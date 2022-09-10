@@ -1,0 +1,9 @@
+{
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@rails/webpacker": "4.3.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^4.9.2"
+  }
+}
