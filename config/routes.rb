@@ -8,4 +8,6 @@ Rails.application.routes.draw do
     end
   end
   # ここまでが追加分
+  # 以下は新規アプリ用
+  # resources :posts, only: [:index, :create, :destroy]
 end
