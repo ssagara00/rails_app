@@ -18,12 +18,14 @@ services:
       - db
 
   db:
+    build: db
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     env_file:
       - ./environments/db.env
     volumes:
       - db-data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - "3306:3306"
 
@@ -39,9 +41,9 @@ services:
 
   front:
     build: react
-    command: sh -c "cd react-app && yarn start"
+    command: sh -c "yarn start"
     volumes:
-      - ./react:/usr/src/react-app
+      - ./react/react-app:/usr/src/react-app
     ports:
       - "4000:3000"
 

@@ -17,7 +17,6 @@ COPY . /myapp
 
 RUN yarn install --check-files
 
-
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["sh", "entrypoint.sh"]

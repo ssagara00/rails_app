@@ -1,8 +1,9 @@
 class PostsController < ApplicationController
+
   before_action :set_post, only: %i[show destroy update]
 
   def index
-    posts = Post.all.order(:id)
+    posts = Post.all.order(created_at: "DESC")
     render json: posts
   end
 
@@ -42,6 +43,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :content)
+    params.require(:post).permit(:user_id, :title, :contents, :image)
   end
+
 end
