@@ -10,7 +10,6 @@ interface PostFormProps {
 }
 
   export const Update = ({ upshow, setupShow, modalid, idtitle, idcontents, posts, setPosts }: PostFormProps) => {
-    //const [posts, setPosts] = useState<Post[]>([]);
     const [title, setTitle] = useState<string>(idtitle);
     const [contents, setContents] = useState<string>(idcontents);
     const [user_id, setUser_id] = useState<number>(2);
