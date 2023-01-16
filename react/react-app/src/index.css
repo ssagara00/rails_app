@@ -11,3 +11,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/*以下は追加分*/
+.wrapper{
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px 50px;
+  justify-content: center;
+}
+
+body{
+  background-color: #CCCCCC;
+}
+
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  padding: 2em;
+  min-width: 20em;
+  max-width: 70%;
+  background-color: #fff;
+  border-radius: 1em;
+  transform: translate(-50%, -50%);
+  outline: transparent;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

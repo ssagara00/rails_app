@@ -22,6 +22,6 @@ export const deletePost = (id: number) => {
 }
 
 // 更新
-export const updatePost = (id: number, param: any) => {
-  return axiosInstance.patch(`/posts/${id}`, param)
+export const updatePost = (id: number, data: Post) => {
+  return axiosInstance.patch(`/posts/${id}`, data)
 }
