@@ -39,7 +39,8 @@ class RepliesController < ApplicationController
   private
 
   def set_reply
-    @reply = Reply.find(params[:id])
+    #@reply = Reply.find(params[:id])
+    @reply = Reply.where(reply_from_id: params[:id])
   end
 
   def reply_params

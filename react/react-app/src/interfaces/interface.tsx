@@ -3,4 +3,5 @@ export interface Post {
   user_id: number
   title: string
   contents: string
+  image?: { url: string }
 }

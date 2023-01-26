@@ -14,7 +14,7 @@ interface PostListProps {
       <div className="wrapper">
         {
           posts.map((post: Post, index: number) => (
-            <Item key={index} post={post} setPost={setPosts}/>
+            <Item key={index} post={post} setPosts={setPosts}/>
           ))
         }
       </div>

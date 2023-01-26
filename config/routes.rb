@@ -5,6 +5,11 @@ Rails.application.routes.draw do
 
   resources :posts
   resources :replies
+  resources :users
+  resources :likes
+
+  get 'likes/like_by/:user_id/:post_id', to:'likes#like_by'
+  delete 'likes/delete/:user_id/:post_id', to:'likes#destroy'
 
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
     registrations: 'auth/registrations'

@@ -1,44 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { AuthContext } from "../../App";
+
 import { Reply } from '../../interfaces/reply_interface';
-import { updateReply } from '../../api/replies';
+import { createReply } from '../../api/replies';
 
 import '../../App.css';
 
-interface ReplyUpdateProps {
-  update: boolean
-  setUpdate: Function
+interface PostReplyProps {
+  reply: boolean
+  setReply: Function
   modalid: number
   idtitle: string
-  idcontents: string
-  sreply: Reply[]
-  setsReply: Function
 }
 
-  export const ReplyUpdate = ({ update, setUpdate, modalid, idtitle, idcontents, sreply, setsReply }: ReplyUpdateProps) => {
-    const { register, handleSubmit,formState: { errors }, } = useForm<Post>({ defaultValues: { title: idtitle, contents: idcontents } });
-
-    const copy = sreply.slice();
+  export const ReplyCreate = ({ reply, setReply, modalid, idtitle }: PostReplyProps) => {
+    const { currentUser }= useContext(AuthContext);
+    const user_id = currentUser.id;
+    const { register, handleSubmit,formState: { errors }, } = useForm<Post>({ defaultValues: { title: 'Re:' + idtitle } });
 
     const closeModal = () => {
-      setUpdate(false)
+      setReply(false)
     }
 
     const onSubmit = async(datas) =>{
 
-      const data: Reply = {
-        title: title,
-        contents: contents
+      const data: Post = {
+        user_id: user_id,
+        title: datas.title,
+        contents: datas.contents
       };
 
       try {
-        const res = await updateReply(modalid,data)
+        const res = await createReply(modalid,data)
         if (res.status == 200) {
-          const index = copy.findIndex(sreply => sreply["id"] === modalid);
-          copy.splice(index,1,res.data);
-          setsReply(copy);
-          setUpdate(false);
+          setReply(false);
         } else {
           console.log(res.data.message)
         }
@@ -49,7 +46,7 @@ interface ReplyUpdateProps {
 
     return(
       <div>
-        <h3 className="font-bold text-lg">Update Posts!</h3>
+        <h3 className="font-bold text-lg">NEW Reply!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
 
           <p className="py-4">title</p>
@@ -71,7 +68,7 @@ interface ReplyUpdateProps {
             )}
 
           <br/>
-          <button className="btn" type="submit">Update</button>
+          <button className="btn" type="submit">POST!</button>
         </form>
         <br/>
         <button onClick={closeModal} className="btn">Close Modal</button>
@@ -79,4 +76,4 @@ interface ReplyUpdateProps {
     )
   }
 
-export default ReplyUpdate;
+export default ReplyCreate;

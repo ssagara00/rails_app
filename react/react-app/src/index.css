@@ -33,10 +33,19 @@ body{
   padding: 2em;
   min-width: 20em;
   max-width: 70%;
+  height: 70%;
+  width: 1200px;
+  max-height: 600px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, .6);
   background-color: #fff;
   border-radius: 1em;
   transform: translate(-50%, -50%);
   outline: transparent;
+}
+
+.heart {
+  width: 30px;
+  height: 30px;
 }
 
 @tailwind base;

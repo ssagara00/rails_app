@@ -22,6 +22,6 @@ export const deletePost = (id: number) => {
 }
 
 // 更新
-export const updatePost = (id: number, data: Post) => {
+export const updatePost = (id: number, data: FormData) => {
   return axiosInstance.patch(`/posts/${id}`, data)
 }

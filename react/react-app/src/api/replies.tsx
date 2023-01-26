@@ -6,9 +6,9 @@ export const getReplies = () => {
   return axiosreplyInstance.get("/replies")
 }
 
-// レコードを１件取得
-export const showReply = (id: number) => {
-  return axiosreplyInstance.get(`/replies/${id}`)
+// レコードを取得
+export const showReply = (reply_from_id: number) => {
+  return axiosreplyInstance.get(`/replies/${reply_from_id}`)
 }
 
 // 新規作成

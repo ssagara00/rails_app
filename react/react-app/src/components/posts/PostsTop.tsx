@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Modal from "react-modal";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { useNavigate, Link } from 'react-router-dom';
 import Cookies from "js-cookie";
-import { useNavigate } from 'react-router-dom';
 
 import { getCurrentUser, signOut } from "../../api/auth"
 import { AuthContext } from "../../App";
@@ -9,6 +10,7 @@ import { AuthContext } from "../../App";
 import { Post } from '../../interfaces/interface';
 import { getPosts } from '../../api/posts';
 
+import AuthTop from '../users/AuthTop';
 import SignIn from '../users/SignIn';
 import SignUp from '../users/SignUp';
 
@@ -23,6 +25,8 @@ Modal.setAppElement("#root");
     const [signin, setSignin] = useState(false);
     const [signup, setSignup] = useState(false);
     const [posts, setPosts] = useState<Post[]>([]);
+    const [active1, setActive1] = useState(true);
+    const [active2, setActive2] = useState(false);
 
     const { loading, isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
 
@@ -46,6 +50,7 @@ Modal.setAppElement("#root");
             Cookies.remove("_access_token")
             Cookies.remove("_client")
             Cookies.remove("_uid")
+            setCurrentUser('')
             setIsSignedIn(false)
             navigation("/posts")
             console.log("Succeeded in sign out")
@@ -55,6 +60,11 @@ Modal.setAppElement("#root");
       } catch (err) {
         console.log(err)
       }
+    }
+
+    const changeactive = () => {
+      setActive1(!active1);
+      setActive2(!active2);
     }
 
     const handleGetCurrentUser = async () => {
@@ -105,6 +115,7 @@ Modal.setAppElement("#root");
               <h1>Not signed in</h1>
             )
           }
+
           </div>
 
           <div className="flex-none">
@@ -146,9 +157,20 @@ Modal.setAppElement("#root");
               }
           </div>
         </div>
-
-          <List posts={posts} setPosts={setPosts}/>
-
+        <Tabs>
+          <TabList>
+          <div className="tabs">
+            <Tab><p className={active1 ? "tab tab-lifted tab-active" : "tab tab-lifted"} onClick={changeactive}>post_LIST</p></Tab>
+            <Tab><p className={active2 ? "tab tab-lifted tab-active" : "tab tab-lifted"} onClick={changeactive}>Auth_List</p></Tab>
+          </div>
+          </TabList>
+          <TabPanel>
+            <List posts={posts} setPosts={setPosts}/>
+          </TabPanel>
+          <TabPanel>
+            <AuthTop />
+          </TabPanel>
+        </Tabs>
       </div>
     )
   }

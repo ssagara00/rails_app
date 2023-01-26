@@ -1,7 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 
 import { AuthContext } from "../../App";
+
+import { User } from '../../interfaces/user_interface';
+import { showUser } from '../../api/users';
 
 import { Reply } from '../../interfaces/reply_interface';
 import { deleteReply } from '../../api/replies';
@@ -10,17 +13,21 @@ import ReplyUpdate from './ReplyUpdate';
 {/*import ReplyDetail from './ReplyDetail';*/}
 
 interface ReplyItemProps {
-  sreply: Reply[]
+  reply: Reply[]
+  setReplies: Function
 }
 
-  export const ReplyItem = ({ sreply }: ReplyItemProps) => {
-    const [reply, setReply] = useState<Post[]>([]);
+  export const ReplyItem = ({ reply, setReplies }: ReplyItemProps) => {
     const [replyupdate, setreplyUpdate] = useState(false);
     const [modalid, setModalid] = useState("");
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
+    const [user, setUser] = useState("");
+    const [likes, setLikes] = useState<Like[]>([]);
+    const [flg, setflg] = useState(false);
 
-    const { isSignedIn, currentUser }= useContext(AuthContext);
+    const { isSignedIn, currentUser, setCurrentUser, SetIsSignedIn, IsSignedIn }= useContext(AuthContext);
+    const user_id = currentUser.id
 
     {/*const [replydetail, setreplyDetail] = useState(false);
     const detailstart = (id: number) =>{
@@ -39,32 +46,49 @@ interface ReplyItemProps {
       try {
         const res = await deleteReply(id)
         if (res?.status === 200) {
-          setReply((prev: Reply[]) => prev.filter((reply: Reply) => reply.id !== id))
+          setReplies((prev: Reply[]) => prev.filter((reply: Reply) => reply.id !== id))
         }
       } catch (err) {
         console.log(err)
       }
     }
 
+    const handleGetUser = async (id: number) => {
+      try {
+        const res = await showUser(reply.user_id)
+        if (res?.status === 200) {
+          setUser(res.data);
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    useEffect(() => {
+      handleGetUser()
+    }, []);
+
     return (
       <div className="wrapper">
         <div className="card w-96 bg-base-100 shadow-xl">
-          <p>投稿者：</p>
+          <p>投稿者：{user.name}</p>
           {/*<figure className="px-10 pt-10">
-            <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
+          { reply.image?.url ?
+            <img src={reply.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
+          }
           </figure>*/}
 
           <div className="card-body items-center text-center">
-            <h2 className="card-title">{sreply.title}</h2>
-              <p>{sreply.contents}</p>
+            <h2 className="card-title">{reply.title}</h2>
+              <p>{reply.contents}</p>
 
                 {
-                  isSignedIn && currentUser.id == sreply.user_id &&
+                  isSignedIn && currentUser.id == reply.user_id &&
 
                   <div className="card-actions">
                     <button className="btn btn-secondary" onClick={() => updatestart(reply.id,reply.title,reply.contents)}>更新</button>
                     <Modal isOpen={replyupdate} className="Modal">
-                      <Update replyupdate={replyupdate} setreplyUpdate={setreplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReply={setReply}/>
+                      <Update replyupdate={replyupdate} setreplyUpdate={setreplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReplies={setReplies}/>
                     </Modal>
 
                     <button className="btn btn-secondary" onClick={() => handleDeleteReply(reply.id)}>削除</button>
