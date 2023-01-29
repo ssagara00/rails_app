@@ -24,16 +24,17 @@ interface PostReplyProps {
       setReply(false)
     }
 
-    const onSubmit = async(datas) =>{
+    const onSubmit = async(data) =>{
 
-      const data: Post = {
+      const datas: Reply = {
         user_id: user_id,
-        title: datas.title,
-        contents: datas.contents
+        title: data.title,
+        contents: data.contents,
+        reply_from_id: modalid
       };
 
       try {
-        const res = await createReply(modalid,data)
+        const res = await createReply(datas)
         if (res.status == 200) {
           setReply(false);
         } else {
