@@ -61,10 +61,10 @@ interface PostFormProps {
     const onSubmit = async(data) =>{
 
       const formData = new FormData();
-      formData.append("user_id", user_id);
-      formData.append("title", data.title);
-      formData.append("contents", data.contents);
-      if (photo) formData.append("image", photo);
+      formData.append("post[user_id]", user_id);
+      formData.append("post[title]", data.title);
+      formData.append("post[contents]", data.contents);
+      if (photo) formData.append("post[image]", photo);
 
       try {
         const res = await createPost(formData)

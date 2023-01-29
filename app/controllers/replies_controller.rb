@@ -1,6 +1,7 @@
 class RepliesController < ApplicationController
 
-  before_action :set_reply, only: %i[show update destroy]
+  before_action :set_reply, only: %i[show]
+  before_action :set_change_reply, only: %i[update destroy]
 
   def index
     replies = Reply.all.order(created_at: "DESC")
@@ -21,30 +22,33 @@ class RepliesController < ApplicationController
   end
 
   def update
-    if @reply.update(reply_params)
-      render json: @reply
+    if @changereply.update(reply_params)
+      render json: @changereply
     else
-      render json: @reply.errors
+      render json: @changereply.errors
     end
   end
 
   def destroy
-    if @reply.destroy
-      render json: @reply
+    if @changereply.destroy
+      render json: @changereply
     else
-      render json: @reply.errors
+      render json: @changereply.errors
     end
   end
 
   private
 
   def set_reply
-    #@reply = Reply.find(params[:id])
     @reply = Reply.where(reply_from_id: params[:id])
   end
 
+  def set_change_reply
+    @changereply = Reply.find(params[:id])
+  end
+
   def reply_params
-    replies.require(:reply).permit(:user_id, :title, :contents, :image, :reply_from_id)
+    params.require(:reply).permit(:user_id, :title, :contents, :image, :reply_from_id)
   end
 
 end

@@ -88,7 +88,7 @@ interface ReplyItemProps {
                   <div className="card-actions">
                     <button className="btn btn-secondary" onClick={() => updatestart(reply.id,reply.title,reply.contents)}>更新</button>
                     <Modal isOpen={replyupdate} className="Modal">
-                      <Update replyupdate={replyupdate} setreplyUpdate={setreplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReplies={setReplies}/>
+                      <ReplyUpdate replyupdate={replyupdate} setreplyUpdate={setreplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReplies={setReplies}/>
                     </Modal>
 
                     <button className="btn btn-secondary" onClick={() => handleDeleteReply(reply.id)}>削除</button>
