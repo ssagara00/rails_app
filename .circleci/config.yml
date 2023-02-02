@@ -52,6 +52,6 @@ workflows:
   build_test_deploy: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - builds
+      - build
       - test:
           requires: -build
