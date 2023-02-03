@@ -6,21 +6,21 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   ruby: circleci/ruby@2.0.0
+  node: circleci/node@5.1.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.2.0-node
     executor: ruby/default
     steps:
       - checkout
       - ruby/install-deps
-      - run:
-          name: Which bundler?
-          command: bundle -v
-      - run: bundle install
+      - node/install-packages:
+          cache-key: yarn.lock
+          pkg-manager: yarn
 
   test:
       parallelism: 3
@@ -31,19 +31,25 @@ jobs:
             - MYSQL_USER: root
             - MYSQL_PASSWORD: appuser
             - MYSQL_DATABASE: myapp_test
-            - MYSQL_ROOT_HOST: '127.0.0.1'
       environment:
-        RAILS_ENV: 'test'
+        BUNDLE_JOBS: '3'
+        BUNDLE_RETRY: '3'
+        PGHOST: 127.0.0.1
+        PGPASSWORD: ''
+        PGUSER: root
+        RAILS_ENV: test
       steps:
         - checkout
         - ruby/install-deps
-        # Database setup
+        - node/install-packages:
+            cache-key: yarn.lock
+            pkg-manager: yarn
         - run:
-            name: Databasesetup
-            command: |
-               bundle exec rake db:create
-               bundle exec rake db:schema:load
-               bundle exec rake db:seed_fu
+            command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
+            name: Wait for DB
+        - run:
+            command: 'bundle exec rails db:schema:load --trace'
+            name: Database setup
         # run tests!
         - run:
             name: Run rspec
