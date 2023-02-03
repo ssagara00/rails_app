@@ -20,6 +20,7 @@ jobs:
       - run:
           name: Which bundler?
           command: bundle -v
+      - run: bundle install
 
   test:
       parallelism: 3
