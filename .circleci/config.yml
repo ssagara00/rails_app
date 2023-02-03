@@ -17,7 +17,9 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - bundle -v
+      - run:
+          name: Which bundler?
+          command: bundle -v
 
   test:
       parallelism: 3
