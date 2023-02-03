@@ -6,7 +6,7 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   ruby: circleci/ruby@2.0.0
-  node: circleci/node@5.1.0
+  #node: circleci/node@5.1.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -18,9 +18,9 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          cache-key: "yarn.lock"
-          pkg-manager: yarn
+      #- node/install-packages:
+          #cache-key: "yarn.lock"
+          #pkg-manager: yarn
 
   test:
       parallelism: 3
@@ -41,11 +41,11 @@ jobs:
       steps:
         - checkout
         - ruby/install-deps
-        - node/install-packages:
-            cache-key: "yarn.lock"
-            pkg-manager: yarn
+        #- node/install-packages:
+        #    cache-key: "yarn.lock"
+        #    pkg-manager: yarn
         - run:
-            command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
+            command: 'dockerize -wait tcp://localhost:3000 -timeout 1m'
             name: Wait for DB
         - run:
             command: 'bundle exec rails db:schema:load --trace'
