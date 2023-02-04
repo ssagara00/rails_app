@@ -43,9 +43,9 @@ jobs:
             MYSQL_HOST: 'db'
       steps:
         - checkout
-        - node/install-packages:
-            cache-key: "react/react-app/yarn.lock"
-            pkg-manager: yarn
+        #- node/install-packages:
+        #    cache-key: "react/react-app/yarn.lock"
+        #    pkg-manager: yarn
         - restore_cache:
             keys:
               - v1-dependencies-{{ checksum "Gemfile.lock" }}
