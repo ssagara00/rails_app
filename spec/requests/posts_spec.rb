@@ -43,7 +43,7 @@ RSpec.describe "Posts", type: :request do
       json = JSON.parse(response.body)
 
       expect(response.status).to eq(200)
-      expect(json['title']).to eq('newtesttitle')
+      expect(json['title']).to eq('new_test-title')
     end
   end
 
