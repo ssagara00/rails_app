@@ -14,14 +14,15 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:3.1.1-node
+      - image: cimg/node:19.5.0
     executor: ruby/default
     steps:
       - checkout
       - ruby/install-deps
-    docker:
-      - image: cimg/node:19.5.0
-    steps:
-      - checkout
+    #docker:
+    #  - image: cimg/node:19.5.0
+    #steps:
+    #  - checkout
       - run:
           name: install
           command: yarn install
