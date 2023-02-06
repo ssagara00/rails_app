@@ -63,9 +63,9 @@ jobs:
             keys:
               - rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
               - rails-demo-yarn-
-        - run:
-            name: install yarn
-            command: yarn install --cache-folder ~/.cache/yarn
+        #- run:
+        #    name: install yarn
+        #    command: yarn install --cache-folder ~/.cache/yarn
         - save_cache:
             key: rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
             paths:
