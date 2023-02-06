@@ -18,9 +18,6 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          cache-key: "yarn.lock"
-          pkg-manager: yarn
 
   test:
       parallelism: 3
@@ -29,7 +26,6 @@ jobs:
           environment:
             BUNDLE_JOBS: 3
             BUNDLE_RETRY: 3
-            BUNDLE_PATH: vendor/bundle
             RAILS_ENV: 'test'
             MYSQL_HOST: 'db'
             MYSQL_PASSWORD: 'appuser'
@@ -44,9 +40,7 @@ jobs:
           name: db
       steps:
         - checkout
-        #- node/install-packages
-        #    cache-key: "react/react-app/yarn.lock"
-        #    pkg-manager: yarn
+        - ruby/install-deps
         - restore_cache:
             keys:
               - v1-dependencies-{{ checksum "Gemfile.lock" }}
@@ -64,9 +58,6 @@ jobs:
             keys:
               - rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
               - rails-demo-yarn-
-        #- run:
-        #    name: install yarn
-        #    command: yarn install --cache-folder ~/.cache/yarn
         - save_cache:
             key: rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
             paths:
@@ -74,12 +65,13 @@ jobs:
         - run: bundle exec rake db:create
         - run:
             name: Database setup
-            command: 'bundle exec rails db:schema:load --trace'
-        - run:
-            name: run rspec
-            command: |
-              mkdir /tmp/test-results \
-              bundle exec rspec \
+            command: bundle exec rails db:schema:load --trace
+        #- run:
+            #name: run rspec
+            #command: |
+            #  mkdir /tmp/test-results \
+            #  bundle exec rspec \
+        - ruby/rspec-test
         - store_test_results:
             path: /tmp/test-results
         - store_artifacts:
