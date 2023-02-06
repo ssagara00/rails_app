@@ -23,9 +23,9 @@ jobs:
     #  - image: cimg/node:19.5.0
     #steps:
     #  - checkout
-      - run:
-          name: install
-          command: yarn install
+    #  - run:
+    #      name: install
+    #      command: yarn install
 
   test:
       parallelism: 3
