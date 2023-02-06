@@ -73,7 +73,7 @@ jobs:
               mkdir -p ~/rspec
               bundle exec rspec \
         - store_test_results:
-            path: test-results
+            path: /tmp/test-results
         - store_artifacts:
             path: /tmp/test-results
             destination: test-results
