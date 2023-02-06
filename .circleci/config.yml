@@ -63,10 +63,10 @@ jobs:
             key: v1-dependencies-{{ checksum "Gemfile.lock" }}
         - restore_cache:
             keys:
-              - rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
+              - rails-demo-yarn-{{ checksum "yarn.lock" }}
               - rails-demo-yarn-
         - save_cache:
-            key: rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
+            key: rails-demo-yarn-{{ checksum "yarn.lock" }}
             paths:
               - ~/.cache/yarn
         - run: bundle exec rake db:create db:migrate
