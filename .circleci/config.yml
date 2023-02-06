@@ -31,7 +31,7 @@ jobs:
             BUNDLE_RETRY: 3
             BUNDLE_PATH: vendor/bundle
             RAILS_ENV: 'test'
-            #MYSQL_HOST: '127.0.0.1'
+            MYSQL_HOST: 'db'
             MYSQL_PASSWORD: 'appuser'
             MYSQL_PORT: 3306
         - image: cimg/mysql:8.0
@@ -39,8 +39,9 @@ jobs:
             MYSQL_USER: 'appuser'
             MYSQL_ROOT_PASSWORD: 'root'
             MYSQL_PASSWORD: 'appuser'
-            MYSQL_DATABASE: 'myapp_tests'
-            #MYSQL_HOST: '127.0.0.1'
+            MYSQL_DATABASE: 'myapp_test'
+            MYSQL_HOST: 'db'
+          name: db
       steps:
         - checkout
         #- node/install-packages
