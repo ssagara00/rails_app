@@ -40,7 +40,6 @@ jobs:
           name: db
       steps:
         - checkout
-        #- ruby/install-deps
         - restore_cache:
             keys:
               - v1-dependencies-{{ checksum "Gemfile.lock" }}
@@ -77,6 +76,21 @@ jobs:
         - store_artifacts:
             path: /tmp/test-results
             destination: test-results
+  jest:
+    docker:
+      - image: cimg/node:19.5.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+            - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+            paths:
+              - node_modules
+            key: v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn jest-test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -89,3 +103,6 @@ workflows:
       - test:
           requires:
             - build
+      - jest:
+          requires:
+            - test
