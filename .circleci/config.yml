@@ -40,7 +40,7 @@ jobs:
           name: db
       steps:
         - checkout
-        - ruby/install-deps
+        #- ruby/install-deps
         - restore_cache:
             keys:
               - v1-dependencies-{{ checksum "Gemfile.lock" }}
@@ -66,12 +66,11 @@ jobs:
         - run:
             name: Database setup
             command: bundle exec rails db:schema:load --trace
-        #- run: 
-            #name: run rspec
-            #command: |
-            #  mkdir /tmp/test-results \
-            #  bundle exec rspec \
-        - ruby/rspec-test
+        - run:
+            name: run rspec
+            command: |
+              mkdir /tmp/test-results \
+              bundle exec rspec \
         - store_test_results:
             path: /tmp/test-results
         - store_artifacts:
