@@ -31,7 +31,7 @@ jobs:
             BUNDLE_RETRY: 3
             BUNDLE_PATH: vendor/bundle
             RAILS_ENV: 'test'
-            MYSQL_HOST: 'db'
+            MYSQL_HOST: '127.0.0.1'
             MYSQL_PASSWORD: 'appuser'
             MYSQL_PORT: 3306
         - image: cimg/mysql:8.0
