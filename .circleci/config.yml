@@ -102,7 +102,7 @@ jobs:
             #key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run: 
           name: test-do
-          command: yarn run jest-test
+          command: yarn run test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
