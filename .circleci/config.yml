@@ -18,9 +18,9 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      #- node/install-packages:
-        #  cache-key: "react/react-app/yarn.lock"
-        #  pkg-manager: yarn
+      - node/install-packages:
+          cache-key: "yarn.lock"
+          pkg-manager: yarn
 
   test:
       parallelism: 3
