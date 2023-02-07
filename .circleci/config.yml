@@ -89,7 +89,7 @@ jobs:
       - image: cimg/node:19.5.0
     steps:
       - checkout
-     - run: 
+      - run: 
           name: joob
           command: yarn
       #- restore_cache:
