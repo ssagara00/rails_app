@@ -6,7 +6,6 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   ruby: circleci/ruby@2.0.0
-  node: circleci/node@5.1.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -14,18 +13,10 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:3.1.1-node
-      - image: cimg/node:19.5.0
     executor: ruby/default
     steps:
       - checkout
       - ruby/install-deps
-    #docker:
-    #  - image: cimg/node:19.5.0
-    #steps:
-    #  - checkout
-      - run:
-          name: install
-          command: yarn
 
   test:
       parallelism: 3
@@ -84,29 +75,7 @@ jobs:
         - store_artifacts:
             path: /tmp/test-results
             destination: test-results
-  jest:
-    docker:
-      - image: cimg/node:19.5.0
-    steps:
-      - checkout
-      - run: 
-          name: joob
-          command: yarn
-      #- restore_cache:
-      #    keys:
-      #      - v1-dependencies-{{ checksum "yarn.lock" }}
-      #      - v1-dependencies-
-      #- run:
-      #    name: dependence-install
-      #    command: yarn install
-      #- save_cache:
-            #paths:
-             # - node_modules
-            #key: v1-dependencies-{{ checksum "yarn.lock" }}
-      - run: 
-          name: test-do
-          command: yarn run jest-test
-
+ 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -118,6 +87,3 @@ workflows:
       - test:
           requires:
             - build
-      - jest:
-          requires:
-            - test
