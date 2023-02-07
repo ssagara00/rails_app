@@ -14,8 +14,7 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:3.1.1-node
-      #- image: cimg/node:19.5.0
-      - image: image/nnode:10.15.3
+      - image: cimg/node:19.5.0
     executor: ruby/default
     steps:
       - checkout
