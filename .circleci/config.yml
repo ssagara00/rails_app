@@ -74,7 +74,7 @@ jobs:
       - image: cimg/node:19.6.0
         environment:
           NODE_ENV: test
-    working_directory: ~/react
+    working_directory: ~/react/react-app
     steps:
       - checkout
       - restore_cache:
