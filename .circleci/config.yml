@@ -68,7 +68,22 @@ jobs:
         - store_artifacts:
             path: /tmp/test-results
             destination: test-results
- 
+
+  front-test:
+    docker:
+      - image: cimg/node:19.6.0
+    working_directory: ~/react
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: yarn install
+          working_directory: ~/react/react-app
+      - run:
+          name: unit test
+          command: yarn jest-test
+          working_directory: ~/react/react-app
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -78,5 +93,8 @@ workflows:
     jobs:
       - build
       - test:
+          requires:
+            - build
+      - front-test
           requires:
             - build
