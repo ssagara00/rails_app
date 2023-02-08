@@ -7,7 +7,7 @@ import { AuthContext } from "../../App";
 
   export const AuthTop = () => {
 
-    const { loading, isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
+    {/*const { loading, isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
 
     const handleGetCurrentUser = async () => {
       try {
@@ -46,10 +46,11 @@ import { AuthContext } from "../../App";
       } catch (err) {
         console.log(err)
       }
-    }
+    }*/}
 
     return (
-      <div>
+        <p>soon after</p>
+      /*<div>
         <h1>Userinfomation</h1>
         {
           isSignedIn && currentUser ? (
@@ -72,7 +73,7 @@ import { AuthContext } from "../../App";
 
         <p>signup</p>
           <Link to={'/auth/signup/'}>Link to signup</Link>
-      </div>
+      </div>*/
     )
   }
 

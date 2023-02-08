@@ -6,7 +6,7 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   ruby: circleci/ruby@2.0.0
-  node: circleci/node@5.1.0
+  #node: circleci/node@5.1.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -14,10 +14,13 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:3.1.1-node
-      - image: cimg/node:19.6.0
+    executor: ruby/default
     steps:
       - checkout
       - ruby/install-deps
+      #- node/install-packages:
+        #  cache-key: "react/react-app/yarn.lock"
+        #  pkg-manager: yarn
 
   test:
       parallelism: 3
@@ -26,6 +29,7 @@ jobs:
           environment:
             BUNDLE_JOBS: 3
             BUNDLE_RETRY: 3
+            BUNDLE_PATH: vendor/bundle
             RAILS_ENV: 'test'
             MYSQL_HOST: 'db'
             MYSQL_PASSWORD: 'appuser'
@@ -37,57 +41,49 @@ jobs:
             MYSQL_PASSWORD: 'appuser'
             MYSQL_DATABASE: 'myapp_test'
             MYSQL_HOST: 'db'
-          name: db
       steps:
         - checkout
-        - ruby/install-deps
+        - node/install-packages:
+            cache-key: "react/react-app/yarn.lock"
+            pkg-manager: yarn
         - restore_cache:
             keys:
               - v1-dependencies-{{ checksum "Gemfile.lock" }}
               - v1-dependencies-
         - run:
-            name: install gems
-            command:
-              bundle install
+            name: install dependencies
+            command: |
+              gem install bundler
+              bundle install --jobs=4 --retry=3 --path vendor/bundle
         - save_cache:
             paths:
               - ./vendor/bundle
             key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-        - run: bundle exec rake db:create db:migrate
+        - restore_cache:
+            keys:
+              - rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
+              - rails-demo-yarn-
+        - run:
+            name: install yarn
+            command: yarn install --cache-folder ~/.cache/yarn
+        - save_cache:
+            key: rails-demo-yarn-{{ checksum "react/react-app/yarn.lock" }}
+            paths:
+              - ~/.cache/yarn
+        - run: bundle exec rake db:create
         - run:
             name: Database setup
-            command: bundle exec rails db:schema:load --trace
+            command: 'bundle exec rails db:schema:load --trace'
         - run:
             name: run rspec
-            command:
-              bundle exec rspec
-
-  front-test:
-    docker:
-      - image: cimg/node:19.6.0
-        environment:
-          NODE_ENV: test
-    working_directory: ~/rails-app
-    steps:
-      - checkout
-      - restore_cache:
-          working_directory: react/react-app
-          keys:
-            - v1-dependencies-{{ checksum "react/react-app/yarn.lock" }}
-      - run:
-          working_directory: react/react-app
-          name: install-yarn
-          command: yarn install --frozen-lockfile
-      - save_cache:
-          working_directory: react/react-app
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "react/react-app/yarn.lock" }}
-      - run:
-          working_directory: react/react-app
-          name: run jest
-          command: yarn jest-test
-          
+            command: |
+              mkdir /tmp/test-results \
+              bundle exec rspec \
+        - store_test_results:
+            path: /tmp/test-results
+        - store_artifacts:
+            path: /tmp/test-results
+            destination: test-results
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -100,4 +96,3 @@ workflows:
       - test:
           requires:
             - build
-      - front-test

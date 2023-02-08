@@ -13,23 +13,16 @@ interface SignUpProps {
 
 export const SignUp = ({ signup, setSignup }: SignUpProps) => {
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
-  const { register, handleSubmit,formState: { errors }, } = useForm<SignInParams>();
+  const { register, handleSubmit,formState: { errors }, } = useForm<SignUpParams>();
 
     const closeModal = () => {
       setSignup(false);
     }
 
-    const onSubmit = async(data) =>{
-
-      const params: SignUpParams = {
-        name: name,
-        email: email,
-        password: password,
-        passwordConfirmation: passwordConfirmation
-      }
+    const onSubmit = async(data: SignUpParams) =>{
 
       try {
-        const res = await signUp(params);
+        const res = await signUp(data);
         if (res.status === 200) {
           console.log("Signed up successfully!")
           setSignup(false);
@@ -75,7 +68,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
           }
 
           <p className="py-4">password</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" type="password"
+          <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
             {...register('password', {
               required: {
                 value: true,
@@ -101,7 +94,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
             )}
 
           <p className="py-4">passwordConfirmation</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" type="passwordConfirmation"
+          <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
             {...register('passwordConfirmation', {
               required: {
                 value: true,

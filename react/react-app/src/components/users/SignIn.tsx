@@ -7,7 +7,7 @@ import { SignInParams } from "../../interfaces/user_interface"
 import { AuthContext } from "../../App";
 
 interface SignInProps {
-  signin: boolean
+  signin: boolean,
   setSignin: Function
 }
 
@@ -15,7 +15,8 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const { register, handleSubmit,formState: { errors }, } = useForm<SignInParams>();
 
-    const onSubmit = async(data) =>{
+    const onSubmit = async (data: SignInParams) => {
+
       try {
         const res = await signIn(data);
         if (res.status === 200) {
@@ -58,7 +59,7 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
               </div>
             }
             <p className="py-4">password</p>
-            <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" type="password"
+            <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
               {...register('password', {
                 required: {
                   value: true,

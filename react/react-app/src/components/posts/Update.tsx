@@ -4,42 +4,38 @@ import { useForm } from 'react-hook-form';
 import { Post } from '../../interfaces/interface';
 import { updatePost } from '../../api/posts';
 
-import '../../App.css';
-
 interface PostUpdateProps {
   update: boolean
   setUpdate: Function
   modalid: number
   idtitle: string
   idcontents: string
-  post: Post[]
+  post: Post
   setPosts: Function
 }
 
   export const Update = ({ update, setUpdate, modalid, idtitle, idcontents, post, setPosts }: PostUpdateProps) => {
     const { register, handleSubmit,formState: { errors } } = useForm<Post>({ defaultValues: { title: idtitle, contents: idcontents } });
-    const inputRef = useRef(null);
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
 
     const [isFileTypeError, setIsFileTypeError] = useState(false);
-    const [photo, setPhoto] = useState<string>("");
-    const [preview, setPreview] = useState<File[]>([]);
+    const [photo, setPhoto] = useState<File>();
+    const [preview, setPreview] = useState<string>("");
 
     const closeModal = () => {
       setUpdate(false)
     }
 
     const emptytarget = () => {
-      event.target.value = '';
+      (event!.target! as HTMLInputElement).value = '';
     }
 
     const handleFile = async() => {
-      if (event.target.files === null || event.target.files.length === 0) {
+      if ((event!.target! as HTMLInputElement).files === null || (event!.target! as HTMLInputElement).files!.length === 0) {
         return;
       }
       setIsFileTypeError(false);
 
-      const file = event.target.files[0];
+      const file = (event!.target! as HTMLInputElement).files![0];
 
       if (
         ![
@@ -54,13 +50,13 @@ interface PostUpdateProps {
       }
 
       setPhoto(file);
-      setPreview(window.URL.createObjectURL(file))
+      setPreview(window.URL.createObjectURL(file));
       return true;
     }
 
-    const onSubmit = async(data) =>{
+    const onSubmit = async(data: Post) =>{
 
-      const formData = new FormData();
+      const formData: any = new FormData();
       formData.append("title", data.title);
       formData.append("contents", data.contents);
       if (photo) formData.append("image", photo);
@@ -80,8 +76,8 @@ interface PostUpdateProps {
 
     const canselFile = () => {
       setIsFileTypeError(false);
-      setPhoto('');
-      setPreview('');
+      setPhoto(undefined);
+      setPreview("");
     }
 
     return(
@@ -109,7 +105,7 @@ interface PostUpdateProps {
 
           <p>image uploade</p>
           <label className="btn">file uploade!!
-            <input hidden type="file" ref={inputRef} id="photo" name="photo" accept={acceptImageFiles} onChange={handleFile} onClick={emptytarget}/>
+            <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
           </label>
           <br/>
           <button className="btn" type="submit">POST!</button>

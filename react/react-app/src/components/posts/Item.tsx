@@ -14,14 +14,14 @@ import { Like } from '../../interfaces/like_interface';
 import { createLike, showLike, searchLike, deleteLike } from '../../api/likes';
 
 import Update from './Update';
-import Detail from './Detail';
+//import Detail from './Detail';
 import ReplyCreate from './ReplyCreate';
 
 import hearton from '../../img/hearton.svg';
 import heartoff from '../../img/heartoff.svg';
 
 interface PostItemProps {
-  post: Post[]
+  post: Post
   setPosts: Function
 }
 
@@ -30,15 +30,14 @@ interface PostItemProps {
     const [detail, setDetail] = useState(false);
     const [update, setUpdate] = useState(false);
     const [reply, setReply] = useState(false);
-    const [modalid, setModalid] = useState("");
+    const [modalid, setModalid] = useState<number>(0);
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
-    const [user, setUser] = useState("");
+    const [user, setUser] = useState<User>();
     const [likes, setLikes] = useState<Like[]>([]);
     const [flg, setflg] = useState(false);
 
-    const { isSignedIn, currentUser, setCurrentUser, SetIsSignedIn, IsSignedIn }= useContext(AuthContext);
-    const user_id = currentUser.id
+    const { loading, isSignedIn, currentUser, setCurrentUser, setIsSignedIn }= useContext(AuthContext);
 
     const detailstart = (id: number) =>{
       setDetail(true);
@@ -69,9 +68,10 @@ interface PostItemProps {
       }
     }
 
-    const handleGetUser = async (id: number) => {
+    const handleGetUser = async () => {
+      const id: number = post.user_id || 0
       try {
-        const res = await showUser(post.user_id)
+        const res = await showUser(id);
         if (res?.status === 200) {
           setUser(res.data);
         }
@@ -80,9 +80,10 @@ interface PostItemProps {
       }
     }
 
-    const handleShowLike = async (id: number) => {
+    const handleShowLike = async () => {
+      const id: number = post.id || 0
       try {
-        const res = await showLike(post.id)
+        const res = await showLike(id)
         if (res?.status === 200) {
           setLikes(res.data);
         }
@@ -90,10 +91,12 @@ interface PostItemProps {
         console.log(err)
       }
     }
+const user_id = 2
 
-    const handleSearch = async (user_id: number, post_id: number) => {
+    const handleSearch = async () => {
+      const post_id: number = post.id || 0
       try {
-        const res = await searchLike(user_id,post.id)
+        const res = await searchLike(user_id,post_id)
         if (res?.status === 200) {
           setflg(res.data)
         }
@@ -105,13 +108,14 @@ interface PostItemProps {
     const onlikeSubmit = async() =>{
       const data: Like = {
         user_id: user_id,
-        post_id: post.id
+        post_id: post.id || 0
       }
 
       try {
         const res = await createLike(data);
         if (res?.status === 200) {
-          const result = await showLike(post.id);
+          const id: number = post.id || 0
+          const result = await showLike(id);
           setLikes(result.data);
           setflg(true);
         }
@@ -121,11 +125,12 @@ interface PostItemProps {
     }
 
     const onunlikeSubmit = async() =>{
-
+      const post_id: number = post.id || 0
       try {
-        const res = await deleteLike(user_id,post.id);console.log(res);
+        const res = await deleteLike(user_id,post_id);
         if (res?.status === 200) {
-          const res = await showLike(post.id);
+          const id: number = post.id || 0
+          const res = await showLike(id);
           setLikes(res.data);
           setflg(false);
         }
@@ -135,25 +140,25 @@ interface PostItemProps {
     }
 
     useEffect(() => {
-      handleShowLike()
-    }, [])
-
-    useEffect(() => {
       handleGetUser()
     }, []);
 
     useEffect(() => {
-      handleSearch(user_id,post.id)
+      handleShowLike()
+    }, [])
+
+    useEffect(() => {
+      handleSearch()
     }, [isSignedIn, setPosts]);
 
     return (
-      <div className="wrapper">
+      <li>
         <div className="card w-96 bg-base-100 shadow-xl">
-          <p>投稿者：{user.name}</p>
-          <p>いいね数：{likes.length}</p>
+          <p>投稿者：{user?.name}</p>
+          <p>いいね数：{likes?.length}</p>
 
           {
-            isSignedIn && currentUser.id == post.user_id ? (
+            isSignedIn && currentUser?.id == post.user_id ? (
 
               flg == true ? (
                 <div>
@@ -176,9 +181,9 @@ interface PostItemProps {
 
           }
 
-          <figure className="px-10 pt-10">
+          <figure className="imageclass">
           { post.image?.url ?
-            <img src={post.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
+            <img src={post.image.url} alt="post_image" width="200" height="200" className="rounded-xl"/> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
           }
           </figure>
 
@@ -193,39 +198,39 @@ interface PostItemProps {
               }
 
                 {
-                  isSignedIn && currentUser.id == post.user_id &&
+                  isSignedIn && currentUser?.id == post.user_id &&
 
                   <div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => updatestart(post.id,post.title,post.contents)}>更新</button>
+                    <button className="btn btn-secondary" onClick={() => updatestart(post.id || 0,post.title,post.contents)}>更新</button>
                     <Modal isOpen={update} className="Modal">
-                      <Update update={update} setUpdate={setUpdate} modalid={modalid} idtitle={title} idcontents={contents} />
+                      <Update update={update} setUpdate={setUpdate} modalid={modalid} idtitle={title} idcontents={contents} post={post} setPosts={setPosts}/>
                     </Modal>
 
-                    <button className="btn btn-secondary" onClick={() => handleDeletePost(post.id)}>削除</button>
+                    <button className="btn btn-secondary" onClick={() => handleDeletePost(post.id || 0)}>削除</button>
                   </div>
 
                 }
 
                 {
                   isSignedIn &&
-
-                  <div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => replystart(post.id,post.title)}>返信</button>
+<p>coming soon</p>
+                  /*<div className="card-actions">
+                    <button className="btn btn-secondary" onClick={() => replystart(post.id || 0,post.title)}>返信</button>
                     <Modal isOpen={reply} className="Modal">
                       <ReplyCreate reply={reply} setReply={setReply} modalid={modalid} idtitle={title} />
                     </Modal>
-                  </div>
+                  </div>*/
                 }
 
-                  <div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => detailstart(post.id)}>詳細</button>
+                  {/*<div className="card-actions">
+                    <button className="btn btn-secondary" onClick={() => detailstart(post.id || 0)}>詳細</button>
                     <Modal isOpen={detail} className="Modal">
                       <Detail detail={detail} setDetail={setDetail} modalid={modalid}/>
                     </Modal>
-                  </div>
+                  </div>*/}
           </div>
         </div>
-      </div>
+      </li>
     )
   }
 

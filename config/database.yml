@@ -32,7 +32,7 @@ development:
 test:
   <<: *default
   database: myapp_test
-  host: db
+  host: 'db'
   username: <%= ENV.fetch('MYSQL_USER') { 'appuser' } %>
   password: <%= ENV.fetch('MYSQL_PASSWORD') { 'appuser' } %>
 

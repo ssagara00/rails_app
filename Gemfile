@@ -35,9 +35,10 @@ group :development, :test do
   gem 'net-smtp'
   gem 'net-imap'
   gem 'net-pop'
-  gem 'webpacker', '~> 4.x'
+  gem 'webpacker', '~> 5.0'
   gem 'psych', '~> 3.1'
   gem 'rspec-rails'
+  gem 'rspec_junit_formatter'
   gem 'rubocop', require:false
   gem 'rubocop-rails', require:false
   gem 'factory_bot_rails'

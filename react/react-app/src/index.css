@@ -21,6 +21,29 @@ code {
   justify-content: center;
 }
 
+.postlist {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px 50px;
+}
+
+.postlist li {
+  margin-top: 50px;
+}
+
+.imageclass {
+  padding: 30px;
+
+}
+.imageclass img {
+  display: block;
+  margin: 0 auto;
+  width: 75%;
+  height: 150px;
+}
+
 body{
   background-color: #CCCCCC;
 }

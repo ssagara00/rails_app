@@ -6,8 +6,6 @@ import { AuthContext } from "../../App";
 import { Post } from '../../interfaces/interface';
 import { createPost } from '../../api/posts';
 
-import '../../App.css';
-
 interface PostFormProps {
   form: boolean
   setForm: Function
@@ -18,28 +16,27 @@ interface PostFormProps {
   export const Form = ({ form, setForm, posts, setPosts }: PostFormProps) => {
     const { register, handleSubmit,formState: { errors },} = useForm<Post>();
     const { currentUser }= useContext(AuthContext);
-    const user_id = currentUser.id;
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
+    const user_id = 2;
 
     const [isFileTypeError, setIsFileTypeError] = useState(false);
-    const [photo, setPhoto] = useState<string>("");
-    const [preview, setPreview] = useState<File[]>([]);
+    const [photo, setPhoto] = useState<File>();
+    const [preview, setPreview] = useState<string>("");
 
     const closeModal = () => {
       setForm(false);
     }
 
     const emptytarget = () => {
-      event.target.value = '';
+      (event!.target! as HTMLInputElement).value = '';
     }
 
     const handleFile = async() => {
-      if (event.target.files === null || event.target.files.length === 0) {
+      if ((event!.target! as HTMLInputElement).files === null || (event!.target! as HTMLInputElement).files!.length === 0) {
         return;
       }
       setIsFileTypeError(false);
 
-      const file = event.target.files[0];
+      const file = (event!.target! as HTMLInputElement).files![0];
 
       if (
         ![
@@ -54,13 +51,13 @@ interface PostFormProps {
       }
 
       setPhoto(file);
-      setPreview(window.URL.createObjectURL(file))
+      setPreview(window.URL.createObjectURL(file));
       return true;
     }
 
-    const onSubmit = async(data) =>{
+    const onSubmit = async(data: Post) =>{
 
-      const formData = new FormData();
+      const formData :any = new FormData();
       formData.append("post[user_id]", user_id);
       formData.append("post[title]", data.title);
       formData.append("post[contents]", data.contents);
@@ -81,8 +78,8 @@ interface PostFormProps {
 
     const canselFile = () => {
       setIsFileTypeError(false);
-      setPhoto('');
-      setPreview('');
+      setPhoto(undefined);
+      setPreview("");
     }
 
     return(
@@ -91,18 +88,18 @@ interface PostFormProps {
         <form onSubmit={handleSubmit(onSubmit)}>
 
           <p className="py-4">title</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <input type="text" placeholder="Type title here" className="input input-bordered w-full max-w-xs"
             {...register('title', {
-              required: '入力が必須の項目です。'
+              required: 'タイトルを入力してください。'
             })}/>
             {errors.title?.type === 'required' && (
               <div>{errors.title.message}</div>
             )}
 
           <p className="py-4">contents</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <input type="text" placeholder="Type contents here" className="input input-bordered w-full max-w-xs"
             {...register('contents', {
-              required: '入力が必須の項目です。'
+              required: '本文を入力してください。'
             })}/>
             {errors.contents?.type === 'required' && (
               <div>{errors.contents.message}</div>
@@ -110,7 +107,7 @@ interface PostFormProps {
 
             <p>image uploade</p>
             <label className="btn">file uploade!!
-              <input hidden type="file" id="photo" name="photo" accept={acceptImageFiles} onChange={handleFile} onClick={emptytarget}/>
+              <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
             </label>
             <br/>
             <button className="btn" type="submit">POST!</button>
