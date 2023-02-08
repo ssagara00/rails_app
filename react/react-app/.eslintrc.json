@@ -14,7 +14,9 @@
       "plugin:import/warnings",
       "plugin:react-hooks/recommended",
       "plugin:jest/recommended",
-      "prettier"
+      "prettier",
+      "react-app",
+      "react-app/jest"
     ],
     "plugins": ["react", "react-hooks", "import", "@typescript-eslint", "jest"],
     "parserOptions": {

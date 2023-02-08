@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "types": [
+      "jest"
+    ],
     "target": "es5",
     "lib": [
       "dom",
@@ -19,9 +22,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "rootDir": "./src"
   },
   "include": [
-    "src"
+    "src/**/*"
   ]
 }
