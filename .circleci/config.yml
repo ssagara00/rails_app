@@ -95,6 +95,6 @@ workflows:
       - test:
           requires:
             - build
-      - front-test
+      - front-test:
           requires:
             - build
