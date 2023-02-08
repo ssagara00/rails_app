@@ -59,15 +59,8 @@ jobs:
             command: bundle exec rails db:schema:load --trace
         - run:
             name: run rspec
-            command: |
-              mkdir /tmp/test-results \
-              mkdir -p ~/rspec
-              bundle exec rspec \
-        - store_test_results:
-            path: /tmp/test-results
-        - store_artifacts:
-            path: /tmp/test-results
-            destination: test-results
+            command:
+              bundle exec rspec
 
   front-build:
     docker:
@@ -92,8 +85,8 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "~/react/react-app/yarn.lock" }}
           working_directory: ~/react/react-app
-      - node/install-packages:
-          pkg-manager: yarn
+      #- node/install-packages:
+      #    pkg-manager: yarn
       #- run:
       #    name: install-yarn
       #    command: yarn install --frozen-lockfile
