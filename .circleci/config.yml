@@ -72,15 +72,22 @@ jobs:
   front-test:
     docker:
       - image: cimg/node:19.6.0
+        environment:
+          NODE_ENV: test
     working_directory: ~/react
     steps:
       - checkout
-      - run:
-          name: install dependencies
-          command: yarn install
+      - restore_cache:
+            keys:
+              - v1-dependencies-{{ checksum "~/react/react-app/package.json" }}
+            working_directory: ~/react/react-app
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "~/react/react-app/package.json" }}
           working_directory: ~/react/react-app
       - run:
-          name: unit test
+          name: fronttest
           command: yarn jest-test
           working_directory: ~/react/react-app
 
