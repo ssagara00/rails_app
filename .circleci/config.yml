@@ -69,6 +69,15 @@ jobs:
             path: /tmp/test-results
             destination: test-results
 
+  front-build:
+    docker:
+      - image: cimg/node:19.6.0
+    steps:
+      - checkout
+      - run:
+          name: install-yarn
+          command: yarn install --frozen-lockfile
+
   front-test:
     docker:
       - image: cimg/node:19.6.0
@@ -78,9 +87,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-            keys:
-              - v1-dependencies-{{ checksum "~/react/react-app/yarn.lock" }}
-            working_directory: ~/react/react-app
+          keys:
+            - v1-dependencies-{{ checksum "~/react/react-app/yarn.lock" }}
+          working_directory: ~/react/react-app
       - run:
           name: install-yarn
           command: yarn install --frozen-lockfile
@@ -105,6 +114,9 @@ workflows:
       - test:
           requires:
             - build
+      - front-build:
+          requires:
+            - test
       - front-test:
           requires:
-            - build
+            - front-build
