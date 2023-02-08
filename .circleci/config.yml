@@ -78,7 +78,7 @@ jobs:
       - image: cimg/node:19.6.0
         environment:
           NODE_ENV: test
-    working_directory: ~/react/react-app
+    working_directory: ~/rails-app
     steps:
       - checkout
       - restore_cache:
@@ -91,11 +91,12 @@ jobs:
       #    name: install-yarn
       #    command: yarn install --frozen-lockfile
       - run:
+          working_directory: react
           name: check
           command: |
             pwd
             ls
-          working_directory: ~/react/react-app
+          
       - save_cache:
           paths:
             - node_modules
