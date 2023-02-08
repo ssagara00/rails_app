@@ -62,17 +62,6 @@ jobs:
             command:
               bundle exec rspec
 
-  #front-build:
-  #  docker:
-  #    - image: cimg/node:19.6.0
-  #  steps:
-  #    - checkout
-      #- node/install-packages:
-      #    pkg-manager: yarn
-      #- run:
-      #    name: install-yarn
-      #    command: yarn install --frozen-lockfile
-
   front-test:
     docker:
       - image: cimg/node:19.6.0
