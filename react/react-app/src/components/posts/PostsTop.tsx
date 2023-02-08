@@ -17,7 +17,7 @@ import SignUp from '../users/SignUp';
 import List from './List';
 import Form from './Form';
 
-Modal.setAppElement("#root");
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
   export const PostsTop = () => {
     const navigation = useNavigate();
@@ -27,7 +27,6 @@ Modal.setAppElement("#root");
     const [posts, setPosts] = useState<Post[]>([]);
     const [active1, setActive1] = useState(true);
     const [active2, setActive2] = useState(false);
-
     const { loading, isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
 
     const formstart = () =>{
@@ -40,31 +39,6 @@ Modal.setAppElement("#root");
 
     const signupstart = () =>{
       setSignup(true);
-    }
-
-    const signoutstart = async (e) => {
-      try {
-        const res = await signOut()
-        if (res.data.success === true) {
-            // サインアウト時には各Cookieを削除
-            Cookies.remove("_access_token")
-            Cookies.remove("_client")
-            Cookies.remove("_uid")
-            setCurrentUser('')
-            setIsSignedIn(false)
-            navigation("/posts")
-            console.log("Succeeded in sign out")
-          } else {
-            console.log("Failed in sign out")
-          }
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    const changeactive = () => {
-      setActive1(!active1);
-      setActive2(!active2);
     }
 
     const handleGetCurrentUser = async () => {
@@ -81,6 +55,30 @@ Modal.setAppElement("#root");
         console.log(err)
       }
       setLoading(false)
+    }
+
+    const signoutstart = async () => {
+      try {
+        const res = await signOut()
+        if (res.data.success === true) {
+            // サインアウト時には各Cookieを削除
+            Cookies.remove("_access_token")
+            Cookies.remove("_client")
+            Cookies.remove("_uid")
+            setIsSignedIn(false)
+            navigation("/posts")
+            console.log("Succeeded in sign out")
+          } else {
+            console.log("Failed in sign out")
+          }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    const changeactive = () => {
+      setActive1(!active1);
+      setActive2(!active2);
     }
 
     const handleGetPosts = async () => {

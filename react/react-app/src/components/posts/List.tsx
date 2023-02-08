@@ -11,13 +11,13 @@ interface PostListProps {
 
   export const List = ({ posts, setPosts }: PostListProps) => {
     return (
-      <div className="wrapper">
-        {
-          posts.map((post: Post, index: number) => (
-            <Item key={index} post={post} setPosts={setPosts}/>
-          ))
-        }
-      </div>
+      <ul className="postlist">
+            {
+              posts.map((post: Post, index: number) => (
+                <Item key={index} post={post} setPosts={setPosts}/>
+              ))
+            }
+      </ul>
     )
   }
 
