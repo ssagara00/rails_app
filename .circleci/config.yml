@@ -14,6 +14,7 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:3.1.1-node
+      - image: cimg/node:19.6.0
     steps:
       - checkout
       - ruby/install-deps
@@ -40,7 +41,6 @@ jobs:
       steps:
         - checkout
         - ruby/install-deps
-
         - restore_cache:
             keys:
               - v1-dependencies-{{ checksum "Gemfile.lock" }}
@@ -62,11 +62,11 @@ jobs:
             command:
               bundle exec rspec
 
-  front-build:
-    docker:
-      - image: cimg/node:19.6.0
-    steps:
-      - checkout
+  #front-build:
+  #  docker:
+  #    - image: cimg/node:19.6.0
+  #  steps:
+  #    - checkout
       #- node/install-packages:
       #    pkg-manager: yarn
       #- run:
@@ -85,8 +85,6 @@ jobs:
           working_directory: react/react-app
           keys:
             - v1-dependencies-{{ checksum "react/react-app/yarn.lock" }}
-      #- node/install-packages:
-      #    pkg-manager: yarn
       - run:
           working_directory: react/react-app
           name: install-yarn
@@ -98,7 +96,7 @@ jobs:
           key: v1-dependencies-{{ checksum "react/react-app/yarn.lock" }}
       - run:
           working_directory: react/react-app
-          name: fronttest
+          name: run jest
           command: yarn jest-test
           
 
@@ -113,9 +111,4 @@ workflows:
       - test:
           requires:
             - build
-      - front-build:
-          requires:
-            - test
-      - front-test:
-          requires:
-            - front-build
+      - front-test
