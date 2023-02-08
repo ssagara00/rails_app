@@ -74,6 +74,8 @@ jobs:
       - image: cimg/node:19.6.0
     steps:
       - checkout
+      - node/install-packages:
+          pkg-manager: yarn
       #- run:
       #    name: install-yarn
       #    command: yarn install --frozen-lockfile
@@ -90,6 +92,8 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "~/react/react-app/yarn.lock" }}
           working_directory: ~/react/react-app
+      - node/install-packages:
+          pkg-manager: yarn
       #- run:
       #    name: install-yarn
       #    command: yarn install --frozen-lockfile
