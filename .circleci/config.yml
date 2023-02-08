@@ -90,6 +90,12 @@ jobs:
       #- run:
       #    name: install-yarn
       #    command: yarn install --frozen-lockfile
+      - run:
+          name: check
+          command: |
+            pwd
+            ls
+          working_directory: ~/react/react-app
       - save_cache:
           paths:
             - node_modules
