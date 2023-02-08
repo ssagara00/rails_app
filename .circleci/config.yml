@@ -82,9 +82,8 @@ jobs:
               - v1-dependencies-{{ checksum "~/react/react-app/yarn.lock" }}
             working_directory: ~/react/react-app
       - run:
-          name: install node
+          name: install-yarn
           command: yarn install --frozen-lockfile
-          working_directory: ~/react/react-app
       - save_cache:
           paths:
             - node_modules
