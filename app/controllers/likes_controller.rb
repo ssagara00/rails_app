@@ -2,6 +2,7 @@ class LikesController < ApplicationController
 
   before_action :set_like, only: %i[show]
   before_action :set_del_like, only: %i[destroy]
+  before_action :param_nil_judge, only: %i[destroy]
 
   def index
     likes = Like.all.order(created_at: "DESC")
@@ -22,19 +23,20 @@ class LikesController < ApplicationController
   end
 
   def destroy
-    if @delLike.nil?
-      render json: { "message"=> "error"}
-    elsif @delLike.destroy
+    
+    param_nil_judge && return
+    
+    if @delLike.destroy
       render json: @delLike
     else
       render json: @delLike.errors
     end
+
   end
 
-
-  def like_by
-    flg = Like.exists?(user_id: params[:user_id], post_id: params[:post_id])
-    render json: flg
+  def is_my_liked
+    my_liked = Like.exists?(user_id: params[:user_id], post_id: params[:post_id])
+    render json: my_liked
   end
 
   private
@@ -46,6 +48,12 @@ class LikesController < ApplicationController
 
   def set_del_like
     @delLike = Like.find_by(user_id: params[:user_id], post_id: params[:post_id])
+  end
+
+  def param_nil_judge
+    if @delLike.nil?
+      render json: { "message"=> "error"}
+    end
   end
 
   def like_params

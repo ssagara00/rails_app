@@ -21,7 +21,7 @@ export const deleteLike = (user_id: number, post_id: number) => {
   return axioslikeInstance.delete(`/likes/delete/${user_id}/${post_id}`)
 }
 
-// like_by
+// いいね済判定
 export const searchLike = (user_id: number, post_id: number) => {
-  return axioslikeInstance.get(`/likes/like_by/${user_id}/${post_id}`)
+  return axioslikeInstance.get(`/likes/is_my_liked/${user_id}/${post_id}`)
 }
