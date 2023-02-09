@@ -18,7 +18,7 @@ RSpec.describe "Likes", type: :request do
     it '特定のデータのみ取得する' do
       like = FactoryBot.create(:like, user_id: 1, post_id: 1)
 
-      get "/likes/like_by/#{like.user_id}/#{like.post_id}"
+      get "/likes/is_my_liked/#{like.user_id}/#{like.post_id}"
       json = JSON.parse(response.body)
 
       expect(response.status).to eq(200)
