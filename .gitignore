@@ -39,7 +39,7 @@ node_modules/
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-/.rspec
+.rspec
 .DS_Store
 /environments/*
 /lib/example.rb
