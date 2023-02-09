@@ -23,12 +23,24 @@
 !/storage/.keep
 .byebug_history
 
+# Ignore node_modules
+node_modules/
+
+# Ignore precompiled javascript packs
+/public/packs
+/public/packs-test
+/public/assets
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-/public/packs
-/public/packs-test
-/node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+/.rspec
+.DS_Store
+/config/database.yml
+/environments/*
+/lib/example.rb
+/lib/hello.rb
+/react/react-app/.env
