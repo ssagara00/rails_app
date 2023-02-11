@@ -35,7 +35,7 @@ interface PostItemProps {
     const [contents, setContents] = useState("");
     const [user, setUser] = useState<User>();
     const [likes, setLikes] = useState<Like[]>([]);
-    const [my_liked, setMy_liked] = useState(false);
+    const [is_liked, setIs_liked] = useState(false);
 
     const { loading, isSignedIn, currentUser, setCurrentUser, setIsSignedIn }= useContext(AuthContext);
 
@@ -98,7 +98,7 @@ const user_id = 2
       try {
         const res = await searchLike(user_id,post_id)
         if (res?.status === 200) {
-          setMy_liked(res.data)
+          setIs_liked(res.data)
         }
       } catch (err) {
         console.log(err)
@@ -117,7 +117,7 @@ const user_id = 2
           const id: number = post.id || 0
           const result = await showLike(id);
           setLikes(result.data);
-          setMy_liked(true);
+          setIs_liked(true);
         }
       } catch (err) {
         console.log(err)
@@ -132,7 +132,7 @@ const user_id = 2
           const id: number = post.id || 0
           const res = await showLike(id);
           setLikes(res.data);
-          setMy_liked(false);
+          setIs_liked(false);
         }
       } catch (err) {
         console.log(err)
@@ -160,7 +160,7 @@ const user_id = 2
           {
             isSignedIn && currentUser?.id == post.user_id ? (
 
-              my_liked == true ? (
+              is_liked == true ? (
                 <div>
                   <p>click to like</p>
                   <form onSubmit={handleSubmit(onunlikeSubmit)}>

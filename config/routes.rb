@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :users
   resources :likes
 
-  get 'likes/is_my_liked/:user_id/:post_id', to:'likes#is_my_liked'
+  get 'likes/is_liked/:user_id/:post_id', to:'likes#is_liked'
   delete 'likes/delete/:user_id/:post_id', to:'likes#destroy'
 
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {

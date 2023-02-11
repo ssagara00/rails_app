@@ -1,7 +1,7 @@
 class LikesController < ApplicationController
 
   before_action :set_like, only: %i[show]
-  before_action :set_del_like, only: %i[destroy]
+  before_action :set_delete_like, only: %i[destroy]
   before_action :param_nil_judge, only: %i[destroy]
 
   def index
@@ -26,17 +26,17 @@ class LikesController < ApplicationController
     
     param_nil_judge && return
     
-    if @delLike.destroy
-      render json: @delLike
+    if @delete_like.destroy
+      render json: @delete_like
     else
-      render json: @delLike.errors
+      render json: @delete_like.errors
     end
 
   end
 
-  def is_my_liked
-    my_liked = Like.exists?(user_id: params[:user_id], post_id: params[:post_id])
-    render json: my_liked
+  def is_liked
+    is_liked = Like.exists?(user_id: params[:user_id], post_id: params[:post_id])
+    render json: is_liked
   end
 
   private
@@ -46,12 +46,12 @@ class LikesController < ApplicationController
     @like = Like.where(post_id: params[:id])
   end
 
-  def set_del_like
-    @delLike = Like.find_by(user_id: params[:user_id], post_id: params[:post_id])
+  def set_delete_like
+    @delete_like = Like.find_by(user_id: params[:user_id], post_id: params[:post_id])
   end
 
   def param_nil_judge
-    if @delLike.nil?
+    if @delete_like.nil?
       render json: { "message"=> "error"}
     end
   end
