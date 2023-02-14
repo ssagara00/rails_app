@@ -1,44 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Reply } from '../../interfaces/reply_interface';
 import { updateReply } from '../../api/replies';
 
-import '../../App.css';
-
 interface ReplyUpdateProps {
-  update: boolean
-  setUpdate: Function
+  replyupdate: boolean
+  setReplyUpdate: Function
   modalid: number
   idtitle: string
   idcontents: string
-  sreply: Reply[]
-  setsReply: Function
+  reply: Reply
+  setReply: Function
 }
 
-  export const ReplyUpdate = ({ update, setUpdate, modalid, idtitle, idcontents, sreply, setsReply }: ReplyUpdateProps) => {
-    const { register, handleSubmit,formState: { errors }, } = useForm<Post>({ defaultValues: { title: idtitle, contents: idcontents } });
+  export const ReplyUpdate = ({ replyupdate, setReplyUpdate, modalid, idtitle, idcontents, reply, setReply }: ReplyUpdateProps) => {
+    const { register, handleSubmit,formState: { errors }, } = useForm<Reply>({ defaultValues: { title: idtitle, contents: idcontents } });
 
-    const copy = sreply.slice();
+    /*const copy = reply.slice();*/
 
     const closeModal = () => {
-      setUpdate(false)
+      setReplyUpdate(false)
     }
 
-    const onSubmit = async(datas) =>{
+    const onSubmit = async(datas: Reply) =>{
 
       const data: Reply = {
-        title: title,
-        contents: contents
+        title: datas.title,
+        contents: datas.contents
       };
 
       try {
         const res = await updateReply(modalid,data)
         if (res.status == 200) {
-          const index = copy.findIndex(sreply => sreply["id"] === modalid);
+          /*const index = copy.findIndex(sreply => sreply["id"] === modalid);
           copy.splice(index,1,res.data);
-          setsReply(copy);
-          setUpdate(false);
+          setsReply(copy);*/
+          setReply((prev: Reply[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
+          setReplyUpdate(false);
         } else {
           console.log(res.data.message)
         }
@@ -71,7 +70,7 @@ interface ReplyUpdateProps {
             )}
 
           <br/>
-          <button className="btn" type="submit">Update</button>
+          <button className="btn" type="submit">ReplyUpdate</button>
         </form>
         <br/>
         <button onClick={closeModal} className="btn">Close Modal</button>

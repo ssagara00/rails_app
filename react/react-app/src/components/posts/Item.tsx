@@ -37,7 +37,7 @@ interface PostItemProps {
     const [likes, setLikes] = useState<Like[]>([]);
     const [is_liked, setIs_liked] = useState(false);
 
-    const { loading, isSignedIn, currentUser, setCurrentUser, setIsSignedIn }= useContext(AuthContext);
+    const { isSignedIn, currentUser }= useContext(AuthContext);
 
     const detailstart = (id: number) =>{
       setDetail(true);
@@ -191,7 +191,7 @@ const user_id = 2
             <h2 className="card-title">{post.title}</h2>
               {
                 post.contents.length > 9 ? (
-                  <p>{post.contents.substr( 0, 5)}...</p>
+                  <p>{post.contents.substring( 0, 6)}...</p>
                 ) : (
                   <p>{post.contents}</p>
                 )
@@ -213,21 +213,22 @@ const user_id = 2
 
                 {
                   isSignedIn &&
-<p>coming soon</p>
-                  /*<div className="card-actions">
+
+                  <div>
+                  <div className="card-actions">
                     <button className="btn btn-secondary" onClick={() => replystart(post.id || 0,post.title)}>返信</button>
                     <Modal isOpen={reply} className="Modal">
                       <ReplyCreate reply={reply} setReply={setReply} modalid={modalid} idtitle={title} />
                     </Modal>
-                  </div>*/
-                }
-
+                  </div>
+                  <p>coming soon</p>
                   {/*<div className="card-actions">
                     <button className="btn btn-secondary" onClick={() => detailstart(post.id || 0)}>詳細</button>
                     <Modal isOpen={detail} className="Modal">
                       <Detail detail={detail} setDetail={setDetail} modalid={modalid}/>
                     </Modal>
-                  </div>*/}
+                  </div>*/}</div>
+                }
           </div>
         </div>
       </li>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AuthContext } from "../../App";
@@ -16,15 +16,15 @@ interface PostReplyProps {
 }
 
   export const ReplyCreate = ({ reply, setReply, modalid, idtitle }: PostReplyProps) => {
-    const { currentUser }= useContext(AuthContext);
-    const user_id = currentUser.id;
-    const { register, handleSubmit,formState: { errors }, } = useForm<Post>({ defaultValues: { title: 'Re:' + idtitle } });
-
+    const { register, handleSubmit, formState: { errors }, } = useForm<Reply>({ defaultValues: { title: 'Re:' + idtitle } });
+    const { currentUser } = useContext(AuthContext);
+    const user_id = currentUser?.id;
+    
     const closeModal = () => {
       setReply(false)
     }
 
-    const onSubmit = async(data) =>{
+    const onSubmit = async(data: Reply) =>{
 
       const datas: Reply = {
         user_id: user_id,
@@ -51,25 +51,25 @@ interface PostReplyProps {
         <form onSubmit={handleSubmit(onSubmit)}>
 
           <p className="py-4">title</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <input type="text" placeholder="Type title here" className="input input-bordered w-full max-w-xs"
             {...register('title', {
-              required: '入力が必須の項目です。'
+              required: 'タイトルを入力してください。'
             })}/>
             {errors.title?.type === 'required' && (
               <div>{errors.title.message}</div>
             )}
 
           <p className="py-4">contents</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <input type="text" placeholder="Type contents here" className="input input-bordered w-full max-w-xs"
             {...register('contents', {
-              required: '入力が必須の項目です。'
+              required: '本文を入力してください。'
             })}/>
             {errors.contents?.type === 'required' && (
               <div>{errors.contents.message}</div>
             )}
 
           <br/>
-          <button className="btn" type="submit">POST!</button>
+          <button className="btn" type="submit">Reply!</button>
         </form>
         <br/>
         <button onClick={closeModal} className="btn">Close Modal</button>

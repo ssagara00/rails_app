@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
     const [posts, setPosts] = useState<Post[]>([]);
     const [active1, setActive1] = useState(true);
     const [active2, setActive2] = useState(false);
-    const { loading, isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
+    const { isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
 
     const formstart = () =>{
       setForm(true);
@@ -43,11 +43,10 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
     const handleGetCurrentUser = async () => {
       try {
-        const res = await getCurrentUser()
-        if (res?.data.isLogin === true) {
+        const res = await getCurrentUser();
+        if (res?.data.is_login === true) {
           setIsSignedIn(true)
           setCurrentUser(res?.data.data)
-          console.log(res?.data.data)
         } else {
           console.log("No current user")
         }
@@ -98,7 +97,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
     useEffect(() => {
       handleGetCurrentUser()
-    }, [setCurrentUser])
+    }, [currentUser])
 
     return (
       <div>

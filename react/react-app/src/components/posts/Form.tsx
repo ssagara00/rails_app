@@ -14,9 +14,9 @@ interface PostFormProps {
 }
 
   export const Form = ({ form, setForm, posts, setPosts }: PostFormProps) => {
-    const { register, handleSubmit,formState: { errors },} = useForm<Post>();
+    const { register, handleSubmit, formState: { errors },} = useForm<Post>();
     const { currentUser }= useContext(AuthContext);
-    const user_id = 2;
+    const user_id = currentUser?.id;
 
     const [isFileTypeError, setIsFileTypeError] = useState(false);
     const [photo, setPhoto] = useState<File>();
