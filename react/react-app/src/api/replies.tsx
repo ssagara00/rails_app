@@ -13,7 +13,7 @@ export const showReply = (reply_from_id: number) => {
 
 // 新規作成
 export const createReply = (data: Reply) => {
-  return axiosreplyInstance.post("/replies", {reply:data})
+  return axiosreplyInstance.post("/replies", data)
 }
 
 // 削除

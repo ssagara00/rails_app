@@ -22,18 +22,18 @@ class RepliesController < ApplicationController
   end
 
   def update
-    if @changereply.update(reply_params)
-      render json: @changereply
+    if @change_reply.update(reply_params)
+      render json: @change_reply
     else
-      render json: @changereply.errors
+      render json: @change_reply.errors
     end
   end
 
   def destroy
-    if @changereply.destroy
-      render json: @changereply
+    if @change_reply.destroy
+      render json: @change_reply
     else
-      render json: @changereply.errors
+      render json: @change_reply.errors
     end
   end
 
@@ -44,7 +44,7 @@ class RepliesController < ApplicationController
   end
 
   def set_change_reply
-    @changereply = Reply.find(params[:id])
+    @change_reply = Reply.find(params[:id])
   end
 
   def reply_params
