@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+/* eslint-disable */import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import { useForm } from 'react-hook-form'
 
@@ -14,7 +14,7 @@ import { Like } from '../../interfaces/like_interface';
 import { createLike, showLike, searchLike, deleteLike } from '../../api/likes';
 
 import Update from './Update';
-//import Detail from './Detail';
+import Detail from './Detail';
 import ReplyCreate from './ReplyCreate';
 
 import hearton from '../../img/hearton.svg';
@@ -162,23 +162,38 @@ const user_id = 2
 
               is_liked == true ? (
                 <div>
-                  <p>click to like</p>
                   <form onSubmit={handleSubmit(onunlikeSubmit)}>
                     <input type="image" src={hearton} alt="hearton" className="heart" />
                   </form>
+
+                  <div className="button-actions">
+                  <button className="btn btn-secondary" onClick={() => updatestart(post.id || 0,post.title,post.contents)}>更新</button>
+                  <Modal isOpen={update} className="Modal">
+                    <Update update={update} setUpdate={setUpdate} modalid={modalid} idtitle={title} idcontents={contents} post={post} setPosts={setPosts}/>
+                  </Modal>
+
+                  <button className="btn btn-secondary" onClick={() => handleDeletePost(post.id || 0)}>削除</button>
+                </div>
                 </div>
               ) : (
                 <div>
-                  <p>click to like</p>
                   <form onSubmit={handleSubmit(onlikeSubmit)}>
                     <input type="image" src={heartoff} alt="heartoff" className="heart" />
                   </form>
+
+                  <div className="button-actions">
+                  <button className="btn btn-secondary" onClick={() => updatestart(post.id || 0,post.title,post.contents)}>更新</button>
+                  <Modal isOpen={update} className="Modal">
+                    <Update update={update} setUpdate={setUpdate} modalid={modalid} idtitle={title} idcontents={contents} post={post} setPosts={setPosts}/>
+                  </Modal>
+
+                  <button className="btn btn-secondary" onClick={() => handleDeletePost(post.id || 0)}>削除</button>
+                </div>
                 </div>
               )
             ) : (
               <img src={heartoff} className="heart" alt="heartoff" />
             )
-
           }
 
           <figure className="imageclass">
@@ -189,46 +204,31 @@ const user_id = 2
 
           <div className="card-body items-center text-center">
             <h2 className="card-title">{post.title}</h2>
-              {
-                post.contents.length > 9 ? (
-                  <p>{post.contents.substring( 0, 6)}...</p>
-                ) : (
-                  <p>{post.contents}</p>
-                )
-              }
+            {
+              post.contents.length > 9 ? (
+                <p>{post.contents.substring( 0, 6)}...</p>
+              ) : (
+                <p>{post.contents}</p>
+              )
+            }
 
-                {
-                  isSignedIn && currentUser?.id == post.user_id &&
+            <div className="card-actions">
+              <button className="btn btn-secondary" onClick={() => detailstart(post.id || 0)}>詳細</button>
+              <Modal isOpen={detail} className="Modal">
+                <Detail detail={detail} setDetail={setDetail} modalid={modalid}/>
+              </Modal>
+            </div>
 
-                  <div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => updatestart(post.id || 0,post.title,post.contents)}>更新</button>
-                    <Modal isOpen={update} className="Modal">
-                      <Update update={update} setUpdate={setUpdate} modalid={modalid} idtitle={title} idcontents={contents} post={post} setPosts={setPosts}/>
-                    </Modal>
+            {
+              isSignedIn &&
 
-                    <button className="btn btn-secondary" onClick={() => handleDeletePost(post.id || 0)}>削除</button>
-                  </div>
-
-                }
-
-                {
-                  isSignedIn &&
-
-                  <div>
-                  <div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => replystart(post.id || 0,post.title)}>返信</button>
-                    <Modal isOpen={reply} className="Modal">
-                      <ReplyCreate reply={reply} setReply={setReply} modalid={modalid} idtitle={title} />
-                    </Modal>
-                  </div>
-                  <p>coming soon</p>
-                  {/*<div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => detailstart(post.id || 0)}>詳細</button>
-                    <Modal isOpen={detail} className="Modal">
-                      <Detail detail={detail} setDetail={setDetail} modalid={modalid}/>
-                    </Modal>
-                  </div>*/}</div>
-                }
+              <div className="card-actions">
+                <button className="btn btn-secondary" onClick={() => replystart(post.id || 0,post.title)}>返信</button>
+                <Modal isOpen={reply} className="Modal">
+                  <ReplyCreate reply={reply} setReply={setReply} modalid={modalid} idtitle={title} />
+                </Modal>
+              </div>
+            }
           </div>
         </div>
       </li>

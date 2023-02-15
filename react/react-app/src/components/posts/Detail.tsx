@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState }  from 'react';
 
 import { Post } from '../../interfaces/interface';
@@ -7,8 +8,6 @@ import { showReply } from '../../api/replies';
 
 import ReplyItem from './ReplyItem';
 
-import '../../App.css';
-
 interface PostDetailProps {
   detail: boolean
   setDetail: Function
@@ -16,8 +15,8 @@ interface PostDetailProps {
 }
 
   export const Detail = ({ detail, setDetail, modalid }: PostDetailProps) =>{
-    const [post, setPost] = useState<Post[]>([]);
-    const [replies, setReplies] = useState<Reply[]>([]);
+    const [post, setPost] = useState<Post>();
+    const [replies, setReplies] = useState<Reply[]>();
 
     const closeModal = () => {
       setDetail(false)
@@ -54,38 +53,30 @@ interface PostDetailProps {
     }, [])
 
     return(
-      <div className="Detail_modals">
-        <h3 className="font-bold text-lg">Detail</h3>
+      <div className="centor">
 
-          <figure className="px-10 pt-10">
-          { post.image?.url ?
-            <img src={post.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
-          }
-          </figure>
+        <figure className="centor_image">
+        { post?.image?.url ?
+          <img src={post.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
+        }
+        </figure>
 
-          <h3>Title</h3>
-          <p className="py-4">{post.title}</p>
-          <h3>Contents</h3>
-          <p className="py-4">{post.contents}</p>
-
-          <br/>
-          <button onClick={closeModal} className="btn">Close Modal</button>
-
-        <h3 className="font-bold text-lg">Reply for this item</h3>
-
-          <div className="collapse">
-            <input type="checkbox" />
-            <div className="collapse-title text-xl font-medium">
-              Click me to show/hide content
-            </div>
-            <div className="collapse-content">
-              {
-                replies.map((reply: Reply, index: number) => (
-                  <ReplyItem key={index} reply={reply} setReplies={setReplies} />
-                ))
-              }
-            </div>
-          </div>
+        <h3 className="topic">Title</h3>
+        <p>{post?.title}</p>
+        <h3 className="topic">Contents</h3>
+        <p>{post?.contents}</p>
+        <br/>
+        <h3 className="topic">Reply for this item</h3>
+          
+          <ul>
+            {
+              replies?.map((reply: Reply, index: number) => (
+                <ReplyItem key={index} reply={reply} setReply={setReplies} />
+              ))
+            }
+          </ul>
+        <br/>
+        <button onClick={closeModal} className="btn">Close Modal</button> 
       </div>
     )
   }

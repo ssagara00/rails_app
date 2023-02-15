@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 
@@ -60,34 +61,31 @@ interface ReplyItemProps {
     }, []);
 
     return (
-      <li>
-        <div className="card w-96 bg-base-100 shadow-xl">
+      <li className="comment">
+        <h2 className="comment-title">{reply.title}</h2>
           <p>投稿者：{user?.name}</p>
           {/*<figure className="px-10 pt-10">
           { reply.image?.url ?
             <img src={reply.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
           }
           </figure>*/}
+   
+          <p className="comment-contents">{reply.contents}</p>
 
-          <div className="card-body items-center text-center">
-            <h2 className="card-title">{reply.title}</h2>
-              <p>{reply.contents}</p>
+            {
+              isSignedIn && currentUser?.id == reply.user_id &&
 
-                {
-                  isSignedIn && currentUser?.id == reply.user_id &&
+              <div className="card-actions">
+                <button className="btn btn-secondary" onClick={() => updatestart(reply.id || 0,reply.title,reply.contents)}>更新</button>
+                <Modal isOpen={replyupdate} className="Modal">
+                  <ReplyUpdate replyupdate={replyupdate} setReplyUpdate={setReplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReply={setReply} />
+                </Modal>
 
-                  <div className="card-actions">
-                    <button className="btn btn-secondary" onClick={() => updatestart(reply.id || 0,reply.title,reply.contents)}>更新</button>
-                    <Modal isOpen={replyupdate} className="Modal">
-                      <ReplyUpdate replyupdate={replyupdate} setReplyUpdate={setReplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReply={setReply} />
-                    </Modal>
+                <button className="btn btn-secondary" onClick={() => handleDeleteReply(reply.id || 0)}>削除</button>
+              </div>
 
-                    <button className="btn btn-secondary" onClick={() => handleDeleteReply(reply.id || 0)}>削除</button>
-                  </div>
+            }
 
-                }
-          </div>
-        </div>
       </li>
     )
   }
