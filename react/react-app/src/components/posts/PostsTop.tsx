@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useEffect, useState, useContext } from 'react';
 import Modal from "react-modal";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';

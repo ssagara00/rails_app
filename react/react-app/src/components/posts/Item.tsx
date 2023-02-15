@@ -1,4 +1,4 @@
-/* eslint-disable */import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import { useForm } from 'react-hook-form'
 
