@@ -52,23 +52,77 @@ body{
   position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   display: block;
   padding: 2em;
-  min-width: 20em;
-  max-width: 70%;
-  height: 70%;
-  width: 1200px;
-  max-height: 600px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, .6);
+  width: 80%;
+  max-width: 840;
+  height: 90%;
+  max-height: 900;
   background-color: #fff;
   border-radius: 1em;
-  transform: translate(-50%, -50%);
+  box-shadow: 0 0 30px rgba(0, 0, 0, .6);
   outline: transparent;
+  overflow: scroll;
+}
+
+.centor {
+  margin: 0 auto;
+  width: 95%;
+  height: 95%;
+}
+
+.centor_image {
+  margin: 0 auto;
+  height: 60%;
+  width: 70%;
+}
+.centor_image img{
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+}
+
+.topic {
+  padding: 0.5em;/*文字周りの余白*/
+  color: #010101;/*文字色*/
+  background: #eaf3ff;/*背景色*/
+  border-bottom: solid 3px #516ab6;/*下線*/
+}
+
+.comment {
+  margin: 2em 0;
+  background: #DCEFFF;
+}
+.comment-title {
+  font-size: 1.2em;
+  padding: 4px;
+  color: black;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+.comment-contents {
+  padding: 15px 20px;
+  margin: 0;
+}
+
+.ReactModal__Body--open {
+  position: fixed;
 }
 
 .heart {
   width: 30px;
   height: 30px;
+  position:absolute;
+  top: 10%;
+  left: 0%;
+}
+
+.button-actions {
+  display:flex;
+  position:absolute;
+  top: 5%;
+  right: 10%;
 }
 
 @tailwind base;
