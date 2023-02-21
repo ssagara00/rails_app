@@ -17,8 +17,6 @@ interface ReplyUpdateProps {
   export const ReplyUpdate = ({ replyupdate, setReplyUpdate, modalid, idtitle, idcontents, reply, setReply }: ReplyUpdateProps) => {
     const { register, handleSubmit,formState: { errors }, } = useForm<Reply>({ defaultValues: { title: idtitle, contents: idcontents } });
 
-    /*const copy = reply.slice();*/
-
     const closeModal = () => {
       setReplyUpdate(false)
     }
@@ -33,9 +31,6 @@ interface ReplyUpdateProps {
       try {
         const res = await updateReply(modalid,data)
         if (res.status == 200) {
-          /*const index = copy.findIndex(sreply => sreply["id"] === modalid);
-          copy.splice(index,1,res.data);
-          setsReply(copy);*/
           setReply((prev: Reply[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
           setReplyUpdate(false);
         } else {
@@ -54,20 +49,44 @@ interface ReplyUpdateProps {
           <p className="py-4">title</p>
           <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
             {...register('title', {
-              required: '入力が必須の項目です。'
+              required: {
+                value: true,
+                message: 'タイトルを入力してください。',
+              },
+              maxLength: {
+                value: 30,
+                message: '30文字以内で入力してください。',
+              },
             })}/>
-            {errors.title?.type === 'required' && (
-              <div>{errors.title.message}</div>
-            )}
+            { errors.title?.message &&
+              <div className="alert alert-warning shadow-lg">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                  <span>{errors.title.message}</span>
+                </div>
+              </div>
+            }
 
           <p className="py-4">contents</p>
           <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
             {...register('contents', {
-              required: '入力が必須の項目です。'
+              required: {
+                value: true,
+                message: '本文を入力してください。',
+              },
+              maxLength: {
+                value: 3000,
+                message: '3000文字以内で入力してください。',
+              },
             })}/>
-            {errors.contents?.type === 'required' && (
-              <div>{errors.contents.message}</div>
-            )}
+            { errors.contents?.message &&
+              <div className="alert alert-warning shadow-lg">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                  <span>{errors.contents.message}</span>
+                </div>
+              </div>
+            }
 
           <br/>
           <button className="btn" type="submit">ReplyUpdate</button>
