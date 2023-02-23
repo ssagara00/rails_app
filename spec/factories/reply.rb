@@ -1,9 +1,8 @@
 FactoryBot.define do
   factory :reply do
     association :post
-    user_id { 'Re_test_user' }
+    user_id { '99' }
     title { 'Re_testtitle' }
     contents { 'Re_test_contents' }
-    image { 'Re_test.jpg' }
   end
 end
