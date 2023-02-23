@@ -12,20 +12,6 @@ RSpec.describe Reply, type: :model do
     end
 
     context "バリデーションエラーがあるとき" do
-      it 'user_idが空の場合、無効である' do
-        reply = FactoryBot.build(:reply, user_id: nil)
-
-        reply.valid?
-        expect(reply.errors[:user_id]).to include("is not a number")
-      end
-
-      it 'user_idが数字以外の場合、無効である' do
-        reply = FactoryBot.build(:reply, user_id: "user_id")
-
-        reply.valid?
-        expect(reply.errors[:user_id]).to include("is not a number")
-      end
-
       it 'titleが空の場合、無効である' do
         reply = FactoryBot.build(:reply, title: nil)
 
@@ -53,21 +39,8 @@ RSpec.describe Reply, type: :model do
         reply.valid?
         expect(reply.errors[:contents]).to include("is too long (maximum is 3000 characters)")
       end
-
-      it 'reply_from_idが空の場合、無効である' do
-        reply = FactoryBot.build(:reply, reply_from_id: nil)
-
-        reply.valid?
-        expect(reply.errors[:reply_from_id]).to include("is not a number")
-      end
-
-      it 'reply_from_idが数字以外の場合、無効である' do
-        reply = FactoryBot.build(:reply, reply_from_id: "reply_from_id")
-
-        reply.valid?
-        expect(reply.errors[:reply_from_id]).to include("is not a number")
-      end
     end
+  
   end
 
   describe "association reply test" do

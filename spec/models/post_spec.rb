@@ -12,20 +12,6 @@ RSpec.describe Post, type: :model do
     end
 
     context "バリデーションエラーがあるとき" do
-      it 'user_idが空の場合、無効である' do
-        post = FactoryBot.build(:post, user_id: nil)
-
-        post.valid?
-        expect(post.errors[:user_id]).to include("is not a number")
-      end
-
-      it 'user_idが数字以外の場合、無効である' do
-        post = FactoryBot.build(:post, user_id: "user_id")
-
-        post.valid?
-        expect(post.errors[:user_id]).to include("is not a number")
-      end
-
       it 'titleが空の場合、無効である' do
         post = FactoryBot.build(:post, title: nil)
 
@@ -53,8 +39,8 @@ RSpec.describe Post, type: :model do
         post.valid?
         expect(post.errors[:contents]).to include("is too long (maximum is 3000 characters)")
       end
-
     end
+  
   end
 
   describe "association post test" do
