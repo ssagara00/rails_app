@@ -14,6 +14,20 @@ RSpec.describe "Posts", type: :request do
     end
   end
 
+  describe "GET /limit_index" do
+    it '特定の範囲の投稿データを取得する' do
+      FactoryBot.create_list(:post, 10)
+
+      get "/posts/limit_index/#{5}/#{5}"
+      json = JSON.parse(response.body)
+
+      expect(response.status).to eq(200)
+      expect(json.length).to eq(5)
+      expect(json[0]['id'] - json[4]['id']).to eq(4)
+      # pending "add some examples (or delete) #{__FILE__}"
+    end
+  end
+
   describe "GET /show" do
     it '特定のデータのみ取得する' do
       post = FactoryBot.create(:post, title: 'posts_show_test-title')

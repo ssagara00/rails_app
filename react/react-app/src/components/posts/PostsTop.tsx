@@ -8,7 +8,7 @@ import { getCurrentUser, signOut } from "../../api/auth"
 import { AuthContext } from "../../App";
 
 import { Post } from '../../interfaces/interface';
-import { getPosts } from '../../api/posts';
+import { getIndexPosts } from '../../api/posts';
 
 import AuthTop from '../users/AuthTop';
 import SignIn from '../users/SignIn';
@@ -22,6 +22,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
   export const PostsTop = () => {
     const navigation = useNavigate();
     const [form, setForm] = useState(false);
+    const [resetoffset, setResetoffset] = useState(false);
     const [signin, setSignin] = useState(false);
     const [signup, setSignup] = useState(false);
     const [posts, setPosts] = useState<Post[]>([]);
@@ -82,7 +83,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
     const handleGetPosts = async () => {
       try {
-        const res = await getPosts()
+        const res = await getIndexPosts(10,0);
         if (res?.status === 200) {
           setPosts(res.data);
         }
@@ -131,7 +132,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
                     <li>
                       <button className="btn btn-primary" onClick={() => formstart()}>Open Form</button>
                       <Modal isOpen={form} className="Modal">
-                        <Form form={form} setForm={setForm} posts={posts} setPosts={setPosts} />
+                        <Form form={form} setForm={setForm} posts={posts} setPosts={setPosts} resetoffset={resetoffset} setResetoffset={setResetoffset}/>
                       </Modal>
                     </li>
                   </ul>
@@ -162,7 +163,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
           </div>
           </TabList>
           <TabPanel>
-            <List posts={posts} setPosts={setPosts}/>
+            <List posts={posts} setPosts={setPosts} resetoffset={resetoffset} setResetoffset={setResetoffset} />
           </TabPanel>
           <TabPanel>
             <AuthTop />

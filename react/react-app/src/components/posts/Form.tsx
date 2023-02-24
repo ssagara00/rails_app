@@ -5,15 +5,18 @@ import { AuthContext } from "../../App";
 
 import { Post } from '../../interfaces/interface';
 import { createPost } from '../../api/posts';
+import { getIndexPosts } from '../../api/posts';
 
 interface PostFormProps {
   form: boolean
   setForm: Function
   posts: Post[]
   setPosts: Function
+  resetoffset: boolean
+  setResetoffset: Function
 }
 
-  export const Form = ({ form, setForm, posts, setPosts }: PostFormProps) => {
+  export const Form = ({ form, setForm, posts, setPosts, resetoffset, setResetoffset }: PostFormProps) => {
     const { register, handleSubmit, formState: { errors },} = useForm<Post>();
     const { currentUser }= useContext(AuthContext);
     const user_id = currentUser?.id;
@@ -66,7 +69,11 @@ interface PostFormProps {
       try {
         const res = await createPost(formData)
         if (res.status == 200) {
-          setPosts([res.data, ...posts])
+          const listres = await getIndexPosts(10,0);
+          if (listres?.status === 200) {
+            setPosts(listres.data);
+          }
+          setResetoffset(true);
           setForm(false);
         } else {
           console.log(res.data.message)

@@ -6,6 +6,11 @@ export const getPosts = () => {
   return axiosInstance.get("/posts")
 }
 
+// レコードをページネーションで取得
+export const getIndexPosts = (limit: number, offset: number) => {
+  return axiosInstance.get(`/posts/limit_index/${limit}/${offset}`)
+}
+
 // レコードを１件取得
 export const showPost = (id: number) => {
   return axiosInstance.get(`/posts/${id}`)
