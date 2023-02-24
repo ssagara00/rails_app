@@ -1,23 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import InfiniteScroll from "react-infinite-scroller";
 
 import { Post } from '../../interfaces/interface';
+import { getIndexPosts } from '../../api/posts';
 
 import Item from './Item';
 
 interface PostListProps {
   posts: Post[]
   setPosts: Function
+  resetoffset: boolean
+  setResetoffset: Function
 }
 
-  export const List = ({ posts, setPosts }: PostListProps) => {
-    return (
-      <ul className="postlist">
-        {
-          posts.map((post: Post, index: number) => (
-            <Item key={index} post={post} setPosts={setPosts}/>
-          ))
+  export const List = ({ posts, setPosts, resetoffset, setResetoffset }: PostListProps) => {
+    const [hasMore, setHasMore] = useState(true);
+    const [offset, setOffset] = useState(0);
+
+    const loadMore = async() => {
+
+      try {
+        if(resetoffset == true ) {
+          setOffset(10);
+          setResetoffset(false);
         }
-      </ul>
+        const res = await getIndexPosts(10,offset);
+        if (res?.status === 200) {
+          if (res?.data.length <  1) {
+            setHasMore(false);
+            return
+          } else {
+            setPosts([...posts, ...res.data]);
+            setOffset(offset + 10 );
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    const loader = <div className="loader" key={0}>Loading ...</div>;
+
+    return (
+    <div>
+      <InfiniteScroll
+        hasMore={hasMore}
+        loadMore={loadMore}    
+        loader={loader}>
+          <ul className="postlist">
+            {
+              posts.map((post: Post, index: number) => (
+                <Item key={index} post={post} setPosts={setPosts}/>
+              ))
+            }
+          </ul>
+      </InfiniteScroll>
+    </div>
     )
   }
 
