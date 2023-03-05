@@ -24,7 +24,23 @@ RSpec.describe "Posts", type: :request do
       expect(response.status).to eq(200)
       expect(json.length).to eq(5)
       expect(json[0]['id'] - json[4]['id']).to eq(4)
-      # pending "add some examples (or delete) #{__FILE__}"
+    end
+  end
+
+  describe "GET /my_posts" do
+    it '自分の投稿データを取得する' do
+      post = FactoryBot.create(:post, user_id: 11)
+      post = FactoryBot.create(:post, user_id: 22)
+      post = FactoryBot.create(:post, user_id: 11)
+      post = FactoryBot.create(:post, user_id: 11)
+      post = FactoryBot.create(:post, user_id: 33)
+
+      get "/posts/my_posts/#{11}/#{3}/#{0}"
+      json = JSON.parse(response.body)
+
+      expect(response.status).to eq(200)
+      expect(json.length).to eq(3)
+      expect(json[0]['user_id']).to eq(11)
     end
   end
 

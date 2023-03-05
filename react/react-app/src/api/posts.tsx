@@ -11,6 +11,11 @@ export const getIndexPosts = (limit: number, offset: number) => {
   return axiosInstance.get(`/posts/limit_index/${limit}/${offset}`)
 }
 
+// 自分の投稿を取得
+export const myPosts = (user_id: number, limit: number, offset: number) => {
+  return axiosInstance.get(`/posts/my_posts/${user_id}/${limit}/${offset}`)
+}
+
 // レコードを１件取得
 export const showPost = (id: number) => {
   return axiosInstance.get(`/posts/${id}`)

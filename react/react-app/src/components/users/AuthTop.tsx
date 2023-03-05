@@ -1,79 +1,79 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import Modal from "react-modal";
+import { useNavigate, Link } from 'react-router-dom';
 import Cookies from "js-cookie";
 
-import { getCurrentUser, signOut } from "../../api/auth"
+import { signOut } from "../../api/auth"
 import { AuthContext } from "../../App";
+import { deleteUser } from '../../api/users';
+
+import editimage from '../../img/edit.svg';
+import deleteaccount from '../../img/deleteaccount.svg';
+import contents from '../../img/contents.svg';
+
+import Edit from './Edit';
+import Mylist from "./Mylist";
 
   export const AuthTop = () => {
+    const navigation = useNavigate();
+    const { currentUser, setIsSignedIn } = useContext(AuthContext);  
+    const [edit, setEdit] = useState<boolean>(false);
+    const [contents_flg, setContents_flg] = useState<boolean>(false);
+    const user_id = currentUser?.id || 0;
 
-    {/*const { loading, isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
-
-    const handleGetCurrentUser = async () => {
-      try {
-        const res = await getCurrentUser()
-        if (res?.data.isLogin === true) {
-          setIsSignedIn(true)
-          setCurrentUser(res?.data.data)
-          console.log(res?.data.data)
-        } else {
-          console.log("No current user")
-        }
-      } catch (err) {
-        console.log(err)
-      }
-      setLoading(false)
+    const editstart = () =>{
+      setEdit(true);
     }
 
-    useEffect(() => {
-      handleGetCurrentUser()
-    }, [setCurrentUser])
+    const contentstart = () =>{
+      setContents_flg(true);
+    }
 
-    const handleSignOut = async (e) => {
+    const handleDeleteUser = async () => {
       try {
-        const res = await signOut()
-        if (res.data.success === true) {
+        const res = await deleteUser(user_id)
+        if (res?.status === 200) {
+          // const res = await signOut()
+          if (res.data.success === true) {
             // サインアウト時には各Cookieを削除
             Cookies.remove("_access_token")
             Cookies.remove("_client")
             Cookies.remove("_uid")
             setIsSignedIn(false)
-            navigation("/auth")
+            navigation("/posts")
             console.log("Succeeded in sign out")
           } else {
             console.log("Failed in sign out")
           }
+        }
       } catch (err) {
         console.log(err)
       }
-    }*/}
+    }
 
     return (
-        <p>soon after</p>
-      /*<div>
-        <h1>Userinfomation</h1>
-        {
-          isSignedIn && currentUser ? (
-            <div>
-              <h1>Signed in successfully!</h1>
-              <h2>Email: {currentUser?.email}</h2>
-              <h2>Name: {currentUser?.name}</h2>
-            </div>
-          ) : (
-            <h1>Not signed in</h1>
-          )
-        }
-        <p>login</p>
-          <Link to={'/auth/signin/'}>Link to signin</Link>
-
-        <p>logout</p>
-        <form onSubmit={handleSignOut}>
-          <input type="submit" value="logout"/>
-        </form>
-
-        <p>signup</p>
-          <Link to={'/auth/signup/'}>Link to signup</Link>
-      </div>*/
+      <div>
+      {
+        contents_flg ? (
+          <Mylist contents_flg={contents_flg} setContents_flg={setContents_flg} />
+        ) : (
+          <ul className="authlist">
+            <li>
+              <button onClick={() => editstart()}><img src={editimage} alt="user_edit" className="authmenu" width="200" height="200" /></button>
+              <Modal isOpen={edit} className="Modal">
+                <Edit edit={edit} setEdit={setEdit} />
+              </Modal>
+            </li>
+            <li>
+              <button onClick={() => handleDeleteUser()}><img src={deleteaccount} alt="deleteaccount" className="authmenu" width="200" height="200" /></button>
+            </li>
+            <li>
+              <button onClick={() => contentstart()}><img src={contents} alt="contents" className="authmenu" width="200" height="200" /></button>
+            </li>
+          </ul>
+        )
+      }
+      </div>
     )
   }
 

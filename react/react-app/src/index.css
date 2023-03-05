@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #CCCCCC;
 }
 
 code {
@@ -13,7 +14,7 @@ code {
 }
 
 /*以下は追加分*/
-.wrapper{
+.wrapper {
   margin-top: 50px;
   display: flex;
   flex-wrap: wrap;
@@ -42,10 +43,6 @@ code {
   margin: 0 auto;
   width: 75%;
   height: 150px;
-}
-
-body{
-  background-color: #CCCCCC;
 }
 
 .Modal {
@@ -118,11 +115,38 @@ body{
   left: 0%;
 }
 
+.tab {
+  width: 50%;
+}
+
+.tabList {
+  display: flex;
+}
+
+.authmenu {
+  padding: 40px;
+  font-weight: bold;
+  color: #6091d3;/*文字色*/
+  background: #FFF;
+  border: solid 3px #6091d3;/*線*/
+  border-radius: 10px;/*角の丸み*/
+}
+
+.authlist {
+  display: flex;
+  justify-content:space-between;
+  margin: 20px;
+}
+
+.height {
+  min-height: 100vh;
+}
+
 .button-actions {
   display:flex;
   position:absolute;
   top: 5%;
-  right: 10%;
+  right: 10%
 }
 
 @tailwind base;

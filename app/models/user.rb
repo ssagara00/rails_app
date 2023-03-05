@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
     presence: true,
     length: { maximum: 100 },
     on: :create
-    
+
   VALID_EMAIL = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email,
     # default validation

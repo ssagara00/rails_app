@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :likes
 
   get 'posts/limit_index/:limit/:offset', to:'posts#limit_index'
+  get 'posts/my_posts/:user_id/:limit/:offset', to:'posts#my_posts'
   get 'likes/is_liked/:user_id/:post_id', to:'likes#is_liked'
   delete 'likes/delete/:user_id/:post_id', to:'likes#destroy'
 
