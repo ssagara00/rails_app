@@ -15,7 +15,9 @@ describe('Form', () => {
     const setForm = jest.fn();
     const posts: Post[] = [];
     const setPosts = jest.fn();
-    render(<Form form={form} setForm={setForm} posts={posts} setPosts={setPosts} />);
+    const resetoffset = false;
+    const setResetoffset = jest.fn();
+    render(<Form form={form} setForm={setForm} posts={posts} setPosts={setPosts} resetoffset={resetoffset} setResetoffset={setResetoffset} />);
   }
 
   it('renders input form', () => {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Modal from "react-modal";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 import { useNavigate, Link } from 'react-router-dom';
 import Cookies from "js-cookie";
 
@@ -101,7 +103,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
     }, [currentUser])
 
     return (
-      <div>
+      <div className="height">
         <div className="navbar bg-neutral text-neutral-content">
           <div className="flex-1">
           {
@@ -155,20 +157,24 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
               }
           </div>
         </div>
-        <Tabs>
-          <TabList>
-          <div className="tabs">
-            <Tab><p className={active1 ? "tab tab-lifted tab-active" : "tab tab-lifted"} onClick={changeactive}>post_LIST</p></Tab>
-            <Tab><p className={active2 ? "tab tab-lifted tab-active" : "tab tab-lifted"} onClick={changeactive}>Auth_List</p></Tab>
-          </div>
-          </TabList>
-          <TabPanel>
+        {
+          isSignedIn && currentUser ? (
+            <Tabs>
+              <TabList className = "tabList">
+                <Tab className = "tab"><p onClick={changeactive}>post_List</p></Tab>
+                <Tab className = "tab"><p onClick={changeactive}>Auth_List</p></Tab>
+              </TabList>
+              <TabPanel>
+                <List posts={posts} setPosts={setPosts} resetoffset={resetoffset} setResetoffset={setResetoffset} />
+              </TabPanel>
+              <TabPanel>
+                <AuthTop />
+              </TabPanel>
+            </Tabs>
+          ) : (
             <List posts={posts} setPosts={setPosts} resetoffset={resetoffset} setResetoffset={setResetoffset} />
-          </TabPanel>
-          <TabPanel>
-            <AuthTop />
-          </TabPanel>
-        </Tabs>
+          )
+        }
       </div>
     )
   }
