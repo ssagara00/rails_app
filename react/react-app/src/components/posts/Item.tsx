@@ -37,7 +37,7 @@ interface PostItemProps {
     const [likes, setLikes] = useState<Like[]>([]);
     const [is_liked, setIs_liked] = useState(false);
 
-    const { isSignedIn, currentUser }= useContext(AuthContext);
+    const { isSignedIn, currentUser, setCurrentUser }= useContext(AuthContext);
     const user_id = currentUser?.id || 0;
 
     const detailstart = (id: number) =>{
@@ -63,6 +63,8 @@ interface PostItemProps {
         const res = await deletePost(id)
         if (res?.status === 200) {
           setPosts((prev: Post[]) => prev.filter((post: Post) => post.id !== id))
+          handleGetLikeTotalNumber()
+          handleGetMyLikes()
         }
       } catch (err) {
         console.log(err)
@@ -81,7 +83,8 @@ interface PostItemProps {
       }
     }
 
-    const handleShowLike = async () => {
+    // 各投稿のいいね数を取得
+    const handleGetLikeTotalNumber = async () => {
       const id: number = post.id || 0
       try {
         const res = await showLike(id)
@@ -93,12 +96,13 @@ interface PostItemProps {
       }
     }
 
-    const handleSearch = async () => {
+    // ログインユーザーがいいねした投稿を取得
+    const handleGetMyLikes = async () => {
       const post_id: number = post.id || 0
       try {
         const res = await searchLike(user_id,post_id)
         if (res?.status === 200) {
-          setIs_liked(res.data)
+          setIs_liked(res.data);
         }
       } catch (err) {
         console.log(err)
@@ -144,12 +148,12 @@ interface PostItemProps {
     }, []);
 
     useEffect(() => {
-      handleShowLike()
+      handleGetLikeTotalNumber()
     }, [])
 
     useEffect(() => {
-      handleSearch()
-    }, [isSignedIn, setPosts]);
+      handleGetMyLikes()
+    }, [setCurrentUser]);
 
     return (
       <li>
@@ -158,7 +162,7 @@ interface PostItemProps {
           <p>いいね数：{likes?.length}</p>
 
           {
-            isSignedIn && currentUser?.id == post.user_id ? (
+            isSignedIn ? (
 
               is_liked == true ? (
                 <div>
