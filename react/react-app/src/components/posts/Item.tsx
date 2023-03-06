@@ -38,6 +38,7 @@ interface PostItemProps {
     const [is_liked, setIs_liked] = useState(false);
 
     const { isSignedIn, currentUser }= useContext(AuthContext);
+    const user_id = currentUser?.id || 0;
 
     const detailstart = (id: number) =>{
       setDetail(true);
@@ -91,7 +92,6 @@ interface PostItemProps {
         console.log(err)
       }
     }
-const user_id = 2
 
     const handleSearch = async () => {
       const post_id: number = post.id || 0
