@@ -18,8 +18,8 @@
     ],
     "plugins": [
       "import",
-      "jest",
       "react",
+      "jest",
       "react-hooks",
       "@typescript-eslint"
     ],

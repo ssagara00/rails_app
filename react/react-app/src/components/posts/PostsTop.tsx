@@ -100,7 +100,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
     useEffect(() => {
       handleGetCurrentUser()
-    }, [currentUser])
+    }, [setCurrentUser])
 
     return (
       <div className="height">
