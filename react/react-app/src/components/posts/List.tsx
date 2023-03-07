@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 
-import { Post } from '../../interfaces/interface';
 import { getIndexPosts } from '../../api/posts';
 
 import Item from './Item';
+
+import { Post } from '../../interfaces/interface';
 
 interface PostListProps {
   posts: Post[]
@@ -18,7 +19,6 @@ interface PostListProps {
     const [offset, setOffset] = useState(0);
 
     const loadMore = async() => {
-
       try {
         if(resetoffset == true ) {
           setOffset(10);
@@ -35,7 +35,7 @@ interface PostListProps {
           }
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 

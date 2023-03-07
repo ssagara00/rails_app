@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Form from './Form';
 import { Post } from '../../interfaces/interface';
+jest.mock('react-alert');
 
 describe('Form', () => {
   beforeEach(() => {
