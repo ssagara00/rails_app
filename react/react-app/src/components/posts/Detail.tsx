@@ -1,11 +1,12 @@
 import React, { useEffect, useState }  from 'react';
 
-import { Post } from '../../interfaces/interface';
 import { showPost } from '../../api/posts';
-import { Reply } from '../../interfaces/reply_interface';
 import { showReply } from '../../api/replies';
 
 import ReplyItem from './ReplyItem';
+
+import { Post } from '../../interfaces/interface';
+import { Reply } from '../../interfaces/reply_interface';
 
 interface PostDetailProps {
   detail: boolean
@@ -39,23 +40,24 @@ interface PostDetailProps {
           setReplies(results.data);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
     useEffect(() => {
-      handleShowPost(modalid)
+      handleShowPost(modalid);
     }, [])
 
     useEffect(() => {
-      handleShowReplies(modalid)
+      handleShowReplies(modalid);
     }, [])
 
     return(
       <div className="centor">
 
         <figure className="centor_image">
-        { post?.image?.url ?
+        { 
+          post?.image?.url ?
           <img src={post.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
         }
         </figure>
@@ -67,17 +69,25 @@ interface PostDetailProps {
         <br/>
         <h3 className="topic">Reply for this item</h3>
           
-          <ul>
-            {
-              replies?.map((reply: Reply, index: number) => (
-                <ReplyItem key={index} reply={reply} setReply={setReplies} />
-              ))
-            }
-          </ul>
+          {
+            replies?.length  == 0 ? (
+              <p>まだ返信がありません。</p>
+            ) : (
+              <ul>
+                {
+                  replies?.map((reply: Reply, index: number) => (
+                    <ReplyItem key={index} reply={reply} setReply={setReplies} />
+                  ))
+                }
+              </ul>
+            )
+          }
+
         <br/>
         <button onClick={closeModal} className="btn">Close Modal</button> 
+
       </div>
     )
   }
 
-export default Detail;
+export default Detail

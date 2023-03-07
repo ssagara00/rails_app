@@ -1,11 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
+import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-
-import { Post } from '../../interfaces/interface';
 import { createPost } from '../../api/posts';
 import { getIndexPosts } from '../../api/posts';
+
+import { Dialog, DialogProps } from '../../Dialog';
+
+import { Post } from '../../interfaces/interface';
 
 interface PostFormProps {
   form: boolean
@@ -17,9 +20,12 @@ interface PostFormProps {
 }
 
   export const Form = ({ form, setForm, posts, setPosts, resetoffset, setResetoffset }: PostFormProps) => {
-    const { register, handleSubmit, formState: { errors },} = useForm<Post>();
     const { currentUser }= useContext(AuthContext);
     const user_id = currentUser?.id;
+
+    const alert = useAlert();
+    const { register, handleSubmit, formState: { errors },} = useForm<Post>();
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
 
     const [isFileTypeError, setIsFileTypeError] = useState(false);
     const [photo, setPhoto] = useState<File>();
@@ -59,27 +65,40 @@ interface PostFormProps {
     }
 
     const onSubmit = async(data: Post) =>{
+      const ret = await new Promise<string>((resolve) => {
+        setDialog({
+        onClose: resolve,
+        title: '投稿',
+        message: '投稿します。よろしいですか?'
+        })
+      })
+      setDialog(undefined);
 
-      const formData :any = new FormData();
-      formData.append("post[user_id]", user_id);
-      formData.append("post[title]", data.title);
-      formData.append("post[contents]", data.contents);
-      if (photo) formData.append("post[image]", photo);
+      if (ret === 'ok') {
+        const formData :any = new FormData();
+        formData.append("post[user_id]", user_id);
+        formData.append("post[title]", data.title);
+        formData.append("post[contents]", data.contents);
+        if (photo) formData.append("post[image]", photo);
 
-      try {
-        const res = await createPost(formData)
-        if (res.status == 200) {
-          const listres = await getIndexPosts(10,0);
-          if (listres?.status === 200) {
-            setPosts(listres.data);
+        try {
+          const res = await createPost(formData);
+          if (res.status == 200) {
+            const listres = await getIndexPosts(10,0);
+            if (listres?.status === 200) {
+              setPosts(listres.data);
+            }
+            alert.success('投稿に成功しました');
+            setResetoffset(true);
+            setForm(false);
+          } else {
+            alert.error('投稿に失敗しました');
+            console.log(res.data.message);
           }
-          setResetoffset(true);
-          setForm(false);
-        } else {
-          console.log(res.data.message)
+        } catch (err) {
+          alert.error('投稿に失敗しました');
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err)
       }
     }
 
@@ -91,6 +110,9 @@ interface PostFormProps {
 
     return(
       <div>
+
+        {dialog && <Dialog {...dialog} />}
+
         <h3 className="font-bold text-lg">NEW Posts!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
 

@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
+import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-
-import { User } from '../../interfaces/user_interface';
-import { showUser } from '../../api/users';
-
-import { Post } from '../../interfaces/interface';
 import { deletePost } from '../../api/posts';
-
-import { Like } from '../../interfaces/like_interface';
+import { showUser } from '../../api/users';
 import { createLike, showLike, searchLike, deleteLike } from '../../api/likes';
 
 import Update from './Update';
 import Detail from './Detail';
 import ReplyCreate from './ReplyCreate';
+import { Dialog, DialogProps } from '../../Dialog';
+
+import { Post } from '../../interfaces/interface';
+import { User } from '../../interfaces/user_interface';
+import { Like } from '../../interfaces/like_interface';
 
 import hearton from '../../img/hearton.svg';
 import heartoff from '../../img/heartoff.svg';
@@ -26,7 +26,12 @@ interface PostItemProps {
 }
 
   export const Item = ({ post, setPosts }: PostItemProps) => {
+    const { isSignedIn, currentUser, setCurrentUser }= useContext(AuthContext);
+    const user_id = currentUser?.id || 0;
+
+    const alert = useAlert();
     const { handleSubmit } = useForm<Like>();
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
     const [detail, setDetail] = useState(false);
     const [update, setUpdate] = useState(false);
     const [reply, setReply] = useState(false);
@@ -36,9 +41,6 @@ interface PostItemProps {
     const [user, setUser] = useState<User>();
     const [likes, setLikes] = useState<Like[]>([]);
     const [is_liked, setIs_liked] = useState(false);
-
-    const { isSignedIn, currentUser, setCurrentUser }= useContext(AuthContext);
-    const user_id = currentUser?.id || 0;
 
     const detailstart = (id: number) =>{
       setDetail(true);
@@ -59,53 +61,69 @@ interface PostItemProps {
     }
 
     const handleDeletePost = async (id: number) => {
-      try {
-        const res = await deletePost(id)
-        if (res?.status === 200) {
-          setPosts((prev: Post[]) => prev.filter((post: Post) => post.id !== id))
-          handleGetLikeTotalNumber()
-          handleGetMyLikes()
+      const ret = await new Promise<string>((resolve) => {
+        setDialog({
+        onClose: resolve,
+        title: '投稿削除',
+        message: '削除します。よろしいですか?'
+        })
+      })
+      setDialog(undefined);
+
+      if (ret === 'ok') {
+        try {
+          const res = await deletePost(id);
+          if (res?.status === 200) {
+            alert.success('削除に成功しました');
+            setPosts((prev: Post[]) => prev.filter((post: Post) => post.id !== id))
+            handleGetLikeTotalNumber();
+            handleGetMyLikes();
+          } else {
+            alert.error('削除に失敗しました');
+            console.log("Failed delete");
+          }
+        } catch (err) {
+          alert.error('削除に失敗しました');
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err)
       }
     }
 
     const handleGetUser = async () => {
-      const id: number = post.user_id || 0
+      const id: number = post.user_id || 0;
       try {
         const res = await showUser(id);
         if (res?.status === 200) {
           setUser(res.data);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
     // 各投稿のいいね数を取得
     const handleGetLikeTotalNumber = async () => {
-      const id: number = post.id || 0
+      const id: number = post.id || 0;
       try {
         const res = await showLike(id)
         if (res?.status === 200) {
           setLikes(res.data);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
     // ログインユーザーがいいねした投稿を取得
     const handleGetMyLikes = async () => {
-      const post_id: number = post.id || 0
+      const post_id: number = post.id || 0;
       try {
-        const res = await searchLike(user_id,post_id)
+        const res = await searchLike(user_id,post_id);
         if (res?.status === 200) {
           setIs_liked(res.data);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
@@ -118,13 +136,13 @@ interface PostItemProps {
       try {
         const res = await createLike(data);
         if (res?.status === 200) {
-          const id: number = post.id || 0
+          const id: number = post.id || 0;
           const result = await showLike(id);
           setLikes(result.data);
           setIs_liked(true);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
@@ -133,30 +151,33 @@ interface PostItemProps {
       try {
         const res = await deleteLike(user_id,post_id);
         if (res?.status === 200) {
-          const id: number = post.id || 0
+          const id: number = post.id || 0;
           const res = await showLike(id);
           setLikes(res.data);
           setIs_liked(false);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
     useEffect(() => {
-      handleGetUser()
+      handleGetUser();
     }, []);
 
     useEffect(() => {
-      handleGetLikeTotalNumber()
+      handleGetLikeTotalNumber();
     }, [])
 
     useEffect(() => {
-      handleGetMyLikes()
+      handleGetMyLikes();
     }, [setCurrentUser]);
 
     return (
       <li>
+
+        {dialog && <Dialog {...dialog} />}
+
         <div className="card w-96 bg-base-100 shadow-xl">
           <p>投稿者：{user?.name}</p>
           <p>いいね数：{likes?.length}</p>
@@ -233,6 +254,7 @@ interface PostItemProps {
                 </Modal>
               </div>
             }
+
           </div>
         </div>
       </li>

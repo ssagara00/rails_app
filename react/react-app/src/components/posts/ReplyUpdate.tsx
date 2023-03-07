@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useAlert } from 'react-alert';
+
+import { updateReply } from '../../api/replies';
+
+import { Dialog, DialogProps } from '../../Dialog';
 
 import { Reply } from '../../interfaces/reply_interface';
-import { updateReply } from '../../api/replies';
+
 
 interface ReplyUpdateProps {
   replyupdate: boolean
@@ -15,34 +20,47 @@ interface ReplyUpdateProps {
 }
 
   export const ReplyUpdate = ({ replyupdate, setReplyUpdate, modalid, idtitle, idcontents, reply, setReply }: ReplyUpdateProps) => {
+    const alert = useAlert();
     const { register, handleSubmit,formState: { errors }, } = useForm<Reply>({ defaultValues: { title: idtitle, contents: idcontents } });
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
 
     const closeModal = () => {
       setReplyUpdate(false)
     }
 
-    const onSubmit = async(datas: Reply) =>{
+    const onSubmit = async(data: Reply) =>{
+      const ret = await new Promise<string>((resolve) => {
+        setDialog({
+        onClose: resolve,
+        title: '投稿',
+        message: '更新します。よろしいですか?'
+        })
+      })
+      setDialog(undefined);
 
-      const data: Reply = {
-        title: datas.title,
-        contents: datas.contents
-      };
-
-      try {
-        const res = await updateReply(modalid,data)
-        if (res.status == 200) {
-          setReply((prev: Reply[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
-          setReplyUpdate(false);
-        } else {
-          console.log(res.data.message)
+      if (ret === 'ok') {
+        try {
+          const res = await updateReply(modalid,data)
+          if (res.status == 200) {
+            alert.success('更新に成功しました');
+            setReply((prev: Reply[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
+            setReplyUpdate(false);
+          } else {
+            alert.error('更新に失敗しました');
+            console.log(res.data.message);
+          }
+        } catch (err) {
+          alert.error('更新に失敗しました');
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err)
       }
     }
 
     return(
       <div>
+
+        {dialog && <Dialog {...dialog} />}
+
         <h3 className="font-bold text-lg">Update Posts!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -93,6 +111,7 @@ interface ReplyUpdateProps {
         </form>
         <br/>
         <button onClick={closeModal} className="btn">Close Modal</button>
+        
       </div>
     )
   }

@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAlert } from 'react-alert'
+import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-import { SignEditParams } from "../../interfaces/user_interface"
 import { editUser } from '../../api/users';
+
 import { Dialog, DialogProps } from '../../Dialog';
+
+import { SignEditParams } from "../../interfaces/user_interface";
 
 interface UserEditProps {
   edit: boolean
@@ -13,14 +15,14 @@ interface UserEditProps {
 }
 
   export const Edit = ({ edit, setEdit }: UserEditProps) => {
-    const alert = useAlert();
     const { currentUser, setCurrentUser } = useContext(AuthContext);
     const user_id = currentUser?.id || 0;
     const user_name = currentUser?.name;
     const user_mail = currentUser?.email;
-    const [dialog, setDialog] = useState<DialogProps | undefined>()
 
+    const alert = useAlert();
     const { register, handleSubmit, formState: { errors }  } = useForm<SignEditParams>({ defaultValues: { name: user_name, email: user_mail } });
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
 
     const closeModal = () => {
       setEdit(false);
@@ -30,8 +32,8 @@ interface UserEditProps {
       const ret = await new Promise<string>((resolve) => {
          setDialog({
          onClose: resolve,
-         title: '確認',
-         message: '編集します。よろしいですか?'
+         title: 'ユーザー情報編集',
+         message: 'ユーザー情報を更新します。よろしいですか?'
         })
       })
       setDialog(undefined);
@@ -40,14 +42,16 @@ interface UserEditProps {
         try {
           const res = await editUser(user_id,data)
           if (res.status == 200) {
-            alert.success('登録に成功しました');
+            alert.success('更新に成功しました');
             setCurrentUser(res.data.data);
             setEdit(false);
           } else {
-            console.log(res.data.message)
+            alert.error('更新に失敗しました');
+            console.log(res.data.message);
           }
         } catch (err) {
-          console.log(err)
+          alert.error('更新に失敗しました');
+          console.log(err);
         }
       }
     }

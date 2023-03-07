@@ -1,39 +1,61 @@
-import React from "react"
-import { useForm } from 'react-hook-form'
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useAlert } from 'react-alert';
 
-import { signUp } from "../../api/auth"
-import { SignUpParams } from "../../interfaces/user_interface"
+import { signUp } from "../../api/auth";
+
+import { Dialog, DialogProps } from '../../Dialog';
+
+import { SignUpParams } from "../../interfaces/user_interface";
 
 interface SignUpProps {
   signup: boolean
   setSignup: Function
 }
 
-export const SignUp = ({ signup, setSignup }: SignUpProps) => {
-  const { register, handleSubmit, getValues, trigger, formState: { errors } } = useForm<SignUpParams>({mode: "onBlur"});
+  export const SignUp = ({ signup, setSignup }: SignUpProps) => {
+    const alert = useAlert();
+    const { register, handleSubmit, getValues, trigger, formState: { errors } } = useForm<SignUpParams>({mode: "onBlur"});
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
 
     const closeModal = () => {
       setSignup(false);
     }
 
     const onSubmit = async(data: SignUpParams) =>{
+      const ret = await new Promise<string>((resolve) => {
+        setDialog({
+        onClose: resolve,
+        title: 'ユーザー登録',
+        message: 'ユーザー登録します。よろしいですか?'
+        })
+      })
+      setDialog(undefined);
 
-      try {
-        const res = await signUp(data);
-        if (res.status === 200) {
-          console.log("Signed up successfully!")
-          setSignup(false);
-        } else {
-          console.log('signup is failed')
+      if (ret === 'ok') {
+        try {
+          const res = await signUp(data);
+          if (res.status === 200) {
+            alert.success('登録に成功しました');
+            console.log("Signed up successfully!");
+            setSignup(false);
+          } else {
+            alert.error('登録に失敗しました');
+            console.log('signup is failed');
+          }
+        } catch (err) {
+          alert.error('登録に失敗しました');
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err)
       }
     }
 
     return (
       <div>
-      <h3 className="font-bold text-lg">SignUp!</h3>
+
+        {dialog && <Dialog {...dialog} />}
+
+        <h3 className="font-bold text-lg">SignUp!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
 
           <p className="py-4">name</p>
@@ -137,6 +159,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
           <br/>
           <input className="btn" type="submit" value="AddUser"/>
         </form>
+        
         <button onClick={closeModal} className="btn">Close Modal</button>
       </div>
     )

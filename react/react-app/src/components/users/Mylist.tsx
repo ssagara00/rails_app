@@ -2,10 +2,11 @@ import React, { useState, useContext } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 
 import { AuthContext } from "../../App";
-import { Post } from '../../interfaces/interface';
 import { myPosts } from '../../api/posts';
 
 import Item from '../posts/Item';
+
+import { Post } from '../../interfaces/interface';
 
 interface MylistProps {
   contents_flg: boolean,
@@ -14,11 +15,12 @@ interface MylistProps {
 
   export const Mylist = ({ contents_flg, setContents_flg }: MylistProps) => {
     const { currentUser } = useContext(AuthContext);
+    const user_id = currentUser?.id || 0;
+
     const [posts, setPosts] = useState<Post[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [offset, setOffset] = useState(0);
-    const user_id = currentUser?.id || 0
-
+    
     const contentsend = () =>{
       setContents_flg(false);
     }
@@ -36,28 +38,28 @@ interface MylistProps {
           }
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
     const loader = <div className="loader" key={0}>Loading ...</div>;
 
     return (
-    <div>
-      <button className="btn btn-primary" onClick={() => contentsend()}>back to menu</button>
-      <InfiniteScroll
-        hasMore={hasMore}
-        loadMore={loadMore}    
-        loader={loader}>
-          <ul className="postlist">
-            {
-              posts.map((post: Post, index: number) => (
-                <Item key={index} post={post} setPosts={setPosts}/>
-              ))
-            }
-          </ul>
-      </InfiniteScroll>
-    </div>
+      <div>
+        <button className="btn btn-primary" onClick={() => contentsend()}>back to menu</button>
+        <InfiniteScroll
+          hasMore={hasMore}
+          loadMore={loadMore}    
+          loader={loader}>
+            <ul className="postlist">
+              {
+                posts.map((post: Post, index: number) => (
+                  <Item key={index} post={post} setPosts={setPosts}/>
+                ))
+              }
+            </ul>
+        </InfiniteScroll>
+      </div>
     )
   }
 

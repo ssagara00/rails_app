@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useAlert } from 'react-alert';
+
+import { updatePost } from '../../api/posts';
+
+import { Dialog, DialogProps } from '../../Dialog';
 
 import { Post } from '../../interfaces/interface';
-import { updatePost } from '../../api/posts';
+
 
 interface PostUpdateProps {
   update: boolean
@@ -15,7 +20,9 @@ interface PostUpdateProps {
 }
 
   export const Update = ({ update, setUpdate, modalid, idtitle, idcontents, post, setPosts }: PostUpdateProps) => {
+    const alert = useAlert();
     const { register, handleSubmit,formState: { errors } } = useForm<Post>({ defaultValues: { title: idtitle, contents: idcontents } });
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
 
     const [isFileTypeError, setIsFileTypeError] = useState(false);
     const [photo, setPhoto] = useState<File>();
@@ -55,22 +62,35 @@ interface PostUpdateProps {
     }
 
     const onSubmit = async(data: Post) =>{
+      const ret = await new Promise<string>((resolve) => {
+        setDialog({
+        onClose: resolve,
+        title: '投稿',
+        message: '更新します。よろしいですか?'
+        })
+      })
+      setDialog(undefined);
 
-      const formData: any = new FormData();
-      formData.append("title", data.title);
-      formData.append("contents", data.contents);
-      if (photo) formData.append("image", photo);
+      if (ret === 'ok') {
+        const formData: any = new FormData();
+        formData.append("title", data.title);
+        formData.append("contents", data.contents);
+        if (photo) formData.append("image", photo);
 
-      try {
-        const res = await updatePost(modalid,formData)
-        if (res.status == 200) {
-          setPosts((prev: Post[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
-          setUpdate(false);
-        } else {
-          console.log(res.data.message)
+        try {
+          const res = await updatePost(modalid,formData);
+          if (res.status == 200) {
+            alert.success('更新に成功しました');
+            setPosts((prev: Post[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
+            setUpdate(false);
+          } else {
+            alert.error('更新に失敗しました');
+            console.log(res.data.message);
+          }
+        } catch (err) {
+          alert.error('更新に失敗しました');
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err)
       }
     }
 
@@ -82,6 +102,9 @@ interface PostUpdateProps {
 
     return(
       <div>
+
+        {dialog && <Dialog {...dialog} />}
+
         <h3 className="font-bold text-lg">Update Posts!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
 

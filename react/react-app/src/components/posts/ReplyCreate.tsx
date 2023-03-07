@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-
-import { Reply } from '../../interfaces/reply_interface';
 import { createReply } from '../../api/replies';
 
-import '../../App.css';
+import { Dialog, DialogProps } from '../../Dialog';
+
+import { Reply } from '../../interfaces/reply_interface';
 
 interface PostReplyProps {
   reply: boolean
@@ -16,37 +17,56 @@ interface PostReplyProps {
 }
 
   export const ReplyCreate = ({ reply, setReply, modalid, idtitle }: PostReplyProps) => {
-    const { register, handleSubmit, formState: { errors }, } = useForm<Reply>({ defaultValues: { title: 'Re:' + idtitle } });
     const { currentUser } = useContext(AuthContext);
     const user_id = currentUser?.id;
     
+    const alert = useAlert();
+    const { register, handleSubmit, formState: { errors }, } = useForm<Reply>({ defaultValues: { title: 'Re:' + idtitle } });
+    const [dialog, setDialog] = useState<DialogProps | undefined>();
+    
     const closeModal = () => {
-      setReply(false)
+      setReply(false);
     }
 
     const onSubmit = async(data: Reply) =>{
+      const ret = await new Promise<string>((resolve) => {
+        setDialog({
+        onClose: resolve,
+        title: '投稿',
+        message: '投稿します。よろしいですか?'
+        })
+      })
+      setDialog(undefined);
 
-      const datas: Reply = {
-        user_id: user_id,
-        title: data.title,
-        contents: data.contents,
-        reply_from_id: modalid
-      };
+      if (ret === 'ok') {
+        const datas: Reply = {
+          user_id: user_id,
+          title: data.title,
+          contents: data.contents,
+          reply_from_id: modalid
+        };
 
-      try {
-        const res = await createReply(datas)
-        if (res.status == 200) {
-          setReply(false);
-        } else {
-          console.log(res.data.message)
+        try {
+          const res = await createReply(datas)
+          if (res.status == 200) {
+            alert.success('投稿に成功しました');
+            setReply(false);
+          } else {
+            alert.error('投稿に失敗しました');
+            console.log(res.data.message);
+          }
+        } catch (err) {
+          alert.error('投稿に失敗しました');
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err)
       }
     }
 
     return(
       <div>
+
+        {dialog && <Dialog {...dialog} />}
+
         <h3 className="font-bold text-lg">NEW Reply!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -98,6 +118,7 @@ interface PostReplyProps {
         </form>
         <br/>
         <button onClick={closeModal} className="btn">Close Modal</button>
+
       </div>
     )
   }
