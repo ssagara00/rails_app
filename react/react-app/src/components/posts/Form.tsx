@@ -38,29 +38,25 @@ export function Form({ form, setForm, posts, setPosts, resetoffset, setResetoffs
     setForm(false)
   }
 
-  const emptytarget = () => {
-    ;(event!.target! as HTMLInputElement).value = ''
+  const emptytarget: React.MouseEventHandler<HTMLInputElement> = (event) => {
+    event.currentTarget.value = ''
   }
 
-  const handleFile = async () => {
-    if (
-      (event!.target! as HTMLInputElement).files === null ||
-      (event!.target! as HTMLInputElement).files!.length === 0
-    ) {
+  const handleFile: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
+    if (event.target.files === null || event.target.files.length === 0) {
       return
     }
     setIsFileTypeError(false)
 
-    const file = (event!.target! as HTMLInputElement).files![0]
+    const file = event.target.files[0]
 
     if (!['image/jpeg', 'image/png', 'image/bmp', 'image/svg+xml'].includes(file.type)) {
       setIsFileTypeError(true)
-      return false
+      return
     }
 
     setPhoto(file)
     setPreview(window.URL.createObjectURL(file))
-    return true
   }
 
   const onSubmit = async (data: Post) => {
@@ -73,16 +69,21 @@ export function Form({ form, setForm, posts, setPosts, resetoffset, setResetoffs
     })
     setDialog(undefined)
 
-    if (ret === 'ok') {
-      const formData: any = new FormData()
-      formData.append('post[user_id]', user_id)
+    if (ret === 'ok' && user_id) {
+      // formData を any にする理由がない
+      const formData = new FormData()
+      formData.append('post[user_id]', user_id.toString())
       formData.append('post[title]', data.title)
       formData.append('post[contents]', data.contents)
       if (photo) formData.append('post[image]', photo)
 
       try {
-        const res = await createPost(formData)
-        if (res.status == 200) {
+        // `formData: any` で消されていたが型が違う。
+        // おそらく上記の `formData` の処理を `createPost` 関数内で行った方が
+        // アーキテクチャとしては優れています。
+        const res = await createPost(formData as any)
+        // 基本的には == ではなく === を使う。
+        if (res.status === 200) {
           const listres = await getIndexPosts(10, 0)
           if (listres?.status === 200) {
             setPosts(listres.data)
@@ -101,7 +102,7 @@ export function Form({ form, setForm, posts, setPosts, resetoffset, setResetoffs
     }
   }
 
-  const canselFile = () => {
+  const cancelFile = () => {
     setIsFileTypeError(false)
     setPhoto(undefined)
     setPreview('')
@@ -207,7 +208,7 @@ export function Form({ form, setForm, posts, setPosts, resetoffset, setResetoffs
       </form>
       <br />
       {isFileTypeError && <p>※jpeg, png, bmp, svg以外のファイル形式は表示されません</p>}
-      <button onClick={canselFile} className="btn">
+      <button onClick={cancelFile} className="btn">
         cancelFile
       </button>
       <button onClick={closeModal} className="btn">
