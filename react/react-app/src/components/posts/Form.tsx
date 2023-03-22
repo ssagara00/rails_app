@@ -60,45 +60,44 @@ export function Form({ form, setForm, posts, setPosts, resetoffset, setResetoffs
   }
 
   const onSubmit = async (data: Post) => {
-    const ret = await new Promise<string>((resolve) => {
-      setDialog({
-        onClose: resolve,
-        title: '投稿',
-        message: '投稿します。よろしいですか?',
-      })
-    })
-    setDialog(undefined)
+    // TODO: ここは別の関数に切り出すなどして別途モック化してください
+    // const ret = await new Promise<string>((resolve) => {
+    //   setDialog({
+    //     onClose: resolve,
+    //     title: '投稿',
+    //     message: '投稿します。よろしいですか?',
+    //   })
+    // })
+    // setDialog(undefined)
 
-    if (ret === 'ok' && user_id) {
-      // formData を any にする理由がない
-      const formData = new FormData()
-      formData.append('post[user_id]', user_id.toString())
-      formData.append('post[title]', data.title)
-      formData.append('post[contents]', data.contents)
-      if (photo) formData.append('post[image]', photo)
+    // formData を any にする理由がない
+    const formData = new FormData()
+    formData.append('post[user_id]', ''.toString())
+    formData.append('post[title]', data.title)
+    formData.append('post[contents]', data.contents)
+    if (photo) formData.append('post[image]', photo)
 
-      try {
-        // `formData: any` で消されていたが型が違う。
-        // おそらく上記の `formData` の処理を `createPost` 関数内で行った方が
-        // アーキテクチャとしては優れています。
-        const res = await createPost(formData as any)
-        // 基本的には == ではなく === を使う。
-        if (res.status === 200) {
-          const listres = await getIndexPosts(10, 0)
-          if (listres?.status === 200) {
-            setPosts(listres.data)
-          }
-          alert.success('投稿に成功しました')
-          setResetoffset(true)
-          setForm(false)
-        } else {
-          alert.error('投稿に失敗しました')
-          console.log(res.data.message)
+    try {
+      // `formData: any` で消されていたが型が違う。
+      // おそらく上記の `formData` の処理を `createPost` 関数内で行った方が
+      // アーキテクチャとしては優れています。
+      const res = await createPost(formData as any)
+      // 基本的には == ではなく === を使う。
+      if (res.status === 200) {
+        const listres = await getIndexPosts(10, 0)
+        if (listres?.status === 200) {
+          setPosts(listres.data)
         }
-      } catch (err) {
+        alert.success('投稿に成功しました')
+        setResetoffset(true)
+        setForm(false)
+      } else {
         alert.error('投稿に失敗しました')
-        console.log(err)
+        console.log(res.data.message)
       }
+    } catch (err) {
+      alert.error('投稿に失敗しました')
+      console.log(err)
     }
   }
 
