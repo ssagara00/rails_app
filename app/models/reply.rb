@@ -1,5 +1,6 @@
 class Reply < ApplicationRecord
   belongs_to :post, foreign_key: 'reply_from_id'
+  belongs_to :user
 
   validates :title,
     presence: true,

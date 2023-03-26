@@ -5,8 +5,7 @@ import { useAlert } from 'react-alert';
 import Cookies from "js-cookie";
 
 import { AuthContext } from "../../App";
-import { signOut } from "../../api/auth";
-import { deleteUser } from '../../api/users';
+import { deleteUser } from "../../api/api_actions";
 
 import Edit from './Edit';
 import Mylist from "./Mylist";
@@ -17,7 +16,7 @@ import deleteaccount from '../../img/deleteaccount.svg';
 import contents from '../../img/contents.svg';
 
   export const AuthTop = () => {
-    const { currentUser, setIsSignedIn } = useContext(AuthContext);
+    const { currentUser, setIsSignedIn, setLoading } = useContext(AuthContext);
     const user_id = currentUser?.id || 0;
 
     const navigation = useNavigate();
@@ -48,24 +47,21 @@ import contents from '../../img/contents.svg';
         try {
           const res = await deleteUser(user_id);
           if (res?.status === 200) {
-            const res = await signOut()
-            if (res.data.success === true) {
-              // サインアウト時には各Cookieを削除
-              Cookies.remove("_access_token");
-              Cookies.remove("_client");
-              Cookies.remove("_uid");
-              setIsSignedIn(false);
-              navigation("/posts");
-              alert.success('削除に成功しました');
-              console.log("Succeeded in sign out");
-            } else {
-              alert.error('削除に失敗しました');
-              console.log("Failed in sign out");
-            }
+            Cookies.remove("_access_token");
+            Cookies.remove("_client");
+            Cookies.remove("_uid");
+            setIsSignedIn(false);
+            setLoading(true);
+            navigation("/");
+            alert.success('削除に成功しました');
+            console.log("Succeeded in sign out");
+          } else {
+            alert.error('削除に失敗しました');
+            console.log("Failed in sign out");
           }
         } catch (err) {
           alert.error('削除に失敗しました');
-          console.log(err)
+          console.log(err);
         }
       }
     }

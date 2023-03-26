@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-import { createReply } from '../../api/replies';
+import { createReply } from '../../api/api_actions';
 
 import { Dialog, DialogProps } from '../../Dialog';
 
-import { Reply } from '../../interfaces/reply_interface';
+import { Reply } from '../../interfaces/interface';
 
 interface PostReplyProps {
   reply: boolean
@@ -39,15 +39,14 @@ interface PostReplyProps {
       setDialog(undefined);
 
       if (ret === 'ok') {
-        const datas: Reply = {
-          user_id: user_id,
-          title: data.title,
-          contents: data.contents,
-          reply_from_id: modalid
-        };
+        const formData :any = new FormData();
+        formData.append("reply[user_id]", user_id);
+        formData.append("reply[title]", data.title);
+        formData.append("reply[contents]", data.contents);
+        formData.append("reply[reply_from_id]", modalid);
 
         try {
-          const res = await createReply(datas)
+          const res = await createReply(formData)
           if (res.status == 200) {
             alert.success('投稿に成功しました');
             setReply(false);
@@ -67,57 +66,62 @@ interface PostReplyProps {
 
         {dialog && <Dialog {...dialog} />}
 
-        <h3 className="font-bold text-lg">NEW Reply!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="container">
+            <div className="head bg-neutral">
+              <h2>REPLY FORM</h2>
+            </div>
 
-          <p className="py-4">title</p>
-          <input type="text" placeholder="Type title here" className="input input-bordered w-full max-w-xs"
-            {...register('title', {
-              required: {
-                value: true,
-                message: 'タイトルを入力してください。',
-              },
-              maxLength: {
-                value: 30,
-                message: '30文字以内で入力してください。',
-              },
-            })}/>
-            { errors.title?.message &&
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>{errors.title.message}</span>
+            <p className="form-title">Title</p>
+            <input type="text" placeholder="Type title here" className="inputarea"
+              {...register('title', {
+                required: {
+                  value: true,
+                  message: 'タイトルを入力してください。',
+                },
+                maxLength: {
+                  value: 30,
+                  message: '30文字以内で入力してください。',
+                },
+              })}/>
+              { errors.title?.message &&
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>{errors.title.message}</span>
+                  </div>
                 </div>
-              </div>
-            }
+              }
 
-
-          <p className="py-4">contents</p>
-          <input type="text" placeholder="Type contents here" className="input input-bordered w-full max-w-xs"
-            {...register('contents', {
-              required: {
-                value: true,
-                message: '本文を入力してください。',
-              },
-              maxLength: {
-                value: 3000,
-                message: '3000文字以内で入力してください。',
-              },
-            })}/>
-            { errors.contents?.message &&
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>{errors.contents.message}</span>
+            <p className="form-title">Contents</p>
+            <input type="text" placeholder="Type contents here" className="textfield"
+              {...register('contents', {
+                required: {
+                  value: true,
+                  message: '本文を入力してください。',
+                },
+                maxLength: {
+                  value: 3000,
+                  message: '3000文字以内で入力してください。',
+                },
+              })}/>
+              { errors.contents?.message &&
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>{errors.contents.message}</span>
+                  </div>
                 </div>
-              </div>
-            }
+              }
+            <br/>
+            <button className="btn btn-secondary" type="submit">REPLY!</button>
 
-          <br/>
-          <button className="btn" type="submit">Reply!</button>
+          </div>
         </form>
-        <br/>
-        <button onClick={closeModal} className="btn">Close Modal</button>
+
+        <div className="footbtns">
+          <button onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        </div>
 
       </div>
     )

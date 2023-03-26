@@ -7,22 +7,20 @@ import { useAlert } from 'react-alert';
 import Cookies from "js-cookie";
 
 import { AuthContext } from "../../App";
-import { getCurrentUser, signOut } from "../../api/auth";
-import { getIndexPosts } from '../../api/posts';
+import { getIndexPosts, getCurrentUser, signOut } from "../../api/api_actions";
 
 import AuthTop from '../users/AuthTop';
 import SignIn from '../users/SignIn';
 import SignUp from '../users/SignUp';
 import List from './List';
 import Form from './Form';
-import { Dialog, DialogProps } from '../../Dialog';
-
+import { Dialog, DialogProps } from '../../Dialog'
 import { Post } from '../../interfaces/interface';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
   export const PostsTop = () => {
-    const { isSignedIn, currentUser, setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext);
+    const { isSignedIn, currentUser, loading, setIsSignedIn, setCurrentUser, setLoading  } = useContext(AuthContext);
 
     const navigation = useNavigate();
     const alert = useAlert();
@@ -59,7 +57,6 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
       } catch (err) {
         console.log(err);
       }
-      setLoading(false);
     }
 
     const signoutStart = async () => {
@@ -81,7 +78,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
               Cookies.remove("_client");
               Cookies.remove("_uid");
               setIsSignedIn(false);
-              navigation("/posts");
+              navigation("/");
               alert.success('ログアウトに成功しました');
               console.log("Succeeded in sign out");
             } else {
@@ -96,7 +93,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
     }
 
     // タブ切り替え
-    const changeActive = () => {
+    const changeActive = () => {console.log('ddd')
       setActive1(!active1);
       setActive2(!active2);
     }
@@ -106,6 +103,7 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
         const res = await getIndexPosts(10,0);
         if (res?.status === 200) {
           setPosts(res.data);
+          setLoading(false);
         }
       } catch (err) {
         console.log(err);
@@ -114,29 +112,26 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
     useEffect(() => {
       handleGetPosts();
-    }, [])
+    }, [loading]);
 
     useEffect(() => {
       handleGetCurrentUser();
-    }, [setCurrentUser])
+    }, [setCurrentUser]);
 
     return (
       <div className="height">
 
         {dialog && <Dialog {...dialog} />}
 
-        <div className="navbar bg-neutral text-neutral-content">
+        <div className="navbar bg-neutral">
           <div className="flex-1">
           {
             isSignedIn && currentUser ? (
-              <div>
-                <h1>WELCOME! {currentUser?.name}</h1>
-              </div>
+              <h1 className="text-neutral-content">ようこそ! {currentUser?.name}さん！</h1>
             ) : (
-              <h1>Not Signed In</h1>
+              <h1 className="text-neutral-content">ログインしていません。</h1>
             )
           }
-
           </div>
 
           <div className="flex-none">
@@ -144,16 +139,16 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
                 isSignedIn && currentUser ? (
                   <ul className="menu menu-horizontal px-1">
                     <li>
-                      <button className="btn btn-primary" onClick={() => signupstart()}>Open Signup</button>
+                      <button className="btn btn-primary w-32" onClick={() => signupstart()}>Open Signup</button>
                       <Modal isOpen={signup} className="Modal">
                         <SignUp signup={signup} setSignup={setSignup} />
                       </Modal>
                     </li>
                     <li>
-                      <button className="btn btn-primary" onClick={() => signoutStart()}>SignOut</button>
+                      <button className="btn btn-primary w-32 " onClick={() => signoutStart()}>SignOut</button>
                     </li>
                     <li>
-                      <button className="btn btn-primary" onClick={() => formstart()}>Open Form</button>
+                      <button className="btn btn-primary w-32" onClick={() => formstart()}>Open Form</button>
                       <Modal isOpen={form} className="Modal">
                         <Form form={form} setForm={setForm} posts={posts} setPosts={setPosts} resetoffset={resetoffset} setResetoffset={setResetoffset}/>
                       </Modal>
@@ -162,13 +157,13 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
                 ) : (
                   <ul className="menu menu-horizontal px-1">
                     <li>
-                      <button className="btn btn-primary" onClick={() => signupstart()}>Open Signup</button>
+                      <button className="btn btn-primary w-32" onClick={() => signupstart()}>Open Signup</button>
                       <Modal isOpen={signup} className="Modal">
                         <SignUp signup={signup} setSignup={setSignup} />
                       </Modal>
                     </li>
                     <li>
-                      <button className="btn btn-primary" onClick={() => signinstart()}>Open Signin</button>
+                      <button className="btn btn-primary w-32" onClick={() => signinstart()}>Open <br/>Signin</button>
                       <Modal isOpen={signin} className="Modal">
                         <SignIn signin={signin} setSignin={setSignin} />
                       </Modal>

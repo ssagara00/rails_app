@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 
-import { getIndexPosts } from '../../api/posts';
+import { getIndexPosts } from '../../api/api_actions';
 
 import Item from './Item';
 
@@ -21,17 +21,17 @@ interface PostListProps {
     const loadMore = async() => {
       try {
         if(resetoffset == true ) {
-          setOffset(10);
+          setOffset(12);
           setResetoffset(false);
         }
-        const res = await getIndexPosts(10,offset);
+        const res = await getIndexPosts(12,offset);
         if (res?.status === 200) {
           if (res?.data.length <  1) {
             setHasMore(false);
             return
           } else {
             setPosts([...posts, ...res.data]);
-            setOffset(offset + 10 );
+            setOffset(offset + 12 );
           }
         }
       } catch (err) {

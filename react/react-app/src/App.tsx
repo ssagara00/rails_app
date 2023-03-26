@@ -1,10 +1,9 @@
 import React, { useState, createContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Home from './Home';
 import PostsTop from './components/posts/PostsTop';
 
-import { User } from './interfaces/user_interface';
+import { User } from './interfaces/interface';
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -16,15 +15,14 @@ export const AuthContext = createContext({} as {
 })
 
   export const App = () => {
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>(false)
     const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
     const [currentUser, setCurrentUser] = useState<User | undefined>()
     return (
       <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
           <BrowserRouter>
             <Routes>
-              <Route path={'/'} element={<Home />} />
-              <Route path={'/posts'} element={<PostsTop />} />
+              <Route path={'/'} element={<PostsTop />} />
             </Routes>
           </BrowserRouter>
       </AuthContext.Provider>

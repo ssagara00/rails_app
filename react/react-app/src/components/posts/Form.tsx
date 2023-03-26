@@ -1,14 +1,13 @@
-import React, { useState, useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { useAlert } from 'react-alert';
+import React, { useState, useContext } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAlert } from 'react-alert'
 
-import { AuthContext } from "../../App";
-import { createPost } from '../../api/posts';
-import { getIndexPosts } from '../../api/posts';
+import { AuthContext } from "../../App"
+import { getIndexPosts, createPost } from '../../api/api_actions'
 
-import { Dialog, DialogProps } from '../../Dialog';
+import { Dialog, DialogProps } from '../../Dialog'
 
-import { Post } from '../../interfaces/interface';
+import { Post } from '../../interfaces/interface'
 
 interface PostFormProps {
   form: boolean
@@ -20,7 +19,7 @@ interface PostFormProps {
 }
 
   export const Form = ({ form, setForm, posts, setPosts, resetoffset, setResetoffset }: PostFormProps) => {
-    const { currentUser }= useContext(AuthContext);
+    const { currentUser, setLoading }= useContext(AuthContext);
     const user_id = currentUser?.id;
 
     const alert = useAlert();
@@ -35,18 +34,17 @@ interface PostFormProps {
       setForm(false);
     }
 
-    const emptytarget = () => {
-      (event!.target! as HTMLInputElement).value = '';
+    const emptytarget: React.MouseEventHandler<HTMLInputElement> = (event) => {
+      event.currentTarget.value = ''
     }
 
-    const handleFile = async() => {
+    const handleFile: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
       if ((event!.target! as HTMLInputElement).files === null || (event!.target! as HTMLInputElement).files!.length === 0) {
         return;
       }
       setIsFileTypeError(false);
 
       const file = (event!.target! as HTMLInputElement).files![0];
-
       if (
         ![
           "image/jpeg",
@@ -75,7 +73,7 @@ interface PostFormProps {
       setDialog(undefined);
 
       if (ret === 'ok') {
-        const formData :any = new FormData();
+        const formData:any = new FormData();
         formData.append("post[user_id]", user_id);
         formData.append("post[title]", data.title);
         formData.append("post[contents]", data.contents);
@@ -89,6 +87,7 @@ interface PostFormProps {
               setPosts(listres.data);
             }
             alert.success('投稿に成功しました');
+            setLoading(true);
             setResetoffset(true);
             setForm(false);
           } else {
@@ -113,73 +112,92 @@ interface PostFormProps {
 
         {dialog && <Dialog {...dialog} />}
 
-        <h3 className="font-bold text-lg">NEW Posts!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
-
-          <p className="py-4">title</p>
-          <input type="text" placeholder="Type title here" className="input input-bordered w-full max-w-xs"
-            {...register('title', {
-              required: {
-                value: true,
-                message: 'タイトルを入力してください。',
-              },
-              maxLength: {
-                value: 30,
-                message: '30文字以内で入力してください。',
-              },
-            })}/>
-            { errors.title?.message &&
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>{errors.title.message}</span>
-                </div>
-              </div>
-            }
-
-          <p className="py-4">contents</p>
-          <input type="text" placeholder="Type contents here" className="input input-bordered w-full max-w-xs"
-            {...register('contents', {
-              required: {
-                value: true,
-                message: '本文を入力してください。',
-              },
-              maxLength: {
-                value: 3000,
-                message: '3000文字以内で入力してください。',
-              },
-            })}/>
-            { errors.contents?.message &&
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>{errors.contents.message}</span>
-                </div>
-              </div>
-            }
-
-            <p>image uploade</p>
-            <label className="btn">file uploade!!
-              <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
-            </label>
-            <br/>
-            <button className="btn" type="submit">POST!</button>
-          </form>
-          <br/>
-          {isFileTypeError && (
-            <p>※jpeg, png, bmp, svg以外のファイル形式は表示されません</p>
-          )}
-          <button onClick={canselFile} className="btn">cancelFile</button>
-          <button onClick={closeModal} className="btn">Close Modal</button>
-          <br/>
-
-          { preview ? (
-            <div>
-              <p>preview</p>
-              <img src={preview} alt="preview img" />
+          <div className="container">
+            <div className="head bg-neutral">
+              <h2>POST FORM</h2>
             </div>
-          ) : null
-          }
+
+            <p className="form-title">Title</p>
+            <input type="text" placeholder="Type title here" className="inputarea"
+              {...register('title', {
+                required: {
+                  value: true,
+                  message: 'タイトルを入力してください。',
+                },
+                maxLength: {
+                  value: 30,
+                  message: '30文字以内で入力してください。',
+                },
+              })}/>
+              { errors.title?.message &&
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>{errors.title.message}</span>
+                  </div>
+                </div>
+              }
+
+            <p className="form-title">Contents</p>
+            <input type="text" placeholder="Type contents here" className="textfield"
+              {...register('contents', {
+                required: {
+                  value: true,
+                  message: '本文を入力してください。',
+                },
+                maxLength: {
+                  value: 3000,
+                  message: '3000文字以内で入力してください。',
+                },
+              })}/>
+              { errors.contents?.message &&
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>{errors.contents.message}</span>
+                  </div>
+                </div>
+              }
+
+              <p className="form-title">Image Uploade</p>
+                <label className="btn btn-secondary">
+                  file uploade!!
+                  <input hidden type="file" data-testid="fileDropzone" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
+                </label>
+
+              {
+                isFileTypeError && (
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>※jpeg, png, bmp, svg以外のファイル形式は表示されません。</span>
+                  </div>
+                </div>
+              )}
+                
+                <br/>
+
+                {
+                  preview ? (
+                    <div>
+                      <p className="form-title">投稿画像イメージ</p>
+                      <img src={preview} alt="preview img" />
+                    </div>
+                  ) : (
+                    null
+                  )
+                }
+              <br/>
+              <button className="btn btn-secondary" type="submit">POST!</button>
+
+          </div>
+        </form>
+
+        <div className="footbtns">
+          <button onClick={canselFile} className="btn btn-secondary">Cancel File</button>
+          <button onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        </div>
 
       </div>
     )

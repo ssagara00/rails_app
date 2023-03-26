@@ -4,9 +4,9 @@ import { useAlert } from 'react-alert';
 import Cookies from "js-cookie";
 
 import { AuthContext } from "../../App";
-import { signIn } from "../../api/auth";
+import { signIn } from "../../api/api_actions";
 
-import { SignInParams } from "../../interfaces/user_interface";
+import { SignInParams } from "../../interfaces/interface";
 
 interface SignInProps {
   signin: boolean,
@@ -22,7 +22,7 @@ interface SignInProps {
     const closeModal = () => {
       setSignin(false);
     }
-    
+
     const onSubmit = async (data: SignInParams) => {
 
       try {
@@ -49,62 +49,71 @@ interface SignInProps {
 
     return (
       <div>
-        <h3 className="font-bold text-lg">SignIn!</h3>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <p className="py-4">email</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
-            {...register('email', {
-              required: {
-                value: true,
-                message: '入力が必須の項目です。',
-              },
-              pattern: {
-                value: /^[a-zA-Z0-9.!#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                message: 'メールアドレスの形式が不正です。',
-              }
-            })}/>
-            { errors.email?.message &&
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>{errors.email.message}</span>
-                </div>
-              </div>
-            }
 
-          <p className="py-4">password</p>
-          <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
-            {...register('password', {
-              required: {
-                value: true,
-                message: '入力が必須の項目です。',
-              },
-              minLength: {
-                value: 6,
-                message: '6文字以上入力してください。',
-              },
-              maxLength: {
-                value: 128,
-                message: '128文字以内で入力してください。',
-              },
-              pattern: {
-                value: /^[a-zA-Z0-9]+$/,
-                message: 'パスワードは半角英数字のみ有効です。',
-              }
-            })}/>
-            { errors.password?.message &&
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>{errors.password.message}</span>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="container">
+            <div className="head bg-neutral">
+              <h2>SIGN IN</h2>
+            </div>
+
+            <p className="form-title">Email</p>
+            <input type="text" placeholder="Type email here" className="inputarea"
+              {...register('email', {
+                required: {
+                  value: true,
+                  message: 'メールアドレスを入力してください。',
+                },
+                pattern: {
+                  value: /^[a-zA-Z0-9.!#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                  message: 'メールアドレスの形式が不正です。',
+                }
+              })}/>
+              { errors.email?.message &&
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>{errors.email.message}</span>
+                  </div>
                 </div>
-              </div>
-            }
-          <br/>
-          <button className="btn" type="submit">SignIN</button>
+              }
+
+            <p className="form-title">Password</p>
+            <input type="password" placeholder="Type password here" className="inputarea"
+              {...register('password', {
+                required: {
+                  value: true,
+                  message: 'パスワードを入力してください。',
+                },
+                minLength: {
+                  value: 6,
+                  message: '6文字以上入力してください。',
+                },
+                maxLength: {
+                  value: 128,
+                  message: '128文字以内で入力してください。',
+                },
+                pattern: {
+                  value: /^[a-zA-Z0-9]+$/,
+                  message: 'パスワードは半角英数字のみ有効です。',
+                }
+              })}/>
+              { errors.password?.message &&
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>{errors.password.message}</span>
+                  </div>
+                </div>
+              }
+            <br/>
+            <button className="btn btn-secondary" type="submit">SignIN</button>
+
+          </div>
         </form>
 
-        <button onClick={closeModal} className="btn">Close Modal</button>
+        <div className="footbtns">
+          <button onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        </div>
       </div>
     )
   }

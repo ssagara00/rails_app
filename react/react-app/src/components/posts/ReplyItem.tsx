@@ -3,14 +3,12 @@ import Modal from "react-modal";
 import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-import { deleteReply } from '../../api/replies';
-import { showUser } from '../../api/users';
+import { deleteReply, showUser } from '../../api/api_actions';
 
 import ReplyUpdate from './ReplyUpdate';
 import { Dialog, DialogProps } from '../../Dialog';
 
-import { Reply } from '../../interfaces/reply_interface';
-import { User } from '../../interfaces/user_interface';
+import { Reply, User } from '../../interfaces/interface';
 
 interface ReplyItemProps {
   reply: Reply
@@ -85,24 +83,18 @@ interface ReplyItemProps {
 
         <h2 className="comment-title">{reply.title}</h2>
           <p>投稿者：{user?.name}</p>
-          {/*<figure className="px-10 pt-10">
-          { reply.image?.url ?
-            <img src={reply.image.url} alt="post_image" className="rounded-xl" /> : <img src="https://placeimg.com/400/225/arch" alt="Shoes" className="rounded-xl" />
-          }
-          </figure>*/}
-   
           <p className="comment-contents">{reply.contents}</p>
 
           {
             isSignedIn && currentUser?.id == reply.user_id &&
 
             <div className="card-actions">
-              <button className="btn btn-secondary" onClick={() => updatestart(reply.id || 0,reply.title,reply.contents)}>更新</button>
+              <button className="btn" onClick={() => updatestart(reply.id || 0,reply.title,reply.contents)}>更新</button>
               <Modal isOpen={replyupdate} className="Modal">
                 <ReplyUpdate replyupdate={replyupdate} setReplyUpdate={setReplyUpdate} modalid={modalid} idtitle={title} idcontents={contents} reply={reply} setReply={setReply} />
               </Modal>
 
-              <button className="btn btn-secondary" onClick={() => handleDeleteReply(reply.id || 0)}>削除</button>
+              <button className="btn" onClick={() => handleDeleteReply(reply.id || 0)}>削除</button>
             </div>
 
           }

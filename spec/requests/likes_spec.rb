@@ -16,7 +16,9 @@ RSpec.describe "Likes", type: :request do
 
   describe "GET /show" do
     it '特定のデータのみ取得する' do
-      like = FactoryBot.create(:like, user_id: 1, post_id: 1)
+      user = FactoryBot.create(:user)
+      post = FactoryBot.create(:post)
+      like = FactoryBot.create(:like, user_id: user.id, post_id: post.id)
 
       get "/likes/is_liked/#{like.user_id}/#{like.post_id}"
       json = JSON.parse(response.body)
@@ -28,7 +30,9 @@ RSpec.describe "Likes", type: :request do
 
   describe "POST /create" do
     it 'いいねする' do
-      create_params = { user_id: 99, post_id: 99 }
+      user = FactoryBot.create(:user)
+      post = FactoryBot.create(:post)
+      create_params = { user_id: user.id, post_id: post.id }
 
       expect { post '/likes', params: { like: create_params } }.to change(Like, :count).by(+1)
       expect(response.status).to eq(200)

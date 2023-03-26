@@ -29,6 +29,9 @@ RSpec.describe "Posts", type: :request do
 
   describe "GET /my_posts" do
     it '自分の投稿データを取得する' do
+      user = FactoryBot.create(:user, id:11)
+      user = FactoryBot.create(:user, id:22)
+      user = FactoryBot.create(:user, id:33)
       post = FactoryBot.create(:post, user_id: 11)
       post = FactoryBot.create(:post, user_id: 22)
       post = FactoryBot.create(:post, user_id: 11)
@@ -58,7 +61,8 @@ RSpec.describe "Posts", type: :request do
 
   describe "POST /create" do
     it '新しい投稿を作成する' do
-      create_params = { user_id: 99, title: 'create_title', contents: 'create_contents', image: 'create_test.jpg'}
+      user = FactoryBot.create(:user)
+      create_params = { user_id: user.id, title: 'create_title', contents: 'create_contents', image: 'create_test.jpg'}
 
       expect { post '/posts', params: { post: create_params } }.to change(Post, :count).by(+1)
       expect(response.status).to eq(200)

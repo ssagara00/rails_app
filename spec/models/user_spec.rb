@@ -94,6 +94,12 @@ RSpec.describe User, type: :model do
       end
     end
 
+    context "repliesとの関係" do
+      it '1:N' do
+        expect(User.reflect_on_association(:replies).macro).to eq :has_many
+      end
+    end
+
     context "likesとの関係" do
       it '1:N' do
         expect(User.reflect_on_association(:likes).macro).to eq :has_many

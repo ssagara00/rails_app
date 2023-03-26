@@ -30,9 +30,10 @@ RSpec.describe "Replies", type: :request do
   describe "POST /create" do
     it '新しい返信を作成する' do
       post = FactoryBot.create(:post)
-      create_params = { user_id: 99, title: 'Re_create_title', contents: 'Re_create_contents', image: 'Re_create_test.jpg', reply_from_id: post.id }
+      user = FactoryBot.create(:user)
+      create_params = { user_id: user.id, title: 'Re_create_title', contents: 'Re_create_contents', image: 'Re_create_test.jpg', reply_from_id: post.id }
 
-      expect { post '/replies', params: { reply: create_params } }.to change(Reply, :count).by(+1)
+      expect { post '/replies', params: { reply: create_params } }.to change(Reply, :count).by(+1);
       expect(response.status).to eq(200)
     end
   end

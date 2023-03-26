@@ -51,6 +51,12 @@ RSpec.describe Reply, type: :model do
       end
     end
 
+    context "userとの関係" do
+      it 'N:1' do
+        expect(Reply.reflect_on_association(:user).macro).to eq :belongs_to
+      end
+    end
+
   end
 
 end

@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { useAlert } from 'react-alert';
 
 import { AuthContext } from "../../App";
-import { editUser } from '../../api/users';
+import { editUser } from '../../api/api_actions';
 
 import { Dialog, DialogProps } from '../../Dialog';
 
-import { SignEditParams } from "../../interfaces/user_interface";
+import { SignEditParams } from "../../interfaces/interface";
 
 interface UserEditProps {
   edit: boolean
@@ -39,8 +39,12 @@ interface UserEditProps {
       setDialog(undefined);
 
       if (ret === 'ok') {
+        const formData :any = new FormData();
+        formData.append("user[name]", data.name);
+        formData.append("user[email]", data.email);
+
         try {
-          const res = await editUser(user_id,data)
+          const res = await editUser(user_id,formData)
           if (res.status == 200) {
             alert.success('更新に成功しました');
             setCurrentUser(res.data.data);
@@ -63,10 +67,18 @@ interface UserEditProps {
         
         <h3 className="font-bold text-lg">Update Your Information!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="container">
+            <div className="head bg-neutral">
+              <h2>User Edit</h2>
+            </div>
 
-          <p className="py-4">name</p>
-            <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+            <p className="form-title">Name</p>
+            <input type="text" placeholder="Type name here" className="inputarea"
               {...register('name', {
+                required: {
+                  value: true,
+                  message: '名前を入力してください。',
+                },
                 maxLength: {
                   value: 100,
                   message: '100文字以内で入力してください。',
@@ -81,9 +93,13 @@ interface UserEditProps {
                 </div>
               }
 
-            <p className="py-4">email</p>
-            <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+            <p className="form-title">Email</p>
+            <input type="text" placeholder="Type email here" className="inputarea"
               {...register('email', {
+                required: {
+                  value: true,
+                  message: 'メールアドレスを入力してください。',
+                },
                 pattern: {
                   value: /^[a-zA-Z0-9.!#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                   message: 'メールアドレスの形式が不正です。',
@@ -97,12 +113,15 @@ interface UserEditProps {
                   </div>
                 </div>
               }
-          <br/>
-          <button className="btn" type="submit">EDIT!</button>
+            <br/>
+            <button className="btn btn-secondary" type="submit">EDIT!</button>
+
+          </div>
         </form>
-        <br/>
-          <button onClick={closeModal} className="btn">Close Modal</button>
-        <br/>
+        
+        <div className="footbtns">
+          <button onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        </div>
 
       </div>
     )

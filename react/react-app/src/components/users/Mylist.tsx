@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 
 import { AuthContext } from "../../App";
-import { myPosts } from '../../api/posts';
+import { myPosts } from '../../api/api_actions';
 
 import Item from '../posts/Item';
 
@@ -27,14 +27,14 @@ interface MylistProps {
 
     const loadMore = async() => {
       try {
-        const res = await myPosts(user_id, 10, offset);
+        const res = await myPosts(user_id, 12, offset);
         if (res?.status === 200) {
           if (res?.data.length <  1) {
             setHasMore(false);
             return
           } else {
             setPosts([...posts, ...res.data]);
-            setOffset(offset + 10 );
+            setOffset(offset + 12 );
           }
         }
       } catch (err) {

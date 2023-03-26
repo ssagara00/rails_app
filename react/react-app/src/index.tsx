@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+import { positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
 import './index.css';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

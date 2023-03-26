@@ -1,12 +1,10 @@
 import React, { useEffect, useState }  from 'react';
 
-import { showPost } from '../../api/posts';
-import { showReply } from '../../api/replies';
+import { showPost, showReply } from '../../api/api_actions';
 
 import ReplyItem from './ReplyItem';
 
-import { Post } from '../../interfaces/interface';
-import { Reply } from '../../interfaces/reply_interface';
+import { Post, Reply } from '../../interfaces/interface';
 
 interface PostDetailProps {
   detail: boolean

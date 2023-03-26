@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAlert } from 'react-alert';
 
-import { updatePost } from '../../api/posts';
+import { updatePost } from '../../api/api_actions';
 
+import { AuthContext } from "../../App";
 import { Dialog, DialogProps } from '../../Dialog';
 
 import { Post } from '../../interfaces/interface';
@@ -20,6 +21,8 @@ interface PostUpdateProps {
 }
 
   export const Update = ({ update, setUpdate, modalid, idtitle, idcontents, post, setPosts }: PostUpdateProps) => {
+    const { setLoading  } = useContext(AuthContext);
+    
     const alert = useAlert();
     const { register, handleSubmit,formState: { errors } } = useForm<Post>({ defaultValues: { title: idtitle, contents: idcontents } });
     const [dialog, setDialog] = useState<DialogProps | undefined>();
@@ -73,15 +76,16 @@ interface PostUpdateProps {
 
       if (ret === 'ok') {
         const formData: any = new FormData();
-        formData.append("title", data.title);
-        formData.append("contents", data.contents);
-        if (photo) formData.append("image", photo);
+        formData.append("post[title]", data.title);
+        formData.append("post[contents]", data.contents);
+        if (photo) formData.append("post[image]", photo);
 
         try {
           const res = await updatePost(modalid,formData);
           if (res.status == 200) {
             alert.success('更新に成功しました');
             setPosts((prev: Post[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
+            setLoading(true);
             setUpdate(false);
           } else {
             alert.error('更新に失敗しました');
@@ -107,9 +111,13 @@ interface PostUpdateProps {
 
         <h3 className="font-bold text-lg">Update Posts!</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="container">
+            <div className="head bg-neutral">
+              <h2>UPDATE FORM</h2>
+            </div>
 
-          <p className="py-4">title</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">Title</p>
+          <input type="text" placeholder='Type title here' className="inputarea"
             {...register('title', {
               required: {
                 value: true,
@@ -129,8 +137,8 @@ interface PostUpdateProps {
               </div>
             }
 
-          <p className="py-4">contents</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">Contents</p>
+          <input type="text" placeholder="Type contents here" className="textfield"
             {...register('contents', {
               required: {
                 value: true,
@@ -150,28 +158,44 @@ interface PostUpdateProps {
               </div>
             }
 
-          <p>image uploade</p>
-          <label className="btn">file uploade!!
-            <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
-          </label>
-          <br/>
-          <button className="btn" type="submit">POST!</button>
-        </form>
-        <br/>
-        {isFileTypeError && (
-          <p>※jpeg, png, bmp, svg以外のファイル形式は表示されません</p>
-        )}
-        <button onClick={canselFile} className="btn">cancelFile</button>
-        <button onClick={closeModal} className="btn">Close Modal</button>
-        <br/>
+            <p className="form-title">Image Uploade</p>
+              <label className="btn btn-secondary">
+                file uploade!!
+                <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
+              </label>
 
-        { preview ? (
-          <div>
-            <p>preview</p>
-            <img src={preview} alt="preview img" />
+              {
+                isFileTypeError && (
+                <div className="alert alert-warning shadow-lg">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>※jpeg, png, bmp, svg以外のファイル形式は表示されません。</span>
+                  </div>
+                </div>
+              )}
+                
+                <br/>
+
+                {
+                  preview ? (
+                    <div>
+                      <p className="form-title">投稿画像イメージ</p>
+                      <img src={preview} alt="preview img" />
+                    </div>
+                  ) : (
+                    null
+                  )
+                }
+              <br/>
+              <button className="btn btn-secondary" type="submit">Update!</button>
+
           </div>
-        ) : null
-        }
+        </form>
+
+        <div className="footbtns">
+          <button onClick={canselFile} className="btn btn-secondary">Cancel File</button>
+          <button onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        </div>
 
       </div>
     )

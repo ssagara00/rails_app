@@ -8,21 +8,20 @@ class User < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
 
-  has_many :likes
-  has_many :posts
+  has_many :likes, dependent: :destroy
+  has_many :posts, dependent: :destroy
+  has_many :replies, dependent: :destroy
 
   validates :name,
     presence: true,
-    length: { maximum: 100 },
-    on: :create
+    length: { maximum: 100 }
 
   VALID_EMAIL = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email,
     # default validation
     # presence: true,
     # uniqueness: true,
-    format: { with: VALID_EMAIL },
-    on: :create
+    format: { with: VALID_EMAIL }
 
   VALID_PASSWORD = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i
   validates :password,
