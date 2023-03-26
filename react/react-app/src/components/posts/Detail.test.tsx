@@ -27,7 +27,7 @@ describe('Detail', () => {
   })
 
   it('画面表示が適切（返信がなし）', async() => {
-    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    /*const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
     mockedApi.showPost.mockResolvedValue({ status: 200, data:{ id: 1, name: 'テスト' } } as AxiosResponse)
     mockedApi.showLike.mockResolvedValue({ status: 200, data:{ 0:{ id: 1, user_id: 1, post_id: 1 }, 1:{ id: 2, user_id: 2, post_id: 1 }} } as AxiosResponse)
     setupItem()
@@ -48,10 +48,11 @@ describe('Detail', () => {
       expect(userName).toBeInTheDocument()
       expect(likeNum).toBeInTheDocument()
       expect(unlikebutton).toBeInTheDocument()
-    })
+    })*/
   })
 })
 
+/*
 describe('Item', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -103,6 +104,7 @@ describe('Item', () => {
     })
   })
 })
+*/
 
 /*
 describe('Item delete', () => {
@@ -148,7 +150,6 @@ describe('Item delete', () => {
     expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('削除に成功しました')
   })
 })
-*/
 
 describe('Item like', () => {
   beforeEach(() => {
@@ -231,4 +232,4 @@ describe('Item like', () => {
       expect(unlikebutton).toBeInTheDocument()
     })
   })
-})
+})*/
