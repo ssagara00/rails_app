@@ -1,6 +1,6 @@
-import axiosInstance from "./axios";
-import Cookies from "js-cookie";
-import { Post, Reply, SignUpParams, SignEditParams, SignInParams, Like } from "../interfaces/interface";
+import Cookies from 'js-cookie'
+import axiosInstance from './axios'
+import { Post, Reply, SignUpParams, SignEditParams, SignInParams, Like } from '../interfaces/interface'
 
 // 一覧を取得
 export const getPosts = () => {

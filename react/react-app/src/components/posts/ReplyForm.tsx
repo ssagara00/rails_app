@@ -4,58 +4,31 @@ import { useAlert } from 'react-alert'
 
 import { AuthContext } from '../../Context'
 import { Dialog, DialogProps } from '../../Dialog'
-import { createPost } from '../../api/api_actions'
-import { Post } from '../../interfaces/interface'
+import { createReply } from '../../api/api_actions'
+import { Post, Reply } from '../../interfaces/interface'
 
-interface PostFormProps {
-  form: boolean
-  setForm: React.Dispatch<React.SetStateAction<boolean>>
+interface PostReplyProps {
+  replyForm: boolean
+  setReplyForm: React.Dispatch<React.SetStateAction<boolean>>
+  post: Post
+  replies?: Reply[] 
+  setReplies?: React.Dispatch<React.SetStateAction<Reply[]>>
 }
 
-export const Form = ({ form, setForm }: PostFormProps) => {
-  const { currentUser,setLoading }= useContext(AuthContext)
+export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }: PostReplyProps) => {
+  const { currentUser } = useContext(AuthContext)
   const user_id = currentUser?.id
+  const post_id = post.id
   
   const alert = useAlert()
-  const { register, handleSubmit, formState: { errors } } = useForm<Post>()
+  const { register, handleSubmit, formState: { errors }, } = useForm<Reply>({ defaultValues: { title: `Re:${post.title}` } })
   const [dialog, setDialog] = useState<DialogProps | undefined>()
-  const [isFileTypeError, setIsFileTypeError] = useState<boolean>(false)
-  const [photo, setPhoto] = useState<File>()
-  const [preview, setPreview] = useState<string>("")
-
+  
   const closeModal = () => {
-    setForm(false)
+    setReplyForm(false)
   }
 
-  const emptytarget: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    event.currentTarget.value = ''
-  }
-
-  const handleFile: React.ChangeEventHandler<HTMLInputElement> = async(event) => {
-    if (event.target.files === null || event.target.files.length === 0) {
-      return
-    }
-    setIsFileTypeError(false)
-
-    const file = event.target.files[0]
-
-    if (
-      ![
-        "image/jpeg",
-        "image/png",
-        "image/bmp",
-        "image/svg+xml",
-      ].includes(file.type)
-    ) {
-      setIsFileTypeError(true)
-      return
-    }
-
-    setPhoto(file)
-    setPreview(window.URL.createObjectURL(file))
-  }
-
-  const onSubmit = async(data: Post) =>{
+  const onSubmit = async(data: Reply) =>{
     const ret = await new Promise<string>((resolve) => {
       setDialog({
       onClose: resolve,
@@ -65,19 +38,22 @@ export const Form = ({ form, setForm }: PostFormProps) => {
     })
     setDialog(undefined)
 
-    if (ret === 'ok' && user_id ) {
+    if (ret === 'ok' && user_id && post_id) {
       const formData = new FormData()
-      formData.append("post[user_id]", user_id.toString())
-      formData.append("post[title]", data.title)
-      formData.append("post[contents]", data.contents)
-      if (photo) formData.append("post[image]", photo)
+      formData.append("reply[user_id]", user_id.toString())
+      formData.append("reply[title]", data.title)
+      formData.append("reply[contents]", data.contents)
+      formData.append("reply[reply_from_id]", post_id.toString())
 
       try {
-        const res = await createPost(formData as any)
+        const res = await createReply(formData as any)
         if (res.status === 200) {
           alert.success('投稿に成功しました')
-          setForm(false)
-          setLoading(true)
+          // 詳細画面から呼び出した場合は、返信内容即時反映のため、配列に新規投稿を追加。
+          if(replies && setReplies ){
+            setReplies([...replies, res.data])
+          }
+          setReplyForm(false)
         } else {
           alert.error('投稿に失敗しました')
           console.log(res.data.message)
@@ -89,12 +65,6 @@ export const Form = ({ form, setForm }: PostFormProps) => {
     }
   }
 
-  const canselFile = () => {
-    setIsFileTypeError(false)
-    setPhoto(undefined)
-    setPreview("")
-  }
-
   return(
     <div>
 
@@ -103,7 +73,7 @@ export const Form = ({ form, setForm }: PostFormProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>POST FORM</h2>
+            <h2>REPLY FORM</h2>
           </div>
 
           <p className="form-title">Title</p>
@@ -147,43 +117,13 @@ export const Form = ({ form, setForm }: PostFormProps) => {
                 </div>
               </div>
             }
-
-            <p className="form-title">Image Uploade</p>
-              <label htmlFor="photo" className="btn btn-secondary">
-                file uploade!!
-                <input hidden type="file" data-testid="fileDropzone" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
-              </label>
-
-            {
-              isFileTypeError && (
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>※jpeg, png, bmp, svg以外のファイル形式は表示されません。</span>
-                </div>
-              </div>
-            )}
-              
-              <br/>
-
-              {
-                preview ? (
-                  <div className="formimage">
-                    <p className="form-title">投稿画像イメージ</p>
-                    <img src={preview} alt="preview img" />
-                  </div>
-                ) : (
-                  null
-                )
-              }
-            <br/>
-            <button className="btn btn-secondary" type="submit">POST!</button>
+          <br/>
+          <button type="submit" className="btn btn-secondary">REPLY!</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={canselFile} className="btn btn-secondary">Cancel File</button>
         <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
       </div>
 

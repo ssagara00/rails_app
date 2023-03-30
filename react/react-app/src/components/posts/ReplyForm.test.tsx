@@ -1,59 +1,61 @@
-import React from 'react'
+import React from "react"
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
-import { Form } from './Form'
+import { Reply } from '../../interfaces/interface'
+import { ReplyForm } from './ReplyForm'
 
 jest.mock('react-alert')
 
-const renderForm = () => {
-  const form = true
-  const setForm = jest.fn()
-  render(<Form form={form} setForm={setForm} />)
+const renderReplyForm = () => {
+  const day = new Date(2023, 2, 1, 0, 0, 0)// 2023-03-01 0:00:00
+  const replyForm = true
+  const setReplyForm = jest.fn()
+  const post = {id: 1, user_id: 1, title: 'テストタイトル', contents: 'テストコンテンツ', created_at: day } 
+  const replies: Reply[] = [] 
+  const setReplies = jest.fn()
+  render(<ReplyForm replyForm={replyForm} setReplyForm={setReplyForm} post={post} replies={replies} setReplies={setReplies} />)
 }
 
-describe('Form', () => {
+describe('ReplyForm', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('画面表示が適切', () => {
-    renderForm()
+    renderReplyForm()
 
     const titleLabel = screen.getByText('Title')
     expect(titleLabel).toBeInTheDocument()
     const contentLabel = screen.getByText('Contents')
     expect(contentLabel).toBeInTheDocument()
-    const imageLabel = screen.getByText('Image Uploade')
-    expect(imageLabel).toBeInTheDocument()
 
     const titleInput = screen.getByPlaceholderText('Type title here')
     expect(titleInput).toBeInTheDocument()
+    expect(titleInput).toHaveValue('Re:テストタイトル')
     const contentInput = screen.getByPlaceholderText('Type contents here')
     expect(contentInput).toBeInTheDocument()
-    
-    const fileInput = screen.getByLabelText('file uploade!!')
-    expect(fileInput).toBeInTheDocument()
-    const submitButton = screen.getByRole('button', { name: 'POST!' })
+
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
     expect(submitButton).toBeInTheDocument()
     const closeButton = screen.getByRole('button', { name: 'Close Modal' })
     expect(closeButton).toBeInTheDocument()
-    const cancelFileButton = screen.getByRole('button', { name: 'Cancel File' })
-    expect(cancelFileButton).toBeInTheDocument()
   })
 })
 
-describe('Form title', () => {
+describe('ReplyForm title', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('タイトルが空の場合、エラーメッセージを表示', async() => {
-    renderForm()
+    renderReplyForm()
+    const titleInput = screen.getByPlaceholderText('Type title here')
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'POST!' })
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
+    userEvent.clear(titleInput)
     userEvent.type(contentInput,'テスト文章')
     userEvent.click(submitButton)
     await waitFor(() => {
@@ -62,30 +64,29 @@ describe('Form title', () => {
   })
 
   it('タイトルが31文字以上の場合、エラーメッセージを表示', async() => {
-    renderForm()
+    renderReplyForm()
     const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitbutton = screen.getByRole('button', { name: 'POST!' })
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
+    userEvent.clear(titleInput)
     userEvent.type(titleInput,'あ'.repeat(31))
-    userEvent.click(submitbutton)
+    userEvent.click(submitButton)
     await waitFor(() => {
       expect(screen.getByText('30文字以内で入力してください。')).toBeInTheDocument()
     })
   })
 })
 
-describe('Form contents', () => {
+describe('ReplyCreate contents', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
   jest.setTimeout(10000)
 
   it('本文が空の場合、エラーメッセージを表示', async() => {
-    renderForm()
-    const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitbutton = screen.getByRole('button', { name: 'POST!' })
+    renderReplyForm()
+    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
 
-    userEvent.type(titleInput,'テストタイトル')
     userEvent.click(submitbutton)
     await waitFor(() => {
       expect(screen.getByText('本文を入力してください。')).toBeInTheDocument()
@@ -93,9 +94,9 @@ describe('Form contents', () => {
   })
 
   it('本文が3001文字以上の場合、エラーメッセージを表示', async() => {
-    renderForm()
+    renderReplyForm()
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'POST!' })
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
     userEvent.type(contentInput,'あ'.repeat(3001))
     userEvent.click(submitButton)

@@ -2,19 +2,19 @@ import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
-import ReplyUpdate from './ReplyUpdate'
+
+import { Reply } from '../../interfaces/interface'
+import { ReplyUpdate } from './ReplyUpdate'
 
 jest.mock('react-alert')
 
-const setupReplyUpdate = () => {
+const renderReplyUpdate = () => {
+  const day = new Date(2023, 2, 1, 0, 0, 0)// 2023-03-01 0:00:00
   const replyupdate = true
   const setReplyUpdate = jest.fn()
-  const modalid = 1
-  const idtitle = 'testreplytitle'
-  const idcontents = 'testreplycontents'
-  const reply: any = []
-  const setReply = jest.fn()
-  render(<ReplyUpdate replyupdate={replyupdate} setReplyUpdate={setReplyUpdate} modalid={modalid} idtitle={idtitle} idcontents={idcontents} reply={reply} setReply={setReply}/>);
+  const reply: Reply = {id: 1, user_id: 1, title: 'Re:テストタイトル', contents: 'テストコンテンツ', created_at: day } 
+  const setReplies = jest.fn()
+  render(<ReplyUpdate replyupdate={replyupdate} setReplyUpdate={setReplyUpdate} reply={reply} setReplies={setReplies}/>)
 }
 
 describe('ReplyUpdate', () => {
@@ -23,24 +23,26 @@ describe('ReplyUpdate', () => {
   })
 
   it('画面表示が適切', () => {
-    setupReplyUpdate()
+    renderReplyUpdate()
 
-    const titleLabel = screen.queryByText('Title')
+    const titleLabel = screen.getByText('Title')
     expect(titleLabel).toBeInTheDocument()
-    const contentsLabel = screen.queryByText('Contents')
-    expect(contentsLabel).toBeInTheDocument()
+    const contentLabel = screen.getByText('Contents')
+    expect(contentLabel).toBeInTheDocument()
 
-    const titleinput = screen.getByPlaceholderText('Type title here')
-    expect(titleinput).toBeInTheDocument()
-    const contentsinput = screen.getByPlaceholderText('Type contents here')
-    expect(contentsinput).toBeInTheDocument()
+    const titleInput = screen.getByPlaceholderText('Type title here')
+    expect(titleInput).toBeInTheDocument()
+    expect(titleInput).toHaveValue('Re:テストタイトル')
+    const contentInput = screen.getByPlaceholderText('Type contents here')
+    expect(contentInput).toBeInTheDocument()
+    expect(contentInput).toHaveValue('テストコンテンツ')
     
-    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
-    expect(submitbutton).toBeInTheDocument()
-    const closebutton = screen.getByRole('button', { name: 'Close Modal' })
-    expect(closebutton).toBeInTheDocument()
-  });
-});
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    expect(submitButton).toBeInTheDocument()
+    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    expect(closeButton).toBeInTheDocument()
+  })
+})
 
 describe('ReplyUpdate title', () => {
   beforeEach(() => {
@@ -48,27 +50,27 @@ describe('ReplyUpdate title', () => {
   })
 
   it('タイトルが空の場合、エラーメッセージを表示', async() => {
-    setupReplyUpdate()
-    const titleinput = screen.getByPlaceholderText('Type title here')
-    userEvent.clear(titleinput)
-    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
+    renderReplyUpdate()
+    const titleInput = screen.getByPlaceholderText('Type title here')
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
-    userEvent.click(submitbutton);
+    userEvent.clear(titleInput)
+    userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('タイトルを入力してください。')).toBeInTheDocument();
+      expect(screen.getByText('タイトルを入力してください。')).toBeInTheDocument()
     })
   })
 
   it('タイトルが31文字以上の場合、エラーメッセージを表示', async() => {
-    setupReplyUpdate()
-    const titleinput = screen.getByPlaceholderText('Type title here')
-    userEvent.clear(titleinput)
-    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
+    renderReplyUpdate()
+    const titleInput = screen.getByPlaceholderText('Type title here')
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
-    userEvent.type(titleinput,'あ'.repeat(31));
-    await userEvent.click(submitbutton);
+    userEvent.clear(titleInput)
+    userEvent.type(titleInput,'あ'.repeat(31))
+    userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('30文字以内で入力してください。')).toBeInTheDocument();
+      expect(screen.getByText('30文字以内で入力してください。')).toBeInTheDocument()
     })
   })
 })
@@ -77,30 +79,30 @@ describe('Form contents', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
-  jest.setTimeout(10000);
+  jest.setTimeout(10000)
 
   it('本文が空の場合、エラーメッセージを表示', async() => {
-    setupReplyUpdate()
-    const contentsinput = screen.getByPlaceholderText('Type contents here')
-    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
-    userEvent.clear(contentsinput)
+    renderReplyUpdate()
+    const contentInput = screen.getByPlaceholderText('Type contents here')
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
-    await userEvent.click(submitbutton);
+    userEvent.clear(contentInput)
+    userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('本文を入力してください。')).toBeInTheDocument();
+      expect(screen.getByText('本文を入力してください。')).toBeInTheDocument()
     })
-  });
+  })
 
   it('本文が3001文字以上の場合、エラーメッセージを表示', async() => {
-    setupReplyUpdate()
-    const contentsinput = screen.getByPlaceholderText('Type contents here')
-    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
-    userEvent.clear(contentsinput)
+    renderReplyUpdate()
+    const contentInput = screen.getByPlaceholderText('Type contents here')
+    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
 
-    userEvent.type(contentsinput,'あ'.repeat(3001))
-    await userEvent.click(submitbutton)
+    userEvent.clear(contentInput)
+    userEvent.type(contentInput,'あ'.repeat(3001))
+    userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('3000文字以内で入力してください。')).toBeInTheDocument();
+      expect(screen.getByText('3000文字以内で入力してください。')).toBeInTheDocument()
     })
-  });
+  })
 })

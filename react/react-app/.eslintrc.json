@@ -25,7 +25,8 @@
     ],
     "parserOptions": {
       "ecmaVersion": "latest",
-      "sourceType": "module"
+      "sourceType": "module",
+      "project": "./tsconfig.eslint.json"
     },
     "env": {
       "browser": true,
@@ -33,9 +34,12 @@
     },
     "globals": {},
     "rules": {
-      "no-undef": "off",
-      "no-unused-vars": "error",
-      "camelcase": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "arrow-body-style": "off",
+      "camelcase": "off", 
+      "consistent-return": "off",
+      "import/prefer-default-export": "off",
       "import/extensions": [
         "error",
         "ignorePackages",
@@ -45,7 +49,24 @@
           "json": "never",
           "ts": "never",
           "tsx": "never"
-        }],
+        }
+      ],
+      "import/no-extraneous-dependencies": ["error", {
+        "devDependencies": true,
+        "optionalDependencies": false
+      }],
+      "jest/no-mocks-import": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "no-console": "off",
+      "no-extra-semi": "error",
+      "jsx-a11y/no-noninteractive-tabindex": "off",
+      "no-nested-ternary": "off",
+      "no-param-reassign": "off",
+      "no-undef": "off",
+      "no-unexpected-multiline": "error",
+      "no-unreachable": "error",
+      "no-unused-vars": "error",
       "react/jsx-props-no-spreading": "off",
       "react/jsx-filename-extension": [
         "error",
@@ -54,10 +75,17 @@
       "react/function-component-definition": [
         2,
         {
-          "namedComponents": "function-declaration",
-          "unnamedComponents": "function-expression"
+          "namedComponents": "arrow-function",
+          "unnamedComponents": "arrow-function"
         }
-      ]
+      ],
+      "react/require-default-props": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "semi": ["error", "never", {"beforeStatementContinuationChars": "never"}],
+      "semi-spacing": ["error", {"after": true, "before": false}],
+      "semi-style": ["error", "first"],
+      "testing-library/no-wait-for-empty-callback": "off",
+      "testing-library/no-wait-for-multiple-assertions": "off"
     },
     "settings": {
       "import/resolver": {

@@ -1,7 +1,1 @@
-build/
-public/
-**/coverage/
-**/node_modules/
-*.config.js
-.*lintrc.js
-/*.*
+src/setupTests.ts

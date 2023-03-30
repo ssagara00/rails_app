@@ -1,10 +1,9 @@
 class RepliesController < ApplicationController
-
   before_action :set_reply, only: %i[show]
   before_action :set_change_reply, only: %i[update destroy]
 
   def index
-    replies = Reply.all.order(created_at: "DESC")
+    replies = Reply.all.order(created_at: 'DESC')
     render json: replies
   end
 
@@ -50,5 +49,4 @@ class RepliesController < ApplicationController
   def reply_params
     params.require(:reply).permit(:user_id, :title, :contents, :image, :reply_from_id)
   end
-
 end

@@ -1,72 +1,93 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
+import { AxiosResponse } from 'axios'
 import '@testing-library/jest-dom'
-import PostsTop from './PostsTop'
-import { AuthContext } from "../../App"
+
+import { AuthContext } from '../../Context'
+import { PostsTop } from './PostsTop'
+import * as ApiActions from '../../api/api_actions'
 
 jest.mock('react-alert')
+jest.mock('../../api/api_actions')
 jest.mock('react-router-dom')
 
-const setupPostsTop = () => {
-  render(<PostsTop />);
+const renderPostsTop = () => {
+  const setLoading = jest.fn()
+  render(
+    <AuthContext.Provider
+      value={
+        {
+          setLoading
+        } as any
+      }
+    >
+      <PostsTop />
+    </AuthContext.Provider>
+    )
 }
 
-const renderPostsTop = () => {
+const renderLoginPostsTop = () => {
+  const setLoading = jest.fn()
   render(
     <AuthContext.Provider
         value={
           {
+            setLoading,
             isSignedIn: true,
             currentUser: {
               id: 1,
-              name: 'テスト'
+              name: 'テストユーザー'
             },
           } as any
         }
       >
-    <PostsTop />
+      <PostsTop />
    </AuthContext.Provider>
   )
 }
 
-describe('PostsTop notLogin', () => {
+describe('PostsTop', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  it('未ログイン状態で画面表示が適切', () => {
-    setupPostsTop()
+  it('未ログイン状態で画面表示が適切', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.getIndexPosts.mockResolvedValue({ status: 200 } as AxiosResponse)
+    renderPostsTop()
 
-    const signupbutton = screen.getByRole('button', { name: 'Open Signup' });
-    expect(signupbutton).toBeInTheDocument();
-    const signinbutton = screen.getByRole('button', { name: 'Open Signin' });
-    expect(signinbutton).toBeInTheDocument();
-    const yetlogin = screen.getByText('ログインしていません。')
-    expect(yetlogin).toBeInTheDocument()
-  })
-})
-
-describe('PostsTop Login', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+    const signupButton = screen.getByRole('button', { name: 'Open Signup' })
+    expect(signupButton).toBeInTheDocument()
+    const signinButton = screen.getByRole('button', { name: 'Open Signin' })
+    expect(signinButton).toBeInTheDocument()
+    const notLogin = screen.getByText('ログインしていません。')
+    expect(notLogin).toBeInTheDocument()
+    
+    // エラー避けのため、ログ出力終わるまで待つ
+    await waitFor(() => {
+    })
   })
 
   it('ログイン状態で画面表示が適切', async() => {
-    renderPostsTop()
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.getIndexPosts.mockResolvedValue({ status: 200 } as AxiosResponse)
+    renderLoginPostsTop()
 
+    const signupButton = screen.getByRole('button', { name: 'Open Signup' })
+    expect(signupButton).toBeInTheDocument()
+    const signoutButton = screen.getByRole('button', { name: 'SignOut' })
+    expect(signoutButton).toBeInTheDocument()
+    const formButton = screen.getByRole('button', { name: 'Open Form' })
+    expect(formButton).toBeInTheDocument()
+    const postTab = screen.getByText('投稿一覧')
+    expect(postTab).toBeInTheDocument()
+    const authTab = screen.getByText('ユーザー情報管理画面')
+    expect(authTab).toBeInTheDocument()
+    const loginName = screen.getByText('ようこそ! テストユーザーさん！')
+    expect(loginName).toBeInTheDocument()
+
+    // エラー避けのため、ログ出力終わるまで待つ
     await waitFor(() => {
-      const signupbutton = screen.getByRole('button', { name: 'Open Signup' });
-      expect(signupbutton).toBeInTheDocument();
-      const signoutbutton = screen.getByRole('button', { name: 'SignOut' });
-      expect(signoutbutton).toBeInTheDocument();
-      const formbutton = screen.getByRole('button', { name: 'Open Form' });
-      expect(formbutton).toBeInTheDocument();
-      const posttab = screen.getByText('投稿一覧')
-      expect(posttab).toBeInTheDocument()
-      const authtab = screen.getByText('ユーザー情報管理画面')
-      expect(authtab).toBeInTheDocument()
-      const loginname = screen.getByText('ようこそ! テストさん！')
-      expect(loginname).toBeInTheDocument()
     })
-  });
-});
+  })
+})

@@ -4,6 +4,7 @@ export interface Post {
   title: string
   contents: string
   image?: { url: string }
+  created_at: Date
 }
 
 export interface Reply {
@@ -13,6 +14,7 @@ export interface Reply {
   contents: string
   image?: { url: string }
   reply_from_id?: number
+  created_at: Date
 }
 
 export interface SignUpParams {

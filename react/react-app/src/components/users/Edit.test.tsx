@@ -1,99 +1,119 @@
-import React from "react";
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
+import React from 'react'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
 
-import Edit from './Edit';
+import { AuthContext } from '../../Context'
+import { Edit } from './Edit'
 
-jest.mock('react-alert');
+jest.mock('react-alert')
 
-const setupSignup = () => {
-  const edit = true;
-  const setEdit = jest.fn();
-  render(<Edit edit={edit} setEdit={setEdit} />);
+const renderEdit = () => {
+  const edit = true
+  const setEdit = jest.fn()
+  render(
+    <AuthContext.Provider
+        value={
+          {
+            isSignedIn: true,
+            currentUser: {
+              id: 1,
+              name: 'テストユーザー',
+              email: 'test@example.co.jp'
+            },
+          } as any
+        }
+      >
+    <Edit edit={edit} setEdit={setEdit} />
+   </AuthContext.Provider>
+  )
 }
 
 describe('Edit', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
   it('画面表示が適切', () => {
-    setupSignup();
+    renderEdit()
 
-    const nameLabel = screen.queryByText('Name');
-    expect(nameLabel).toBeInTheDocument();
-    const emailLabel = screen.queryByText('Email');
-    expect(emailLabel).toBeInTheDocument();
+    const nameLabel = screen.queryByText('Name')
+    expect(nameLabel).toBeInTheDocument()
+    const emailLabel = screen.queryByText('Email')
+    expect(emailLabel).toBeInTheDocument()
 
-    const nameinput = screen.getByPlaceholderText('Type name here');
-    expect(nameinput).toBeInTheDocument();
-    const emailinput = screen.getByPlaceholderText('Type email here');
-    expect(emailinput).toBeInTheDocument();
+    const nameInput = screen.getByPlaceholderText('Type name here')
+    expect(nameInput).toBeInTheDocument()
+    expect(nameInput).toHaveValue('テストユーザー')
+    const emailInput = screen.getByPlaceholderText('Type email here')
+    expect(emailInput).toBeInTheDocument()
+    expect(emailInput).toHaveValue('test@example.co.jp')
 
-    const submitbutton = screen.getByRole('button', { name: 'EDIT!' });
-    expect(submitbutton).toBeInTheDocument();
-    const closebutton = screen.getByRole('button', { name: 'Close Modal' });
-    expect(closebutton).toBeInTheDocument();
-  });
+    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
+    expect(submitButton).toBeInTheDocument()
+    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    expect(closeButton).toBeInTheDocument()
+  })
 })
 
 describe('Edit name', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
   it('名前が空の場合、エラーメッセージを表示', async() => {
-    setupSignup();
-    const emailinput = screen.getByPlaceholderText('Type email here');
-    const submitbutton = screen.getByRole('button', { name: 'EDIT!' });
+    renderEdit()
+    const nameInput = screen.getByPlaceholderText('Type name here')
+    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
 
-    userEvent.type(emailinput,'test@example.com');
-    await userEvent.click(submitbutton);
+    userEvent.clear(nameInput)
+    userEvent.click(submitButton)
     await waitFor(() => {
       expect(screen.getByText('名前を入力してください。')).toBeInTheDocument()
     })
-  });
+  })
 
   it('名前が101文字以上の場合、エラーメッセージを表示', async() => {
-    setupSignup();
-    const nameinput = screen.getByPlaceholderText('Type name here');
-    const submitbutton = screen.getByRole('button', { name: 'EDIT!' });
+    renderEdit()
+    const nameInput = screen.getByPlaceholderText('Type name here')
+    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
 
-    userEvent.type(nameinput,'あ'.repeat(101));
-    await userEvent.click(submitbutton);
+    userEvent.clear(nameInput)
+    userEvent.type(nameInput,'あ'.repeat(101))
+    userEvent.click(submitButton)
     await waitFor(() => {
       expect(screen.getByText('100文字以内で入力してください。')).toBeInTheDocument()
     })
-  });
+  })
 })
 
 describe('Edit email', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
   it('メールアドレスが空の場合、エラーメッセージを表示', async() => {
-    setupSignup();
-    const nameinput = screen.getByPlaceholderText('Type name here');
-    const submitbutton = screen.getByRole('button', { name: 'EDIT!' });
+    renderEdit()
+    const emailInput = screen.getByPlaceholderText('Type email here')
+    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
 
-    userEvent.type(nameinput,'テスト');
-    await userEvent.click(submitbutton);
+    userEvent.clear(emailInput)
+    userEvent.click(submitButton)
     await waitFor(() => {
       expect(screen.getByText('メールアドレスを入力してください。')).toBeInTheDocument()
     })
-  });
+  })
 
   it('メールアドレスの形式が不正の場合、エラーメッセージを表示', async() => {
-    setupSignup();
-    const emailinput = screen.getByPlaceholderText('Type email here');
-    const submitbutton = screen.getByRole('button', { name: 'EDIT!' });
+    renderEdit()
+    const emailInput = screen.getByPlaceholderText('Type email here')
+    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
 
-    userEvent.type(emailinput,'xxxx1111');
-    await userEvent.click(submitbutton);
+    userEvent.clear(emailInput)
+    userEvent.type(emailInput,'xxxx1111')
+    userEvent.click(submitButton)
     await waitFor(() => {
       expect(screen.getByText('メールアドレスの形式が不正です。')).toBeInTheDocument()
     })
-  });
+  })
 })

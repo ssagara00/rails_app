@@ -1,33 +1,20 @@
-import React, { useState, createContext } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import PostsTop from './components/posts/PostsTop';
+import { AuthProvider } from './Context'
+import { PostsTop } from './components/posts/PostsTop'
 
-import { User } from './interfaces/interface';
-
-export const AuthContext = createContext({} as {
-  loading: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  isSignedIn: boolean
-  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>
-  currentUser: User | undefined
-  setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
-})
-
-  export const App = () => {
-    const [loading, setLoading] = useState<boolean>(false)
-    const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
-    const [currentUser, setCurrentUser] = useState<User | undefined>()
-    return (
-      <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
-          <BrowserRouter>
-            <Routes>
-              <Route path={'/'} element={<PostsTop />} />
-            </Routes>
-          </BrowserRouter>
-      </AuthContext.Provider>
-    )
-  }
+export const App = () => {
+  return (
+    <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<PostsTop />} />
+          </Routes>
+        </BrowserRouter>
+    </AuthProvider>
+  )
+}
 
 // デフォルト
 // import React from 'react';
@@ -57,4 +44,4 @@ export const AuthContext = createContext({} as {
 //
 // }
 //
-export default App
+// export default App
