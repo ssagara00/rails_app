@@ -1,65 +1,70 @@
-import React, { useContext } from "react";
-import { useForm } from 'react-hook-form';
-import { useAlert } from 'react-alert';
-import Cookies from "js-cookie";
+import React, { useContext } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAlert } from 'react-alert'
+import Cookies from 'js-cookie'
 
-import { AuthContext } from "../../App";
-import { signIn } from "../../api/auth";
-
-import { SignInParams } from "../../interfaces/user_interface";
+import { AuthContext } from '../../Context'
+import { signIn } from '../../api/api_actions'
+import { SignInParams } from '../../interfaces/interface'
 
 interface SignInProps {
   signin: boolean,
-  setSignin: Function
+  setSignin: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-  export const SignIn = ({ signin, setSignin }: SignInProps) => {
-    const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+export const SignIn = ({ signin, setSignin }: SignInProps) => {
+  const { setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext)
 
-    const alert = useAlert();
-    const { register, handleSubmit,formState: { errors } } = useForm<SignInParams>();
+  const alert = useAlert()
+  const { register, handleSubmit,formState: { errors } } = useForm<SignInParams>()
 
-    const closeModal = () => {
-      setSignin(false);
-    }
-    
-    const onSubmit = async (data: SignInParams) => {
+  const closeModal = () => {
+    setSignin(false)
+  }
 
-      try {
-        const res = await signIn(data);
-        if (res.status === 200) {
-          alert.success('ログインに成功しました');
-          // ログインに成功した場合はCookieに各値を格納
-          Cookies.set("_access_token", res.headers["access-token"]);
-          Cookies.set("_client", res.headers["client"]);
-          Cookies.set("_uid", res.headers["uid"]);
-          setIsSignedIn(true);
-          setCurrentUser(res.data.data);
-          console.log("Signed in successfully!");
-          setSignin(false);
-        } else {
-          alert.error('ログインに失敗しました');
-          console.log("Signed in missed");
-        }
-      } catch (err) {
-        alert.error('ログインに失敗しました');
-        console.log(err);
+  const onSubmit = async (data: SignInParams) => {
+
+    try {
+      const res = await signIn(data)
+      if (res.status === 200) {
+        alert.success('ログインに成功しました')
+        // ログインに成功した場合はCookieに各値を格納
+        Cookies.set("_access_token", res.headers["access-token"])
+        Cookies.set("_client", res.headers.client)
+        Cookies.set("_uid", res.headers.uid)
+        setIsSignedIn(true)
+        setCurrentUser(res.data.data)
+        // 非ログイン時に表示した投稿の重複を避けるため、現在の表示内容を削除し、スクロール状況をリセットする関数を起動する。
+        setLoading(true)
+        setSignin(false)
+      } else {
+        alert.error('ログインに失敗しました')
+        console.log("Signed in missed")
       }
+    } catch (err) {
+      alert.error('ログインに失敗しました')
+      console.log(err)
     }
+  }
 
-    return (
-      <div>
-        <h3 className="font-bold text-lg">SignIn!</h3>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <p className="py-4">email</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+  return (
+    <div>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="container">
+          <div className="head bg-neutral">
+            <h2>ログイン</h2>
+          </div>
+
+          <p className="form-title">メールアドレス</p>
+          <input type="text" placeholder="Type email here" className="inputarea"
             {...register('email', {
               required: {
                 value: true,
-                message: '入力が必須の項目です。',
+                message: 'メールアドレスを入力してください。',
               },
               pattern: {
-                value: /^[a-zA-Z0-9.!#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                value: /^[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/,
                 message: 'メールアドレスの形式が不正です。',
               }
             })}/>
@@ -72,12 +77,12 @@ interface SignInProps {
               </div>
             }
 
-          <p className="py-4">password</p>
-          <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">パスワード</p>
+          <input type="password" placeholder="Type password here" className="inputarea"
             {...register('password', {
               required: {
                 value: true,
-                message: '入力が必須の項目です。',
+                message: 'パスワードを入力してください。',
               },
               minLength: {
                 value: 6,
@@ -101,12 +106,14 @@ interface SignInProps {
               </div>
             }
           <br/>
-          <button className="btn" type="submit">SignIN</button>
-        </form>
+          <button className="btn btn-secondary" type="submit">ログインする</button>
 
-        <button onClick={closeModal} className="btn">Close Modal</button>
+        </div>
+      </form>
+
+      <div className="footbtns">
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
-    )
-  }
-
-export default SignIn
+    </div>
+  )
+}

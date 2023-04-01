@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :post do
-    user_id { '99' }
+    association :user
     title { 'testtitle' }
     contents { 'test_contents' }
     image { 'test.jpg' }

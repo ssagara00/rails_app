@@ -1,69 +1,69 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useAlert } from 'react-alert';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAlert } from 'react-alert'
 
-import { signUp } from "../../api/auth";
-
-import { Dialog, DialogProps } from '../../Dialog';
-
-import { SignUpParams } from "../../interfaces/user_interface";
+import { Dialog, DialogProps } from '../../Dialog'
+import { signUp } from '../../api/api_actions'
+import { SignUpParams } from '../../interfaces/interface'
 
 interface SignUpProps {
   signup: boolean
-  setSignup: Function
+  setSignup: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-  export const SignUp = ({ signup, setSignup }: SignUpProps) => {
-    const alert = useAlert();
-    const { register, handleSubmit, getValues, trigger, formState: { errors } } = useForm<SignUpParams>({mode: "onBlur"});
-    const [dialog, setDialog] = useState<DialogProps | undefined>();
+export const SignUp = ({ signup, setSignup }: SignUpProps) => {
+  const alert = useAlert()
+  const { register, handleSubmit, getValues, trigger, formState: { errors } } = useForm<SignUpParams>({mode: "onBlur"})
+  const [dialog, setDialog] = useState<DialogProps | undefined>()
 
-    const closeModal = () => {
-      setSignup(false);
-    }
+  const closeModal = () => {
+    setSignup(false)
+  }
 
-    const onSubmit = async(data: SignUpParams) =>{
-      const ret = await new Promise<string>((resolve) => {
-        setDialog({
-        onClose: resolve,
-        title: 'ユーザー登録',
-        message: 'ユーザー登録します。よろしいですか?'
-        })
+  const onSubmit = async(data: SignUpParams) =>{
+    const ret = await new Promise<string>((resolve) => {
+      setDialog({
+      onClose: resolve,
+      title: '会員登録',
+      message: '会員登録します。よろしいですか?'
       })
-      setDialog(undefined);
+    })
+    setDialog(undefined)
 
-      if (ret === 'ok') {
-        try {
-          const res = await signUp(data);
-          if (res.status === 200) {
-            alert.success('登録に成功しました');
-            console.log("Signed up successfully!");
-            setSignup(false);
-          } else {
-            alert.error('登録に失敗しました');
-            console.log('signup is failed');
-          }
-        } catch (err) {
-          alert.error('登録に失敗しました');
-          console.log(err);
+    if (ret === 'ok') {
+      try {
+        const res = await signUp(data)
+        if (res.status === 200) {
+          alert.success('登録に成功しました')
+          setSignup(false)
+        } else {
+          alert.error('登録に失敗しました')
+          console.log('signup is failed')
         }
+      } catch (err) {
+        alert.error('登録に失敗しました')
+        console.log(err)
       }
     }
+  }
 
-    return (
-      <div>
+  return (
+    <div>
 
-        {dialog && <Dialog {...dialog} />}
+      {dialog && <Dialog {...dialog} />}
 
-        <h3 className="font-bold text-lg">SignUp!</h3>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="container">
+          <div className="head bg-neutral">
+            <h2>SIGN UP</h2>
+          </div>
 
-          <p className="py-4">name</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">名前</p>
+          <input type="text" placeholder="Type name here" className="inputarea"
             {...register('name', {
               required: {
                 value: true,
-                message: '入力が必須の項目です。',
+                message: '名前を入力してください。',
               },
               maxLength: {
                 value: 100,
@@ -79,15 +79,15 @@ interface SignUpProps {
               </div>
             }
 
-          <p className="py-4">email</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">メールアドレス</p>
+          <input type="text" placeholder="Type email here" className="inputarea"
             {...register('email', {
               required: {
                 value: true,
-                message: '入力が必須の項目です。',
+                message: 'メールアドレスを入力してください。',
               },
               pattern: {
-                value: /^[a-zA-Z0-9.!#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                value: /^[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/,
                 message: 'メールアドレスの形式が不正です。',
               }
             })}/>
@@ -100,12 +100,12 @@ interface SignUpProps {
               </div>
             }
 
-          <p className="py-4">password</p>
-          <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">パスワード</p>
+          <input type="password" placeholder="Type password here" className="inputarea"
             {...register('password', {
               required: {
                 value: true,
-                message: '入力が必須の項目です。',
+                message: 'パスワードを入力してください。',
               },
               minLength: {
                 value: 6,
@@ -121,7 +121,7 @@ interface SignUpProps {
               },
               onBlur: () => {
                 if(getValues("passwordConfirmation")){
-                  trigger("passwordConfirmation");
+                  trigger("passwordConfirmation")
                 }
               }
             })}/>
@@ -134,17 +134,17 @@ interface SignUpProps {
               </div>
             }
 
-          <p className="py-4">passwordConfirmation</p>
-          <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">パスワード（確認）</p>
+          <input type="password" placeholder="Type passwordconfirmation here" className="inputarea"
             {...register('passwordConfirmation', {
               required: {
                 value: true,
-                message: '入力が必須の項目です。',
+                message: '確認用パスワードを入力してください。',
               },
               validate: (value)=> {
                 return (
                   value === getValues("password") || "パスワードが一致しません"
-                );
+                )
               }
             })}/>
             { errors.passwordConfirmation?.message &&
@@ -155,14 +155,15 @@ interface SignUpProps {
                 </div>
               </div>
             }
-
           <br/>
-          <input className="btn" type="submit" value="AddUser"/>
-        </form>
-        
-        <button onClick={closeModal} className="btn">Close Modal</button>
-      </div>
-    )
-  }
+          <button className="btn btn-secondary" type="submit">会員登録する</button>
 
-export default SignUp
+        </div>
+      </form>
+
+      <div className="footbtns">
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
+      </div>
+    </div>
+  )
+}

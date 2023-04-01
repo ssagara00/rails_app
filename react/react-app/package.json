@@ -12,6 +12,7 @@
     "axios-case-converter": "^0.9.0",
     "daisyui": "^2.51.3",
     "js-cookie": "^3.0.1",
+    "moment": "^2.29.4",
     "postcss": "^8.4.21",
     "react": "^18.2.0",
     "react-alert": "^7.0.3",
@@ -33,11 +34,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "jest-test": "jest",
-    "lint": "eslint './react-app/src/*.tsx'",
-    "prettier": "prettier './react-app/src/*.tsx'",
-    "fix": "yarn format && yarn lint:fix",
-    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix './react-app/src/*.tsx'"
+    "eslint": "eslint './src/**/*.{ts,tsx}'",
+    "prettier": "prettier './src/**/*.{ts,tsx}'",
+    "fix": "eslint --fix './src/**/*.{ts,tsx}'",
+    "format": "prettier --write './src/**/*.{ts,tsx}'"
   },
   "browserslist": {
     "production": [
@@ -60,6 +60,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^28.1.8",
     "@types/js-cookie": "^3.0.3",
+    "@types/moment": "^2.13.0",
     "@types/node": "^16.18.14",
     "@types/react": "^18.0.28",
     "@types/react-alert": "^7.0.2",

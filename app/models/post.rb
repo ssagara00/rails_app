@@ -3,14 +3,13 @@ class Post < ApplicationRecord
 
   has_many :replies, dependent: :destroy, foreign_key: 'reply_from_id'
   has_many :likes, dependent: :destroy
-  belongs_to :user, optional: true
+  belongs_to :user
 
   validates :title,
-    presence: true,
-    length: { maximum: 30 }
+            presence: true,
+            length: { maximum: 30 }
 
   validates :contents,
-    presence: true,
-    length: { maximum: 3000 }
-
+            presence: true,
+            length: { maximum: 3000 }
 end

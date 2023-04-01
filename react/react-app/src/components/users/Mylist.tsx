@@ -1,66 +1,65 @@
-import React, { useState, useContext } from "react";
-import InfiniteScroll from "react-infinite-scroller";
+import React, { useState, useContext } from 'react'
+import InfiniteScroll from 'react-infinite-scroller'
 
-import { AuthContext } from "../../App";
-import { myPosts } from '../../api/posts';
-
-import Item from '../posts/Item';
-
-import { Post } from '../../interfaces/interface';
+import { AuthContext } from '../../Context'
+import { myPosts } from '../../api/api_actions'
+import { Post } from '../../interfaces/interface'
+import { Item } from '../posts/Item'
 
 interface MylistProps {
   contents_flg: boolean,
-  setContents_flg: Function
+  setContents_flg: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-  export const Mylist = ({ contents_flg, setContents_flg }: MylistProps) => {
-    const { currentUser } = useContext(AuthContext);
-    const user_id = currentUser?.id || 0;
+export const Mylist = ({ contents_flg, setContents_flg }: MylistProps) => {
+  const { currentUser } = useContext(AuthContext)
+  const user_id = currentUser?.id
 
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [hasMore, setHasMore] = useState(true);
-    const [offset, setOffset] = useState(0);
-    
-    const contentsend = () =>{
-      setContents_flg(false);
-    }
+  const [posts, setPosts] = useState<Post[]>([])
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [offset, setOffset] = useState<number>(0)
+  
+  const contentsend = () =>{
+    setContents_flg(false)
+  }
 
-    const loadMore = async() => {
+  const loadMore = async() => {
+    if(user_id) {
       try {
-        const res = await myPosts(user_id, 10, offset);
-        if (res?.status === 200) {
-          if (res?.data.length <  1) {
-            setHasMore(false);
-            return
+        const res = await myPosts(user_id, 12, offset)
+        if (res.status === 200) {
+          if (res.data.length <  1) {
+            setHasMore(false)
           } else {
-            setPosts([...posts, ...res.data]);
-            setOffset(offset + 10 );
+            setPosts([...posts, ...res.data])
+            setOffset(offset + 12 )
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
+    } else {
+      console.log('You have to Sign In')
     }
-
-    const loader = <div className="loader" key={0}>Loading ...</div>;
-
-    return (
-      <div>
-        <button className="btn btn-primary" onClick={() => contentsend()}>back to menu</button>
-        <InfiniteScroll
-          hasMore={hasMore}
-          loadMore={loadMore}    
-          loader={loader}>
-            <ul className="postlist">
-              {
-                posts.map((post: Post, index: number) => (
-                  <Item key={index} post={post} setPosts={setPosts}/>
-                ))
-              }
-            </ul>
-        </InfiniteScroll>
-      </div>
-    )
   }
 
-export default Mylist
+  const loader = <div className="loader" key={0}>ロード中 ...</div>
+
+  return (
+    <div>
+      <button type="submit" className="btn btn-primary" onClick={() => contentsend()}>メニューに戻る</button>
+      <InfiniteScroll
+        hasMore={hasMore}
+        loadMore={loadMore}    
+        loader={loader}>
+          <ul className="postlist">
+            {
+              posts.map((post: Post, index: number) => (
+                <Item key={post.id} post={post} setPosts={setPosts}/>
+              ))
+            }
+          </ul>
+      </InfiniteScroll>
+    </div>
+  )
+}

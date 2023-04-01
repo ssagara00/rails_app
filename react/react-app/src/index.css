@@ -22,27 +22,8 @@ code {
   justify-content: center;
 }
 
-.postlist {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 50px 50px;
-}
-
-.postlist li {
-  margin-top: 50px;
-}
-
-.imageclass {
-  padding: 30px;
-
-}
-.imageclass img {
-  display: block;
-  margin: 0 auto;
-  width: 75%;
-  height: 150px;
+.height {
+  min-height: 100vh;
 }
 
 .Modal {
@@ -62,29 +43,82 @@ code {
   outline: transparent;
   overflow: scroll;
 }
-
-.centor {
-  margin: 0 auto;
-  width: 95%;
-  height: 95%;
+.ReactModal__Body--open {
+  position: fixed;
 }
 
-.centor_image {
-  margin: 0 auto;
-  height: 60%;
-  width: 70%;
+.tab {
+  width: 50%;
 }
-.centor_image img{
+.tabList {
+  display: flex;
+}
+
+.postlist {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px 50px;
+}
+.postlist li {
+  margin-top: 50px;
+}
+
+.contentsheader {
+  display: flex;
+  margin: 10px;
+  justify-content: space-between;
+}
+
+.imageclass {
+  padding: 30px;
+  width: 100%;
+  height: 300px;
+}
+.imageclass img {
+  object-fit: cover;
+  display: block;
   margin: 0 auto;
   height: 100%;
   width: 100%;
 }
 
+.heart {
+  width: 30px;
+  height: 30px;
+  position:absolute;
+  top: 8%;
+  right: 0%;
+  margin-right: 20px;
+}
+
+.centor {
+  margin: 0 auto;
+  overflow: scroll;
+}
+
+.heartindetail {
+  width: 30px;
+  height: 30px;
+}
+
+.centor_image {
+  margin: 0 auto;
+  height: 400px;
+  width: 500px;
+}
+.centor_image img{
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
 .topic {
-  padding: 0.5em;/*文字周りの余白*/
-  color: #010101;/*文字色*/
-  background: #eaf3ff;/*背景色*/
-  border-bottom: solid 3px #516ab6;/*下線*/
+  padding: 0.5em;
+  color: #010101;
+  background: #eaf3ff;
+  border-bottom: solid 3px #516ab6;
 }
 
 .comment {
@@ -103,50 +137,139 @@ code {
   margin: 0;
 }
 
-.ReactModal__Body--open {
-  position: fixed;
-}
-
-.heart {
-  width: 30px;
-  height: 30px;
-  position:absolute;
-  top: 10%;
-  left: 0%;
-}
-
-.tab {
-  width: 50%;
-}
-
-.tabList {
-  display: flex;
-}
-
 .authmenu {
   padding: 40px;
   font-weight: bold;
-  color: #6091d3;/*文字色*/
+  color: #6091d3;
   background: #FFF;
-  border: solid 3px #6091d3;/*線*/
-  border-radius: 10px;/*角の丸み*/
+  border: solid 3px #6091d3;
+  border-radius: 10px;
 }
 
 .authlist {
   display: flex;
   justify-content:space-between;
-  margin: 20px;
+  align-items: centor;
+  margin-top: 30px;
+}
+.authlist li {
+  margin:0 auto;
+  text-align:center;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 33%;
+  max-width: 270px;
+  min-width: 130px;
 }
 
-.height {
-  min-height: 100vh;
+.head {
+  -webkit-border-radius:6px 6px 0px 0px;
+  -moz-border-radius:6px 6px 0px 0px;
+  border-radius:6px 6px 0px 0px;
+  color:#FAFAFA;
 }
 
-.button-actions {
-  display:flex;
-  position:absolute;
-  top: 5%;
-  right: 10%
+.container {
+  max-width:600px;
+  margin:0 auto;
+  text-align:center;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
+  border-radius:6px;
+}
+
+h2 {
+  text-align: center;
+  padding:18px 0 18px 0;
+  font-size: 1.4em;
+}
+
+.form-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+.inputarea {
+  font-size: 1em;
+  padding: 15px 10px 10px;
+  border: 1px solid #cecece;
+  background: #d7d7d7;
+  border-radius: 5px;
+  background-clip: padding-box;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 600px;
+}
+
+.textfield {
+  font-size: 1em;
+  padding: 15px 10px 10px;
+  border: 1px solid #cecece;
+  background: #d7d7d7;
+  border-radius: 5px;
+  background-clip: padding-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 200px;
+  max-width: 600px;
+}
+
+.footbtns {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.formimage {
+  margin: 0 auto;
+  width: 50%;
+  height: 50%;
+}
+.formimage img {
+  display: block;
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+}
+
+@media screen and (max-width:400px) {
+ 
+	/*　画面サイズが400px以下（スマホ画面）の場合ここの記述が適用される　*/
+ 
+  .flex-none ul {
+    display: block;
+  }
+
+  .centor_image {
+    margin: 0 auto;
+    height: 200px;
+    width: 220px;
+  }
+
+  .authmenu {
+    padding: 10px;
+    font-weight: bold;
+    color: #6091d3;
+    background: #FFF;
+    border: solid 3px #6091d3;
+    border-radius: 10px;
+  }
+
+  .authlist {
+    display: block;
+  }
+  .authlist li {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    max-width: 150px;
+    min-width: 100px;
+  }
+
+  .form-title {
+    font-size: 15px;
+  }
+
 }
 
 @tailwind base;

@@ -39,13 +39,14 @@ group :development, :test do
   gem 'psych', '~> 3.1'
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
-  gem 'rubocop', require:false
-  gem 'rubocop-rails', require:false
   gem 'factory_bot_rails'
 end
 
 group :development do
   gem 'listen', '~> 3.3'
+  gem 'rubocop', require:false
+  gem 'rubocop-rails', require:false
+  gem 'rubocop-rspec', require:false
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end

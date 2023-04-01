@@ -1,71 +1,73 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useAlert } from 'react-alert';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAlert } from 'react-alert'
 
-import { updateReply } from '../../api/replies';
-
-import { Dialog, DialogProps } from '../../Dialog';
-
-import { Reply } from '../../interfaces/reply_interface';
-
+import { Dialog, DialogProps } from '../../Dialog'
+import { updateReply } from '../../api/api_actions'
+import { Reply } from '../../interfaces/interface'
 
 interface ReplyUpdateProps {
   replyupdate: boolean
-  setReplyUpdate: Function
-  modalid: number
-  idtitle: string
-  idcontents: string
+  setReplyUpdate: React.Dispatch<React.SetStateAction<boolean>>
   reply: Reply
-  setReply: Function
+  setReplies: React.Dispatch<React.SetStateAction<Reply[]>>
 }
 
-  export const ReplyUpdate = ({ replyupdate, setReplyUpdate, modalid, idtitle, idcontents, reply, setReply }: ReplyUpdateProps) => {
-    const alert = useAlert();
-    const { register, handleSubmit,formState: { errors }, } = useForm<Reply>({ defaultValues: { title: idtitle, contents: idcontents } });
-    const [dialog, setDialog] = useState<DialogProps | undefined>();
+export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: ReplyUpdateProps) => {
+  const alert = useAlert()
+  const { register, handleSubmit,formState: { errors }, } = useForm<Reply>({ defaultValues: { title: reply.title, contents: reply.contents } })
+  const [dialog, setDialog] = useState<DialogProps | undefined>()
 
-    const closeModal = () => {
-      setReplyUpdate(false)
-    }
+  const closeModal = () => {
+    setReplyUpdate(false)
+  }
 
-    const onSubmit = async(data: Reply) =>{
-      const ret = await new Promise<string>((resolve) => {
-        setDialog({
-        onClose: resolve,
-        title: '投稿',
-        message: '更新します。よろしいですか?'
-        })
+  const onSubmit = async(data: Reply) =>{
+    const ret = await new Promise<string>((resolve) => {
+      setDialog({
+      onClose: resolve,
+      title: '更新',
+      message: '更新します。よろしいですか?'
       })
-      setDialog(undefined);
+    })
+    setDialog(undefined)
 
-      if (ret === 'ok') {
-        try {
-          const res = await updateReply(modalid,data)
-          if (res.status == 200) {
-            alert.success('更新に成功しました');
-            setReply((prev: Reply[]) => prev.map((value) => (value.id == modalid ?  res.data : value)));
-            setReplyUpdate(false);
-          } else {
-            alert.error('更新に失敗しました');
-            console.log(res.data.message);
-          }
-        } catch (err) {
-          alert.error('更新に失敗しました');
-          console.log(err);
+    if (ret === 'ok' && reply.id ) {
+      const formData :any = new FormData()
+      formData.append("reply[title]", data.title)
+      formData.append("reply[contents]", data.contents)
+
+      try {
+        const res = await updateReply(reply.id, formData)
+        if (res.status === 200) {
+          alert.success('更新に成功しました')
+          // 更新内容を一覧画面に即座に反映させる
+          setReplies((prev: Reply[]) => prev.map((value) => (value.id === reply.id ? res.data : value)))
+          setReplyUpdate(false)
+        } else {
+          alert.error('更新に失敗しました')
+          console.log(res.data.message)
         }
+      } catch (err) {
+        alert.error('更新に失敗しました')
+        console.log(err)
       }
     }
+  }
 
-    return(
-      <div>
+  return(
+    <div>
 
-        {dialog && <Dialog {...dialog} />}
+      {dialog && <Dialog {...dialog} />}
 
-        <h3 className="font-bold text-lg">Update Posts!</h3>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="container">
+          <div className="head bg-neutral">
+            <h2>返信更新</h2>
+          </div>
 
-          <p className="py-4">title</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">タイトル</p>
+          <input type="text" placeholder="Type title here" className="inputarea"
             {...register('title', {
               required: {
                 value: true,
@@ -85,8 +87,8 @@ interface ReplyUpdateProps {
               </div>
             }
 
-          <p className="py-4">contents</p>
-          <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs"
+          <p className="form-title">本文</p>
+          <input type="text" placeholder="Type contents here" className="textfield"
             {...register('contents', {
               required: {
                 value: true,
@@ -105,15 +107,16 @@ interface ReplyUpdateProps {
                 </div>
               </div>
             }
-
           <br/>
-          <button className="btn" type="submit">ReplyUpdate</button>
-        </form>
-        <br/>
-        <button onClick={closeModal} className="btn">Close Modal</button>
-        
-      </div>
-    )
-  }
+          <button type="submit" className="btn btn-secondary">更新する</button>
 
-export default ReplyUpdate;
+        </div>
+      </form>
+
+      <div className="footbtns">
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
+      </div>
+
+    </div>
+  )
+}

@@ -1,3 +1,22 @@
+export interface Post {
+  id?: number
+  user_id: number
+  title: string
+  contents: string
+  image?: { url: string }
+  created_at: Date
+}
+
+export interface Reply {
+  id?: number
+  user_id?: number | undefined
+  title: string
+  contents: string
+  image?: { url: string }
+  reply_from_id?: number
+  created_at: Date
+}
+
 export interface SignUpParams {
   name: string
   email: string
@@ -29,4 +48,10 @@ export interface User {
   allowPasswordChange: boolean
   created_at: Date
   updated_at: Date
+}
+
+export interface Like {
+  id?: number
+  user_id: number
+  post_id: number
 }

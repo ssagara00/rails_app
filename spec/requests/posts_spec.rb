@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "Posts", type: :request do
-  describe "GET /index" do
+RSpec.describe 'Posts', type: :request do
+  describe 'GET /index' do
     it '全ての投稿データを取得する' do
-      FactoryBot.create_list(:post, 10)
+      create_list(:post, 10)
 
       get '/posts'
       json = JSON.parse(response.body)
@@ -14,11 +14,11 @@ RSpec.describe "Posts", type: :request do
     end
   end
 
-  describe "GET /limit_index" do
+  describe 'GET /limit_index' do
     it '特定の範囲の投稿データを取得する' do
-      FactoryBot.create_list(:post, 10)
+      create_list(:post, 10)
 
-      get "/posts/limit_index/#{5}/#{5}"
+      get '/posts/limit_index/5/5'
       json = JSON.parse(response.body)
 
       expect(response.status).to eq(200)
@@ -27,15 +27,18 @@ RSpec.describe "Posts", type: :request do
     end
   end
 
-  describe "GET /my_posts" do
+  describe 'GET /my_posts' do
     it '自分の投稿データを取得する' do
-      post = FactoryBot.create(:post, user_id: 11)
-      post = FactoryBot.create(:post, user_id: 22)
-      post = FactoryBot.create(:post, user_id: 11)
-      post = FactoryBot.create(:post, user_id: 11)
-      post = FactoryBot.create(:post, user_id: 33)
+      user = create(:user, id: 11)
+      user = create(:user, id: 22)
+      user = create(:user, id: 33)
+      post = create(:post, user_id: 11)
+      post = create(:post, user_id: 22)
+      post = create(:post, user_id: 11)
+      post = create(:post, user_id: 11)
+      post = create(:post, user_id: 33)
 
-      get "/posts/my_posts/#{11}/#{3}/#{0}"
+      get '/posts/my_posts/11/3/0'
       json = JSON.parse(response.body)
 
       expect(response.status).to eq(200)
@@ -44,9 +47,9 @@ RSpec.describe "Posts", type: :request do
     end
   end
 
-  describe "GET /show" do
+  describe 'GET /show' do
     it '特定のデータのみ取得する' do
-      post = FactoryBot.create(:post, title: 'posts_show_test-title')
+      post = create(:post, title: 'posts_show_test-title')
 
       get "/posts/#{post.id}"
       json = JSON.parse(response.body)
@@ -56,18 +59,19 @@ RSpec.describe "Posts", type: :request do
     end
   end
 
-  describe "POST /create" do
+  describe 'POST /create' do
     it '新しい投稿を作成する' do
-      create_params = { user_id: 99, title: 'create_title', contents: 'create_contents', image: 'create_test.jpg'}
+      user = create(:user)
+      create_params = { user_id: user.id, title: 'create_title', contents: 'create_contents', image: 'create_test.jpg' }
 
       expect { post '/posts', params: { post: create_params } }.to change(Post, :count).by(+1)
       expect(response.status).to eq(200)
     end
   end
 
-  describe "PUT /update" do
+  describe 'PUT /update' do
     it '編集を行う' do
-      post = FactoryBot.create(:post, title: 'old_test-title')
+      post = create(:post, title: 'old_test-title')
 
       put "/posts/#{post.id}", params: { post: { title: 'new_test-title' } }
       json = JSON.parse(response.body)
@@ -77,13 +81,12 @@ RSpec.describe "Posts", type: :request do
     end
   end
 
-  describe "DELETE /delete" do
+  describe 'DELETE /delete' do
     it '削除を行う' do
-      post = FactoryBot.create(:post)
+      post = create(:post)
 
       expect { delete "/posts/#{post.id}" }.to change(Post, :count).by(-1)
       expect(response.status).to eq(200)
     end
   end
-
 end
