@@ -51,13 +51,13 @@ export const AuthTop = () => {
             Cookies.remove("_uid")
             setIsSignedIn(false)
             navigation("/")
-            alert.success('削除に成功しました')
+            alert.success('アカウントの削除に成功しました')
           } else {
-            alert.error('削除に失敗しました')
+            alert.error('アカウントの削除に失敗しました')
             console.log('Failed in delete User')
           }
         } catch (err) {
-          alert.error('削除に失敗しました')
+          alert.error('アカウントの削除に失敗しました')
           console.log(err)
         }
       }

@@ -21,13 +21,13 @@ describe('SignUp', () => {
   it('画面表示が適切', () => {
     renderSignup()
 
-    const nameLabel = screen.queryByText('Name')
+    const nameLabel = screen.queryByText('名前')
     expect(nameLabel).toBeInTheDocument()
-    const emailLabel = screen.queryByText('Email')
+    const emailLabel = screen.queryByText('メールアドレス')
     expect(emailLabel).toBeInTheDocument()
-    const passwordLabel = screen.queryByText('Password')
+    const passwordLabel = screen.queryByText('パスワード')
     expect(passwordLabel).toBeInTheDocument()
-    const passwordconfirmationLabel = screen.queryByText('PasswordConfirmation')
+    const passwordconfirmationLabel = screen.queryByText('パスワード（確認）')
     expect(passwordconfirmationLabel).toBeInTheDocument()
 
     const nameInput = screen.getByPlaceholderText('Type name here')
@@ -39,9 +39,9 @@ describe('SignUp', () => {
     const passwordconfirmationInput = screen.getByPlaceholderText('Type passwordconfirmation here')
     expect(passwordconfirmationInput).toBeInTheDocument()
 
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
     expect(submitButton).toBeInTheDocument()
-    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    const closeButton = screen.getByRole('button', { name: '閉じる' })
     expect(closeButton).toBeInTheDocument()
   })
 })
@@ -56,7 +56,7 @@ describe('SignUp name', () => {
     const emailInput = screen.getByPlaceholderText('Type email here')
     const passwordInput = screen.getByPlaceholderText('Type password here')
     const passwordconfirmationInput = screen.getByPlaceholderText('Type passwordconfirmation here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(emailInput,'test@example.com')
     userEvent.type(passwordInput,'xxxx1111')
@@ -70,7 +70,7 @@ describe('SignUp name', () => {
   it('名前が101文字以上の場合、エラーメッセージを表示', async() => {
     renderSignup()
     const nameInput = screen.getByPlaceholderText('Type name here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(nameInput,'あ'.repeat(101))
     userEvent.click(submitButton)
@@ -90,7 +90,7 @@ describe('SignUp email', () => {
     const nameInput = screen.getByPlaceholderText('Type name here')
     const passwordInput = screen.getByPlaceholderText('Type password here')
     const passwordconfirmationInput = screen.getByPlaceholderText('Type passwordconfirmation here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(nameInput,'テスト')
     userEvent.type(passwordInput,'xxxx1111')
@@ -104,7 +104,7 @@ describe('SignUp email', () => {
   it('メールアドレスの形式が不正の場合、エラーメッセージを表示', async() => {
     renderSignup()
     const emailInput = screen.getByPlaceholderText('Type email here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(emailInput,'xxxx1111')
     userEvent.click(submitButton)
@@ -124,7 +124,7 @@ describe('SignUp password', () => {
     const nameInput = screen.getByPlaceholderText('Type name here')
     const emailInput = screen.getByPlaceholderText('Type email here')
     const passwordconfirmationInput = screen.getByPlaceholderText('Type passwordconfirmation here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(nameInput,'テスト')
     userEvent.type(emailInput,'test@example.com')
@@ -138,7 +138,7 @@ describe('SignUp password', () => {
   it('パスワード5文字以内の場合、エラーメッセージを表示', async() => {
     renderSignup()
     const passwordInput = screen.getByPlaceholderText('Type password here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(passwordInput,'aaaaa')
     userEvent.click(submitButton)
@@ -150,7 +150,7 @@ describe('SignUp password', () => {
   it('パスワードが129文字以上の場合、エラーメッセージを表示', async() => {
     renderSignup()
     const passwordInput = screen.getByPlaceholderText('Type password here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(passwordInput,'a'.repeat(129))
     userEvent.click(submitButton)
@@ -162,7 +162,7 @@ describe('SignUp password', () => {
   it('パスワードが半角英数字以外の場合、エラーメッセージを表示', async() => {
     renderSignup()
     const passwordInput = screen.getByPlaceholderText('Type password here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(passwordInput,'ああああああああ')
     userEvent.click(submitButton)
@@ -182,7 +182,7 @@ describe('SignUp passwordconfirmation', () => {
     const nameInput = screen.getByPlaceholderText('Type name here')
     const emailInput = screen.getByPlaceholderText('Type email here')
     const passwordInput = screen.getByPlaceholderText('Type password here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(nameInput,'テスト')
     userEvent.type(emailInput,'test@example.com')
@@ -197,7 +197,7 @@ describe('SignUp passwordconfirmation', () => {
     renderSignup()
     const passwordInput = screen.getByPlaceholderText('Type password here')
     const passwordconfirmationInput = screen.getByPlaceholderText('Type passwordconfirmation here')
-    const submitButton = screen.getByRole('button', { name: 'SignUp' })
+    const submitButton = screen.getByRole('button', { name: '会員登録する' })
 
     userEvent.type(passwordInput,'xxxx1111')
     userEvent.type(passwordconfirmationInput,'xxxx1112')

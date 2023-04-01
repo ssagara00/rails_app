@@ -25,11 +25,11 @@ describe('Update', () => {
   it('画面表示が適切', async() => {
     renderUpdate()
 
-    const titleLabel = screen.getByText('Title')
+    const titleLabel = screen.getByText('タイトル')
     expect(titleLabel).toBeInTheDocument()
-    const contentLabel = screen.getByText('Contents')
+    const contentLabel = screen.getByText('本文')
     expect(contentLabel).toBeInTheDocument()
-    const imageLabel = screen.getByText('Image Uploade')
+    const imageLabel = screen.getByText('画像')
     expect(imageLabel).toBeInTheDocument()
 
     const titleInput = screen.getByPlaceholderText('Type title here')
@@ -39,13 +39,13 @@ describe('Update', () => {
     expect(contentInput).toBeInTheDocument()
     expect(contentInput).toHaveValue('テストコンテンツ')
     
-    const fileInput = screen.getByLabelText('file uploade!!')
+    const fileInput = screen.getByLabelText('画像アップロード')
     expect(fileInput).toBeInTheDocument()
-    const submitButton = screen.getByRole('button', { name: 'Update!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
     expect(submitButton).toBeInTheDocument()
-    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    const closeButton = screen.getByRole('button', { name: '閉じる' })
     expect(closeButton).toBeInTheDocument()
-    const cancelFileButton = screen.getByRole('button', { name: 'Cancel File' })
+    const cancelFileButton = screen.getByRole('button', { name: '画像リセット' })
     expect(cancelFileButton).toBeInTheDocument()
   })
 })
@@ -58,7 +58,7 @@ describe('Update title', () => {
   it('タイトルが空の場合、エラーメッセージを表示', async() => {
     renderUpdate()
     const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitButton = screen.getByRole('button', { name: 'Update!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(titleInput)
     userEvent.click(submitButton)
@@ -70,7 +70,7 @@ describe('Update title', () => {
   it('タイトルが31文字以上の場合、エラーメッセージを表示', async() => {
     renderUpdate()
     const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitButton = screen.getByRole('button', { name: 'Update!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(titleInput)
     userEvent.type(titleInput,'あ'.repeat(31))
@@ -90,7 +90,7 @@ describe('Form contents', () => {
   it('本文が空の場合、エラーメッセージを表示', async() => {
     renderUpdate()
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'Update!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(contentInput)
     userEvent.click(submitButton)
@@ -102,7 +102,7 @@ describe('Form contents', () => {
   it('本文が3001文字以上の場合、エラーメッセージを表示', async() => {
     renderUpdate()
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'Update!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(contentInput)
     userEvent.type(contentInput,'あ'.repeat(3001))

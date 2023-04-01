@@ -57,7 +57,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
     const ret = await new Promise<string>((resolve) => {
       setDialog({
       onClose: resolve,
-      title: '投稿',
+      title: '更新',
       message: '更新します。よろしいですか?'
       })
     })
@@ -98,14 +98,13 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
 
       {dialog && <Dialog {...dialog} />}
 
-      <h3 className="font-bold text-lg">Update Posts!</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>UPDATE FORM</h2>
+            <h2>更新</h2>
           </div>
 
-        <p className="form-title">Title</p>
+        <p className="form-title">タイトル</p>
         <input type="text" placeholder='Type title here' className="inputarea"
           {...register('title', {
             required: {
@@ -126,7 +125,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
             </div>
           }
 
-        <p className="form-title">Contents</p>
+        <p className="form-title">本文</p>
         <input type="text" placeholder="Type contents here" className="textfield"
           {...register('contents', {
             required: {
@@ -147,9 +146,9 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
             </div>
           }
 
-          <p className="form-title">Image Uploade</p>
+          <p className="form-title">画像</p>
             <label htmlFor="photo" className="btn btn-secondary">
-              file uploade!!
+              画像アップロード
               <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
             </label>
 
@@ -176,14 +175,14 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
                 )
               }
             <br/>
-            <button className="btn btn-secondary" type="submit">Update!</button>
+            <button className="btn btn-secondary" type="submit">更新する</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={cancelFile} className="btn btn-secondary">Cancel File</button>
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={cancelFile} className="btn btn-secondary">画像リセット</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 
     </div>

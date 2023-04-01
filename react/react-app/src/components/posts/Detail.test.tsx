@@ -85,7 +85,7 @@ describe('Detail', () => {
     expect(reply).toBeInTheDocument()
     const unlikeButton = screen.getByAltText('heartoff')
     expect(unlikeButton).toBeInTheDocument()
-    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    const closeButton = screen.getByRole('button', { name: '閉じる' })
     expect(closeButton).toBeInTheDocument()
 
     await waitFor(() => {

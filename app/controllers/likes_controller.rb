@@ -39,7 +39,6 @@ class LikesController < ApplicationController
   private
 
   def set_like
-    # @like = Like.find(params[:id])
     @like = Like.where(post_id: params[:id])
   end
 

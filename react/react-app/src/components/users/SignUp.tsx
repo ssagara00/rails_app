@@ -24,8 +24,8 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
     const ret = await new Promise<string>((resolve) => {
       setDialog({
       onClose: resolve,
-      title: 'ユーザー登録',
-      message: 'ユーザー登録します。よろしいですか?'
+      title: '会員登録',
+      message: '会員登録します。よろしいですか?'
       })
     })
     setDialog(undefined)
@@ -58,7 +58,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
             <h2>SIGN UP</h2>
           </div>
 
-          <p className="form-title">Name</p>
+          <p className="form-title">名前</p>
           <input type="text" placeholder="Type name here" className="inputarea"
             {...register('name', {
               required: {
@@ -79,7 +79,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
               </div>
             }
 
-          <p className="form-title">Email</p>
+          <p className="form-title">メールアドレス</p>
           <input type="text" placeholder="Type email here" className="inputarea"
             {...register('email', {
               required: {
@@ -100,7 +100,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
               </div>
             }
 
-          <p className="form-title">Password</p>
+          <p className="form-title">パスワード</p>
           <input type="password" placeholder="Type password here" className="inputarea"
             {...register('password', {
               required: {
@@ -134,7 +134,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
               </div>
             }
 
-          <p className="form-title">PasswordConfirmation</p>
+          <p className="form-title">パスワード（確認）</p>
           <input type="password" placeholder="Type passwordconfirmation here" className="inputarea"
             {...register('passwordConfirmation', {
               required: {
@@ -156,13 +156,13 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
               </div>
             }
           <br/>
-          <button className="btn btn-secondary" type="submit">SignUp</button>
+          <button className="btn btn-secondary" type="submit">会員登録する</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
     </div>
   )

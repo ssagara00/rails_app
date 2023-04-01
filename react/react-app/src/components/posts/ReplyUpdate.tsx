@@ -26,7 +26,7 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
     const ret = await new Promise<string>((resolve) => {
       setDialog({
       onClose: resolve,
-      title: '投稿',
+      title: '更新',
       message: '更新します。よろしいですか?'
       })
     })
@@ -63,10 +63,10 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>REPLY FORM</h2>
+            <h2>返信更新</h2>
           </div>
 
-          <p className="form-title">Title</p>
+          <p className="form-title">タイトル</p>
           <input type="text" placeholder="Type title here" className="inputarea"
             {...register('title', {
               required: {
@@ -87,7 +87,7 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
               </div>
             }
 
-          <p className="form-title">Contents</p>
+          <p className="form-title">本文</p>
           <input type="text" placeholder="Type contents here" className="textfield"
             {...register('contents', {
               required: {
@@ -108,17 +108,15 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
               </div>
             }
           <br/>
-          <button type="submit" className="btn btn-secondary">REPLY!</button>
+          <button type="submit" className="btn btn-secondary">更新する</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 
     </div>
   )
 }
-
-export default ReplyUpdate

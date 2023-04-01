@@ -43,11 +43,11 @@ export const Mylist = ({ contents_flg, setContents_flg }: MylistProps) => {
     }
   }
 
-  const loader = <div className="loader" key={0}>Loading ...</div>
+  const loader = <div className="loader" key={0}>ロード中 ...</div>
 
   return (
     <div>
-      <button type="submit" className="btn btn-primary" onClick={() => contentsend()}>back to menu</button>
+      <button type="submit" className="btn btn-primary" onClick={() => contentsend()}>メニューに戻る</button>
       <InfiniteScroll
         hasMore={hasMore}
         loadMore={loadMore}    

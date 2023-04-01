@@ -135,7 +135,7 @@ export const PostsTop = () => {
     }
   }
 
-  const loader = <div className="loader" key={0}>Loading ...</div>
+  const loader = <div className="loader" key={0}>ロード中 ...</div>
 
   // 新規投稿時とログイン状態に変更があった際に、表示内容リセットの関数を起動。
   useEffect(() => {
@@ -167,16 +167,16 @@ export const PostsTop = () => {
               isSignedIn && currentUser ? (
                 <ul className="menu menu-horizontal px-1">
                   <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>Open Signup</button>
+                    <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>会員登録</button>
                     <Modal isOpen={signup} className="Modal">
                       <SignUp signup={signup} setSignup={setSignup} />
                     </Modal>
                   </li>
                   <li>
-                    <button type="submit" className="btn btn-primary w-32 " onClick={() => signoutStart()}>SignOut</button>
+                    <button type="submit" className="btn btn-primary w-32 " onClick={() => signoutStart()}>ログアウト</button>
                   </li>
                   <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => formstart()}>Open Form</button>
+                    <button type="submit" className="btn btn-primary w-32" onClick={() => formstart()}>新規投稿</button>
                     <Modal isOpen={form} className="Modal">
                       <Form form={form} setForm={setForm} />
                     </Modal>
@@ -185,13 +185,13 @@ export const PostsTop = () => {
               ) : (
                 <ul className="menu menu-horizontal px-1">
                   <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>Open Signup</button>
+                    <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>会員登録</button>
                     <Modal isOpen={signup} className="Modal">
                       <SignUp signup={signup} setSignup={setSignup} />
                     </Modal>
                   </li>
                   <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => signinstart()}>Open <br/>Signin</button>
+                    <button type="submit" className="btn btn-primary w-32" onClick={() => signinstart()}>ログイン</button>
                     <Modal isOpen={signin} className="Modal">
                       <SignIn signin={signin} setSignin={setSignin} />
                     </Modal>

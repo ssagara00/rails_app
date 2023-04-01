@@ -26,9 +26,9 @@ describe('ReplyForm', () => {
   it('画面表示が適切', () => {
     renderReplyForm()
 
-    const titleLabel = screen.getByText('Title')
+    const titleLabel = screen.getByText('タイトル')
     expect(titleLabel).toBeInTheDocument()
-    const contentLabel = screen.getByText('Contents')
+    const contentLabel = screen.getByText('本文')
     expect(contentLabel).toBeInTheDocument()
 
     const titleInput = screen.getByPlaceholderText('Type title here')
@@ -37,9 +37,9 @@ describe('ReplyForm', () => {
     const contentInput = screen.getByPlaceholderText('Type contents here')
     expect(contentInput).toBeInTheDocument()
 
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '返信する' })
     expect(submitButton).toBeInTheDocument()
-    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    const closeButton = screen.getByRole('button', { name: '閉じる' })
     expect(closeButton).toBeInTheDocument()
   })
 })
@@ -53,7 +53,7 @@ describe('ReplyForm title', () => {
     renderReplyForm()
     const titleInput = screen.getByPlaceholderText('Type title here')
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '返信する' })
 
     userEvent.clear(titleInput)
     userEvent.type(contentInput,'テスト文章')
@@ -66,7 +66,7 @@ describe('ReplyForm title', () => {
   it('タイトルが31文字以上の場合、エラーメッセージを表示', async() => {
     renderReplyForm()
     const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '返信する' })
 
     userEvent.clear(titleInput)
     userEvent.type(titleInput,'あ'.repeat(31))
@@ -85,9 +85,9 @@ describe('ReplyCreate contents', () => {
 
   it('本文が空の場合、エラーメッセージを表示', async() => {
     renderReplyForm()
-    const submitbutton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '返信する' })
 
-    userEvent.click(submitbutton)
+    userEvent.click(submitButton)
     await waitFor(() => {
       expect(screen.getByText('本文を入力してください。')).toBeInTheDocument()
     })
@@ -96,7 +96,7 @@ describe('ReplyCreate contents', () => {
   it('本文が3001文字以上の場合、エラーメッセージを表示', async() => {
     renderReplyForm()
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '返信する' })
 
     userEvent.type(contentInput,'あ'.repeat(3001))
     userEvent.click(submitButton)

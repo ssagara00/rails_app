@@ -37,9 +37,9 @@ describe('Edit', () => {
   it('画面表示が適切', () => {
     renderEdit()
 
-    const nameLabel = screen.queryByText('Name')
+    const nameLabel = screen.queryByText('名前')
     expect(nameLabel).toBeInTheDocument()
-    const emailLabel = screen.queryByText('Email')
+    const emailLabel = screen.queryByText('メールアドレス')
     expect(emailLabel).toBeInTheDocument()
 
     const nameInput = screen.getByPlaceholderText('Type name here')
@@ -49,9 +49,9 @@ describe('Edit', () => {
     expect(emailInput).toBeInTheDocument()
     expect(emailInput).toHaveValue('test@example.co.jp')
 
-    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
     expect(submitButton).toBeInTheDocument()
-    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    const closeButton = screen.getByRole('button', { name: '閉じる' })
     expect(closeButton).toBeInTheDocument()
   })
 })
@@ -64,7 +64,7 @@ describe('Edit name', () => {
   it('名前が空の場合、エラーメッセージを表示', async() => {
     renderEdit()
     const nameInput = screen.getByPlaceholderText('Type name here')
-    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(nameInput)
     userEvent.click(submitButton)
@@ -76,7 +76,7 @@ describe('Edit name', () => {
   it('名前が101文字以上の場合、エラーメッセージを表示', async() => {
     renderEdit()
     const nameInput = screen.getByPlaceholderText('Type name here')
-    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(nameInput)
     userEvent.type(nameInput,'あ'.repeat(101))
@@ -95,7 +95,7 @@ describe('Edit email', () => {
   it('メールアドレスが空の場合、エラーメッセージを表示', async() => {
     renderEdit()
     const emailInput = screen.getByPlaceholderText('Type email here')
-    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(emailInput)
     userEvent.click(submitButton)
@@ -107,7 +107,7 @@ describe('Edit email', () => {
   it('メールアドレスの形式が不正の場合、エラーメッセージを表示', async() => {
     renderEdit()
     const emailInput = screen.getByPlaceholderText('Type email here')
-    const submitButton = screen.getByRole('button', { name: 'EDIT!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(emailInput)
     userEvent.type(emailInput,'xxxx1111')

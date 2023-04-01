@@ -53,10 +53,10 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>SIGN IN</h2>
+            <h2>ログイン</h2>
           </div>
 
-          <p className="form-title">Email</p>
+          <p className="form-title">メールアドレス</p>
           <input type="text" placeholder="Type email here" className="inputarea"
             {...register('email', {
               required: {
@@ -77,7 +77,7 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
               </div>
             }
 
-          <p className="form-title">Password</p>
+          <p className="form-title">パスワード</p>
           <input type="password" placeholder="Type password here" className="inputarea"
             {...register('password', {
               required: {
@@ -106,13 +106,13 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
               </div>
             }
           <br/>
-          <button className="btn btn-secondary" type="submit">SignIN</button>
+          <button className="btn btn-secondary" type="submit">ログインする</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
     </div>
   )

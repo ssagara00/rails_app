@@ -103,10 +103,10 @@ export const Form = ({ form, setForm }: PostFormProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>POST FORM</h2>
+            <h2>新規投稿</h2>
           </div>
 
-          <p className="form-title">Title</p>
+          <p className="form-title">タイトル</p>
           <input type="text" placeholder="Type title here" className="inputarea"
             {...register('title', {
               required: {
@@ -127,7 +127,7 @@ export const Form = ({ form, setForm }: PostFormProps) => {
               </div>
             }
 
-          <p className="form-title">Contents</p>
+          <p className="form-title">本文</p>
           <input type="text" placeholder="Type contents here" className="textfield"
             {...register('contents', {
               required: {
@@ -148,9 +148,9 @@ export const Form = ({ form, setForm }: PostFormProps) => {
               </div>
             }
 
-            <p className="form-title">Image Uploade</p>
+            <p className="form-title">画像</p>
               <label htmlFor="photo" className="btn btn-secondary">
-                file uploade!!
+                画像アップロード
                 <input hidden type="file" data-testid="fileDropzone" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
               </label>
 
@@ -177,14 +177,14 @@ export const Form = ({ form, setForm }: PostFormProps) => {
                 )
               }
             <br/>
-            <button className="btn btn-secondary" type="submit">POST!</button>
+            <button className="btn btn-secondary" type="submit">投稿する</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={canselFile} className="btn btn-secondary">Cancel File</button>
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={canselFile} className="btn btn-secondary">画像リセット</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 
     </div>

@@ -25,9 +25,9 @@ describe('ReplyUpdate', () => {
   it('画面表示が適切', () => {
     renderReplyUpdate()
 
-    const titleLabel = screen.getByText('Title')
+    const titleLabel = screen.getByText('タイトル')
     expect(titleLabel).toBeInTheDocument()
-    const contentLabel = screen.getByText('Contents')
+    const contentLabel = screen.getByText('本文')
     expect(contentLabel).toBeInTheDocument()
 
     const titleInput = screen.getByPlaceholderText('Type title here')
@@ -37,9 +37,9 @@ describe('ReplyUpdate', () => {
     expect(contentInput).toBeInTheDocument()
     expect(contentInput).toHaveValue('テストコンテンツ')
     
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
     expect(submitButton).toBeInTheDocument()
-    const closeButton = screen.getByRole('button', { name: 'Close Modal' })
+    const closeButton = screen.getByRole('button', { name: '閉じる' })
     expect(closeButton).toBeInTheDocument()
   })
 })
@@ -52,7 +52,7 @@ describe('ReplyUpdate title', () => {
   it('タイトルが空の場合、エラーメッセージを表示', async() => {
     renderReplyUpdate()
     const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(titleInput)
     userEvent.click(submitButton)
@@ -64,7 +64,7 @@ describe('ReplyUpdate title', () => {
   it('タイトルが31文字以上の場合、エラーメッセージを表示', async() => {
     renderReplyUpdate()
     const titleInput = screen.getByPlaceholderText('Type title here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(titleInput)
     userEvent.type(titleInput,'あ'.repeat(31))
@@ -84,7 +84,7 @@ describe('Form contents', () => {
   it('本文が空の場合、エラーメッセージを表示', async() => {
     renderReplyUpdate()
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(contentInput)
     userEvent.click(submitButton)
@@ -96,7 +96,7 @@ describe('Form contents', () => {
   it('本文が3001文字以上の場合、エラーメッセージを表示', async() => {
     renderReplyUpdate()
     const contentInput = screen.getByPlaceholderText('Type contents here')
-    const submitButton = screen.getByRole('button', { name: 'REPLY!' })
+    const submitButton = screen.getByRole('button', { name: '更新する' })
 
     userEvent.clear(contentInput)
     userEvent.type(contentInput,'あ'.repeat(3001))

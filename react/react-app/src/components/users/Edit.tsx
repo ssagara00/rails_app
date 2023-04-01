@@ -63,14 +63,13 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
 
       {dialog && <Dialog {...dialog} />}
       
-      <h3 className="font-bold text-lg">Update Your Information!</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>User Edit</h2>
+            <h2>ユーザー情報更新</h2>
           </div>
 
-          <p className="form-title">Name</p>
+          <p className="form-title">名前</p>
           <input type="text" placeholder="Type name here" className="inputarea"
             {...register('name', {
               required: {
@@ -91,7 +90,7 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
               </div>
             }
 
-          <p className="form-title">Email</p>
+          <p className="form-title">メールアドレス</p>
           <input type="text" placeholder="Type email here" className="inputarea"
             {...register('email', {
               required: {
@@ -112,13 +111,13 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
               </div>
             }
           <br/>
-          <button type="submit" className="btn btn-secondary">EDIT!</button>
+          <button type="submit" className="btn btn-secondary">更新する</button>
 
         </div>
       </form>
       
       <div className="footbtns">
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 
     </div>

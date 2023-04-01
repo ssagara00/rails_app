@@ -32,8 +32,8 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
     const ret = await new Promise<string>((resolve) => {
       setDialog({
       onClose: resolve,
-      title: '投稿',
-      message: '投稿します。よろしいですか?'
+      title: '返信',
+      message: '返信します。よろしいですか?'
       })
     })
     setDialog(undefined)
@@ -48,18 +48,18 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
       try {
         const res = await createReply(formData as any)
         if (res.status === 200) {
-          alert.success('投稿に成功しました')
+          alert.success('返信に成功しました')
           // 詳細画面から呼び出した場合は、返信内容即時反映のため、配列に新規投稿を追加。
           if(replies && setReplies ){
             setReplies([...replies, res.data])
           }
           setReplyForm(false)
         } else {
-          alert.error('投稿に失敗しました')
+          alert.error('返信に失敗しました')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('投稿に失敗しました')
+        alert.error('返信に失敗しました')
         console.log(err)
       }
     }
@@ -73,10 +73,10 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="head bg-neutral">
-            <h2>REPLY FORM</h2>
+            <h2>返信</h2>
           </div>
 
-          <p className="form-title">Title</p>
+          <p className="form-title">タイトル</p>
           <input type="text" placeholder="Type title here" className="inputarea"
             {...register('title', {
               required: {
@@ -97,7 +97,7 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
               </div>
             }
 
-          <p className="form-title">Contents</p>
+          <p className="form-title">本文</p>
           <input type="text" placeholder="Type contents here" className="textfield"
             {...register('contents', {
               required: {
@@ -118,13 +118,13 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
               </div>
             }
           <br/>
-          <button type="submit" className="btn btn-secondary">REPLY!</button>
+          <button type="submit" className="btn btn-secondary">返信する</button>
 
         </div>
       </form>
 
       <div className="footbtns">
-        <button type="submit" onClick={closeModal} className="btn btn-secondary">Close Modal</button>
+        <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 
     </div>

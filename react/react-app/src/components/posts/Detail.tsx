@@ -169,23 +169,26 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
           }
         <p>いいね数：{Object.keys(likes).length}</p>
       </div>
-        <p className="date">投稿日：{moment(post.created_at).format('YYYY-MM-DD')}</p>
 
-      {
-        isSignedIn ? (
-          is_liked === true ? (
-            <form onSubmit={handleSubmit(onunlikeSubmit)}>
-              <button type='submit' data-testid='tounlike'><img src={hearton} className="heartindetail" alt="hearton" /></button>
-            </form>
+      <div className="contentsheader">
+        <p>投稿日：{moment(post.created_at).format('YYYY-MM-DD')}</p>
+
+        {
+          isSignedIn ? (
+            is_liked === true ? (
+              <form onSubmit={handleSubmit(onunlikeSubmit)}>
+                <button type='submit' data-testid='tounlike'><img src={hearton} className="heartindetail" alt="hearton" /></button>
+              </form>
+            ) : (
+              <form data-testid='tet' onSubmit={handleSubmit(onlikeSubmit)}>        
+                <button type='submit' data-testid='tolike'><img src={heartoff} className="heartindetail" alt="heartoff" /></button>
+              </form>
+            )
           ) : (
-            <form data-testid='tet' onSubmit={handleSubmit(onlikeSubmit)}>        
-              <button type='submit' data-testid='tolike'><img src={heartoff} className="heartindetail" alt="heartoff" /></button>
-            </form>
+            <img src={heartoff} className="heartindetail" alt="heartoff" />
           )
-        ) : (
-          <img src={heartoff} className="heartindetail" alt="heartoff" />
-        )
-      }
+        }
+      </div>
 
       <div className="centor_image">
         { 
@@ -194,9 +197,9 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
         }
       </div>
 
-      <h3 className="topic">Title</h3>
+      <h3 className="topic">タイトル</h3>
       <p>{post.title}</p>
-      <h3 className="topic">Contents</h3>
+      <h3 className="topic">本文</h3>
       <p>{post.contents}</p>
       <br/>
 
@@ -226,7 +229,7 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
         }
       </div>
 
-      <h3 className="topic">Reply for this item</h3>
+      <h3 className="topic">返信</h3>
         
         {
           replies.length  === 0 ? (
@@ -243,7 +246,7 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
         }
 
       <br/>
-      <button type="submit" onClick={closeModal} className="btn">Close Modal</button> 
+      <button type="submit" onClick={closeModal} className="btn">閉じる</button> 
 
     </div>
   )
