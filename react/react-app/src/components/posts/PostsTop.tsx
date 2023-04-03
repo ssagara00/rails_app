@@ -135,7 +135,7 @@ export const PostsTop = () => {
     }
   }
 
-  const loader = <div className="loader" key={0}>ロード中 ...</div>
+  const loader = <div key={0}>ロード中 ...</div>
 
   // 新規投稿時とログイン状態に変更があった際に、表示内容リセットの関数を起動。
   useEffect(() => {
@@ -147,7 +147,7 @@ export const PostsTop = () => {
   }, [currentUser])
 
   return (
-    <div className="height">
+    <div className="home">
 
       {dialog && <Dialog {...dialog} />}
 
@@ -162,7 +162,7 @@ export const PostsTop = () => {
         }
         </div>
 
-        <div className="flex-none">
+        <div className="posts-head-btns">
             {
               isSignedIn && currentUser ? (
                 <ul className="menu menu-horizontal px-1">
@@ -214,7 +214,7 @@ export const PostsTop = () => {
                   hasMore={hasMore}
                   loadMore={loadMore}
                   loader={loader}>
-                    <ul className="postlist">
+                    <ul className="posts-list">
                       {
                         posts.map((post: Post) => (
                           <Item key={post.id} post={post} setPosts={setPosts} />
@@ -234,7 +234,7 @@ export const PostsTop = () => {
               hasMore={hasMore}
               loadMore={loadMore}
               loader={loader}>
-                <ul className="postlist">
+                <ul className="posts-list">
                   {
                     posts.map((post: Post) => (
                       <Item key={post.id} post={post} setPosts={setPosts} />

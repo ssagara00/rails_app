@@ -73,17 +73,17 @@ export const ReplyItem = ({ reply, setReplies }: ReplyItemProps) => {
   }, [])
 
   return (
-    <li className="comment">
+    <li className="reply">
 
       {dialog && <Dialog {...dialog} />}
 
-      <h2 className="comment-title">{reply.title}</h2>
+      <h2 className="reply-title">{reply.title}</h2>
         {
           user ?
             <p>投稿者：{user.name}</p> : <p>投稿者：undefinedUSer</p>
         }
         <p>投稿日：{moment(reply.created_at).format('YYYY-MM-DD')}</p>
-        <p className="comment-contents">{reply.contents}</p>
+        <p className="reply-contents">{reply.contents}</p>
 
         {
           isSignedIn && currentUser?.id === reply.user_id &&

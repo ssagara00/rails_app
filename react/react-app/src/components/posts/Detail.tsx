@@ -158,48 +158,50 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
   }, [])
 
   return(
-    <div className="centor">
+    <div className="detail">
 
       { dialog && <Dialog {...dialog} /> }
 
-      <div className="contentsheader">
+      <div className="item-header">
           {
             user ?
-              <p>投稿者：{user.name}</p> : <p>投稿者：undefinedUSer</p>
+              <p>投稿者：{user.name}</p> : <p>投稿者：undefinedUser</p>
           }
         <p>いいね数：{Object.keys(likes).length}</p>
       </div>
 
-      <div className="contentsheader">
+      <div className="item-header">
         <p>投稿日：{moment(post.created_at).format('YYYY-MM-DD')}</p>
 
         {
           isSignedIn ? (
             is_liked === true ? (
               <form onSubmit={handleSubmit(onunlikeSubmit)}>
-                <button type='submit' data-testid='tounlike'><img src={hearton} className="heartindetail" alt="hearton" /></button>
+                <button type='submit' data-testid='tounlike'><img src={hearton} className="detail-like-icon" alt="hearton" /></button>
               </form>
             ) : (
               <form data-testid='tet' onSubmit={handleSubmit(onlikeSubmit)}>        
-                <button type='submit' data-testid='tolike'><img src={heartoff} className="heartindetail" alt="heartoff" /></button>
+                <button type='submit' data-testid='tolike'><img src={heartoff} className="detail-like-icon" alt="heartoff" /></button>
               </form>
             )
           ) : (
-            <img src={heartoff} className="heartindetail" alt="heartoff" />
+            <img src={heartoff} className="detail-like-icon" alt="heartoff" />
           )
         }
       </div>
 
-      <div className="centor_image">
+      <div className="detail-img">
         { 
           post.image?.url ?
-          <img src={post.image.url} alt="post_image" className="rounded-xl" /> : <img src={noimage} alt="Shoes" className="rounded-xl" />
+          <img src={post.image.url} alt="user_content" className="rounded-xl" />
+           : 
+          <img src={noimage} alt="default" className="rounded-xl" />
         }
       </div>
 
-      <h3 className="topic">タイトル</h3>
+      <h3 className="detail-lead">タイトル</h3>
       <p>{post.title}</p>
-      <h3 className="topic">本文</h3>
+      <h3 className="detail-lead">本文</h3>
       <p>{post.contents}</p>
       <br/>
 
@@ -229,7 +231,7 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
         }
       </div>
 
-      <h3 className="topic">返信</h3>
+      <h3 className="detail-lead">返信</h3>
         
         {
           replies.length  === 0 ? (

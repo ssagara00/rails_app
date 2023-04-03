@@ -52,7 +52,7 @@ export const Mylist = ({ contents_flg, setContents_flg }: MylistProps) => {
         hasMore={hasMore}
         loadMore={loadMore}    
         loader={loader}>
-          <ul className="postlist">
+          <ul className="posts-list">
             {
               posts.map((post: Post, index: number) => (
                 <Item key={post.id} post={post} setPosts={setPosts}/>

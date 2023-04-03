@@ -51,13 +51,13 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
     <div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="container">
+        <div className="form">
           <div className="head bg-neutral">
             <h2>ログイン</h2>
           </div>
 
-          <p className="form-title">メールアドレス</p>
-          <input type="text" placeholder="Type email here" className="inputarea"
+          <p className="form-lead">メールアドレス</p>
+          <input type="text" placeholder="Type email here" className="form-input"
             {...register('email', {
               required: {
                 value: true,
@@ -77,8 +77,8 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
               </div>
             }
 
-          <p className="form-title">パスワード</p>
-          <input type="password" placeholder="Type password here" className="inputarea"
+          <p className="form-lead">パスワード</p>
+          <input type="password" placeholder="Type password here" className="form-input"
             {...register('password', {
               required: {
                 value: true,
@@ -97,6 +97,7 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
                 message: 'パスワードは半角英数字のみ有効です。',
               }
             })}/>
+            <br/>
             { errors.password?.message &&
               <div className="alert alert-warning shadow-lg">
                 <div>
@@ -111,7 +112,7 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
         </div>
       </form>
 
-      <div className="footbtns">
+      <div className="form-foot-btns">
         <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
     </div>
