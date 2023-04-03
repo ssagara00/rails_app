@@ -78,7 +78,7 @@ describe('Detail', () => {
     const formatday = screen.getByText(/2023-03-01/i)
     expect(formatday).toBeInTheDocument()
     // 画像が投稿されている場合、投稿された画像が表示される
-    const image = screen.getByAltText('post_image')
+    const image = screen.getByAltText('user_content')
     expect(image).toBeInTheDocument()
     // 返信がない場合は、メッセージ表示
     const reply = screen.getByText('まだ返信がありません。')
@@ -103,7 +103,7 @@ describe('Detail', () => {
     renderLoginDetail()
     
     // 画像なしの場合はデフォルト画像が表示される
-    const image = screen.getByAltText('Shoes')
+    const image = screen.getByAltText('default')
     expect(image).toBeInTheDocument()
     // ３つのボタン全てが表示される
     const returnButton = screen.getByRole('button', { name: '返信' })

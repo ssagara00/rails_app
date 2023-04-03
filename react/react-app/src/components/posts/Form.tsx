@@ -101,13 +101,13 @@ export const Form = ({ form, setForm }: PostFormProps) => {
       {dialog && <Dialog {...dialog} />}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="container">
+        <div className="form">
           <div className="head bg-neutral">
             <h2>新規投稿</h2>
           </div>
 
-          <p className="form-title">タイトル</p>
-          <input type="text" placeholder="Type title here" className="inputarea"
+          <p className="form-lead">タイトル</p>
+          <input type="text" placeholder="Type title here" className="form-input"
             {...register('title', {
               required: {
                 value: true,
@@ -127,8 +127,8 @@ export const Form = ({ form, setForm }: PostFormProps) => {
               </div>
             }
 
-          <p className="form-title">本文</p>
-          <input type="text" placeholder="Type contents here" className="textfield"
+          <p className="form-lead">本文</p>
+          <textarea placeholder="Type contents here" className="form-textarea" 
             {...register('contents', {
               required: {
                 value: true,
@@ -138,7 +138,8 @@ export const Form = ({ form, setForm }: PostFormProps) => {
                 value: 3000,
                 message: '3000文字以内で入力してください。',
               },
-            })}/>
+            })}>
+          </textarea>
             { errors.contents?.message &&
               <div className="alert alert-warning shadow-lg">
                 <div>
@@ -148,41 +149,40 @@ export const Form = ({ form, setForm }: PostFormProps) => {
               </div>
             }
 
-            <p className="form-title">画像</p>
-              <label htmlFor="photo" className="btn btn-secondary">
-                画像アップロード
-                <input hidden type="file" data-testid="fileDropzone" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
-              </label>
+          <p className="form-lead">画像</p>
+          <label htmlFor="photo" className="btn btn-secondary">
+            画像アップロード
+            <input hidden type="file" data-testid="fileDropzone" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
+          </label>
 
-            {
-              isFileTypeError && (
-              <div className="alert alert-warning shadow-lg">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>※jpeg, png, bmp, svg以外のファイル形式は表示されません。</span>
-                </div>
+          {
+            isFileTypeError && (
+            <div className="alert alert-warning shadow-lg">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span>※jpeg, png, bmp, svg以外のファイル形式は表示されません。</span>
               </div>
-            )}
+            </div>
+          )}
               
-              <br/>
-
-              {
-                preview ? (
-                  <div className="formimage">
-                    <p className="form-title">投稿画像イメージ</p>
-                    <img src={preview} alt="preview img" />
-                  </div>
-                ) : (
-                  null
-                )
-              }
-            <br/>
-            <button className="btn btn-secondary" type="submit">投稿する</button>
-
+          <br/>
+          {
+            preview ? (
+              <div className="form-img">
+                <p className="form-lead">投稿画像イメージ</p>
+                <img src={preview} alt="preview img" />
+              </div>
+            ) : (
+              null
+            )
+          }
+          <br/>
+          <button className="btn btn-secondary" type="submit">投稿する</button>
+          
         </div>
       </form>
 
-      <div className="footbtns">
+      <div className="form-foot-btns">
         <button type="submit" onClick={canselFile} className="btn btn-secondary">画像リセット</button>
         <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>

@@ -182,10 +182,10 @@ export const Item = ({ post, setPosts}: PostItemProps) => {
       { dialog && <Dialog {...dialog} /> }
 
       <div className="card w-96 bg-base-100 shadow-xl">
-        <div className="contentsheader">
+        <div className="item-header">
           {
             user ?
-              <p>投稿者：{user.name}</p> : <p>投稿者：undefinedUSer</p>
+              <p>投稿者：{user.name}</p> : <p>投稿者：undefined-User</p>
           }
           <p>いいね数：{Object.keys(likes).length}</p>
         </div>
@@ -195,32 +195,39 @@ export const Item = ({ post, setPosts}: PostItemProps) => {
 
             is_liked === true ? (
               <form onSubmit={handleSubmit(onunlikeSubmit)}>
-                <button type='submit' data-testid='tounlike'><img src={hearton} className="heart" alt="hearton" /></button>
+                <button type='submit' data-testid='tounlike'><img src={hearton} className="item-like-icon" alt="hearton" /></button>
               </form>
             ) : (
               <form data-testid='tet' onSubmit={handleSubmit(onlikeSubmit)}>        
-                <button type='submit' data-testid='tolike'><img src={heartoff} className="heart" alt="heartoff" /></button>
+                <button type='submit' data-testid='tolike'><img src={heartoff} className="item-like-icon" alt="heartoff" /></button>
               </form>
             )
           ) : (
-            <img src={heartoff} className="heart" alt="heartoff" />
+            <img src={heartoff} className="item-like-icon" alt="heartoff" />
           )
         }
 
-        <div className="imageclass">
+        <div className="item-img">
         { 
           post.image?.url ?
-          <img src={post.image.url} alt="post_image" width="200" height="200" className="rounded-xl"/>
+          <img src={post.image.url} alt="user_content" width="200" height="200" className="rounded-xl"/>
             : 
-          <img src={noimage} alt="Shoes" className="rounded-xl" />
+          <img src={noimage} alt="default" className="rounded-xl" />
         }
         </div>
 
         <div className="card-body items-center text-center">
-          <h2 className="card-title">{post.title}</h2>
+        {
+            post.title.length > 15 ? (
+              <h2 className="card-title">{post.title.substring( 0, 15 )}</h2>
+            ) : (
+              <h2 className="card-title">{post.title}</h2>
+            )
+          }
+          
           {
-            post.contents.length > 30 ? (
-              <p>{post.contents.substring( 0, 30)}...</p>
+            post.contents.length > 19 ? (
+              <p>{post.contents.substring( 0, 19 )}...</p>
             ) : (
               <p>{post.contents}</p>
             )

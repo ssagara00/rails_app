@@ -80,6 +80,7 @@
         }
       ],
       "react/require-default-props": "off",
+      "react/self-closing-comp": "off",
       "react-hooks/exhaustive-deps": "off",
       "semi": ["error", "never", {"beforeStatementContinuationChars": "never"}],
       "semi-spacing": ["error", {"after": true, "before": false}],

@@ -75,9 +75,9 @@ export const AuthTop = () => {
       contents_flg ? (
         <Mylist contents_flg={contents_flg} setContents_flg={setContents_flg} />
       ) : (
-        <ul className="authlist">
+        <ul className="mypage-list">
           <li>
-            <button type="submit" onClick={() => editstart()}><img src={editimage} alt="user_edit" className="authmenu" width="250" height="250" /></button>
+            <button type="submit" onClick={() => editstart()}><img src={editimage} alt="user_edit" className="mypage-icon" width="250" height="250" /></button>
             <Modal isOpen={edit} className="Modal">
               <Edit edit={edit} setEdit={setEdit} />
             </Modal>
@@ -91,7 +91,7 @@ export const AuthTop = () => {
               </div>
           </li>
           <li>
-            <button type="submit" onClick={() => contentsStart()}><img src={contents} alt="contents" className="authmenu" width="250" height="250" /></button>
+            <button type="submit" onClick={() => contentsStart()}><img src={contents} alt="contents" className="mypage-icon" width="250" height="250" /></button>
             <div tabIndex={0} className="collapse collapse-arrow bg-base-100 rounded-box">
               <div className="collapse-title text-xl font-medium">
                 投稿一覧
@@ -102,7 +102,7 @@ export const AuthTop = () => {
             </div>
           </li>
           <li>
-            <button type="submit" onClick={() => handleDeleteUser(user_id)}><img src={deleteaccount} alt="deleteaccount" className="authmenu" width="250" height="250" /></button>
+            <button type="submit" onClick={() => handleDeleteUser(user_id)}><img src={deleteaccount} alt="deleteaccount" className="mypage-icon" width="250" height="250" /></button>
             <div tabIndex={0} className="collapse collapse-arrow bg-base-100 rounded-box">
               <div className="collapse-title text-xl font-medium">
                 退会

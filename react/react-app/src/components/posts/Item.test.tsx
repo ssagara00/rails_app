@@ -19,7 +19,7 @@ const renderItem = () => {
     :'http://localhost:3000/uploads' }, created_at: day }
   const setPosts = jest.fn()
   render(
-   <Item post={post} setPosts={setPosts} />
+    <Item post={post} setPosts={setPosts} />
   )
 }
 
@@ -59,7 +59,7 @@ describe('Item', () => {
     const content = screen.getByText('testContents')
     expect(content).toBeInTheDocument()
     // 画像が投稿されている場合、投稿された画像が表示される
-    const image = screen.getByAltText('post_image')
+    const image = screen.getByAltText('user_content')
     expect(image).toBeInTheDocument()
     const detailButton = screen.getByRole('button', { name: '詳細' })
     expect(detailButton).toBeInTheDocument()
@@ -89,7 +89,7 @@ describe('Item', () => {
     renderLoginItem()
 
     // 画像なしの場合はデフォルト画像が表示される
-    const image = screen.getByAltText('Shoes')
+    const image = screen.getByAltText('default')
     expect(image).toBeInTheDocument()
     // ３つのボタン全てが表示される
     const returnButton = screen.getByRole('button', { name: '返信' })

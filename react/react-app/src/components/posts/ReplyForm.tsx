@@ -71,13 +71,13 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
       {dialog && <Dialog {...dialog} />}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="container">
+        <div className="form">
           <div className="head bg-neutral">
             <h2>返信</h2>
           </div>
 
-          <p className="form-title">タイトル</p>
-          <input type="text" placeholder="Type title here" className="inputarea"
+          <p className="form-lead">タイトル</p>
+          <input type="text" placeholder="Type title here" className="form-input"
             {...register('title', {
               required: {
                 value: true,
@@ -97,8 +97,8 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
               </div>
             }
 
-          <p className="form-title">本文</p>
-          <input type="text" placeholder="Type contents here" className="textfield"
+          <p className="form-lead">本文</p>
+          <textarea placeholder="Type contents here" className="form-textarea" 
             {...register('contents', {
               required: {
                 value: true,
@@ -108,7 +108,9 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
                 value: 3000,
                 message: '3000文字以内で入力してください。',
               },
-            })}/>
+            })}>
+          </textarea>
+          <br/>
             { errors.contents?.message &&
               <div className="alert alert-warning shadow-lg">
                 <div>
@@ -119,11 +121,11 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
             }
           <br/>
           <button type="submit" className="btn btn-secondary">返信する</button>
-
+          
         </div>
       </form>
 
-      <div className="footbtns">
+      <div className="form-foot-btns">
         <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 

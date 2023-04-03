@@ -64,13 +64,13 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
       {dialog && <Dialog {...dialog} />}
       
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="container">
+        <div className="form">
           <div className="head bg-neutral">
             <h2>ユーザー情報更新</h2>
           </div>
 
-          <p className="form-title">名前</p>
-          <input type="text" placeholder="Type name here" className="inputarea"
+          <p className="form-lead">名前</p>
+          <input type="text" placeholder="Type name here" className="form-input"
             {...register('name', {
               required: {
                 value: true,
@@ -90,8 +90,8 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
               </div>
             }
 
-          <p className="form-title">メールアドレス</p>
-          <input type="text" placeholder="Type email here" className="inputarea"
+          <p className="form-lead">メールアドレス</p>
+          <input type="text" placeholder="Type email here" className="form-input"
             {...register('email', {
               required: {
                 value: true,
@@ -102,6 +102,7 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
                 message: 'メールアドレスの形式が不正です。',
               }
             })}/>
+            <br/>
             { errors.email?.message &&
               <div className="alert alert-warning shadow-lg">
                 <div>
@@ -116,7 +117,7 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
         </div>
       </form>
       
-      <div className="footbtns">
+      <div className="form-foot-btns">
         <button type="submit" onClick={closeModal} className="btn btn-secondary">閉じる</button>
       </div>
 
