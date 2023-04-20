@@ -53,6 +53,7 @@ describe('PostsTop', () => {
 
   it('未ログイン状態で画面表示が適切', async() => {
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.getPosts.mockResolvedValue({ status: 200, data: { id:1, user_id:1, title:'testTitle', contents:'testContents'} } as AxiosResponse)
     mockedApi.getIndexPosts.mockResolvedValue({ status: 200 } as AxiosResponse)
     renderPostsTop()
 
@@ -70,6 +71,7 @@ describe('PostsTop', () => {
 
   it('ログイン状態で画面表示が適切', async() => {
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.getPosts.mockResolvedValue({ status: 200, data: { id:1, user_id:1, title:'testTitle', contents:'testContents'} } as AxiosResponse)
     mockedApi.getIndexPosts.mockResolvedValue({ status: 200 } as AxiosResponse)
     renderLoginPostsTop()
 

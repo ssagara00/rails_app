@@ -9,7 +9,7 @@ import 'react-tabs/style/react-tabs.css'
 
 import { AuthContext } from '../../Context'
 import { Dialog, DialogProps } from '../../Dialog'
-import { getIndexPosts, getCurrentUser, signOut } from '../../api/api_actions'
+import { getPosts, getIndexPosts, getCurrentUser, signOut } from '../../api/api_actions'
 import { Post } from '../../interfaces/interface'
 import { AuthTop } from '../users/AuthTop'
 import { SignIn } from '../users/SignIn'
@@ -111,11 +111,23 @@ export const PostsTop = () => {
   }
 
   // スクロールのパラメータリセット
-  const resetscroll = () => {
+  const resetscroll = async () => {
     setOffset(0)
-    setHasMore(true)
     setPosts([])
     handleGetPosts()
+    // 投稿が全部で12未満の場合は追加読み込みしないようにしておく
+    try {
+      const res = await getPosts()
+      if (res.status === 200) {
+        if( res.data.length <= 12 ) {
+          setHasMore(false)
+        } else {
+          setHasMore(true)
+        }
+      }
+    } catch (err) {
+      console.log(err)
+    }
     setLoading(false)
   }
 
@@ -123,7 +135,7 @@ export const PostsTop = () => {
     try {
       const res = await getIndexPosts(12,offset)
       if (res.status === 200) {
-        if (res.data.length <  1) {
+        if (res.data.length < 1) {
           setHasMore(false)
         } else {
           setPosts([...posts, ...res.data])

@@ -70,7 +70,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
       if (photo) formData.append("post[image]", photo)
 
       try {
-        const res = await updatePost(post.id , formData)
+        const res = await updatePost(post.id, formData)
         if (res.status === 200) {
           alert.success('更新に成功しました')
           // 更新内容を一覧画面に即座に反映させる

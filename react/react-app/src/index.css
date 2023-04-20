@@ -47,6 +47,7 @@ code {
 }
 .ReactModal__Body--open {
   position: fixed;
+  width: 100%;
 }
 
 /*投稿一覧*/

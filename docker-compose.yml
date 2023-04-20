@@ -4,14 +4,13 @@ services:
 
   app:
     build: .
-    command: bash -c "bundle exec puma -C config/puma.rb"
-    env_file:
-      - ./environments/db.env
+    environment:
+      RAILS_ENV: development
+      TZ: Asia/Tokyo
     volumes:
       - .:/myapp
       - public-data:/myapp/public
       - tmp-data:/myapp/tmp
-      - log-data:/myapp/log
     ports:
       - "3000:3000"
     depends_on:
@@ -24,7 +23,7 @@ services:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     env_file:
-      - ./environments/db.env
+      - .env
     volumes:
       - db-data:/var/lib/mysql
       - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
@@ -34,7 +33,6 @@ services:
   web:
     build: nginx
     volumes:
-      - public-data:/myapp/public
       - tmp-data:/myapp/tmp
     ports:
       - "80:80"
@@ -43,7 +41,6 @@ services:
 
   front:
     build: react
-    command: sh -c "yarn start"
     volumes:
       - ./react/react-app:/usr/src/react-app
     ports:
@@ -52,5 +49,4 @@ services:
 volumes:
   public-data:
   tmp-data:
-  log-data:
   db-data:
