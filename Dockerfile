@@ -22,4 +22,11 @@ COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["sh", "entrypoint.sh"]
 
-RUN mkdir -p tmp/sockets
+RUN mkdir -p myapp/tmp/sockets
+
+# 本番環境用
+VOLUME /myapp/public
+VOLUME /myapp/tmp
+EXPOSE 3000
+
+CMD /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"

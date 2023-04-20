@@ -1,6 +1,5 @@
-ARG MYSQL_VERSION=latest
-FROM mysql:${MYSQL_VERSION}
-
+ARG MYSQL_VERSION=8
+FROM mysql:${MYSQL_VERSION}-debian
 
 COPY my.cnf /etc/mysql/conf.d/my.cnf
 

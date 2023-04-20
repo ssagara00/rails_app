@@ -28,13 +28,14 @@ jobs:
             BUNDLE_RETRY: 3
             RAILS_ENV: 'test'
             MYSQL_HOST: 'db'
+            MYSQL_USER: 'appuser'
             MYSQL_PASSWORD: 'appuser'
             MYSQL_PORT: 3306
         - image: cimg/mysql:8.0
           environment:
             MYSQL_USER: 'appuser'
-            MYSQL_ROOT_PASSWORD: 'root'
             MYSQL_PASSWORD: 'appuser'
+            MYSQL_ROOT_PASSWORD: 'root'
             MYSQL_DATABASE: 'myapp_test'
             MYSQL_HOST: 'db'
           name: db

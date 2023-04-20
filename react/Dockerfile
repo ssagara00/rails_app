@@ -1,2 +1,21 @@
 FROM node:14.18-alpine
 WORKDIR /usr/src/react-app
+
+# 本番環境用
+COPY ["./react-app/package.json", "./react-app/yarn.lock", "./"]
+# パッケージをインストール
+RUN yarn install --network-timeout 600000
+# ファイルを全部作業用ディレクトリにコピー
+COPY ./react-app .
+
+# パッケージをインストール
+RUN yarn install --network-timeout 600000
+
+# 本番環境用にビルド
+RUN yarn build
+
+#nginx用にディレクトリを共有
+VOLUME /usr/src/react-app
+EXPOSE 4000
+# コンテナを起動するコマンド
+ENTRYPOINT [ "yarn", "start" ]
