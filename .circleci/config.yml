@@ -109,7 +109,7 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           registry-id: AWS_ECR_REGISTRY_ID
           repo: 'react-app'
-          region: AWS_REGION
+          region: AWS_DEFAULT_REGION
           tag: "${CIRCLE_SHA1}"
           path: ./react/
           requires:
@@ -124,7 +124,7 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           registry-id: AWS_ECR_REGISTRY_ID
           repo: 'rails-app'
-          region: AWS_REGION
+          region: AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
           path: ./
           requires:
@@ -139,9 +139,15 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           registry-id: AWS_ECR_REGISTRY_ID
           repo: 'nginx-app'
-          region: AWS_REGION
+          region: AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
           path: ./nginx/
+          # requires:
+          #     - test
+          #     - front-test
+          # filters:
+          #   branches:
+          #     only: main
       - aws-ecs/deploy-service-update:
           requires:
             - build-and-push-image-react
