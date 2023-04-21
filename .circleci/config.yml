@@ -112,12 +112,12 @@ workflows:
           region: $AWS_DEFAULT_REGION
           tag: "${CIRCLE_SHA1}"
           dockerfile: ./react/Dockerfile.prod
-          # requires:
-          #     - test
-          #     - front-test
-          # filters:
-          #   branches:
-          #     only: main
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-rails
           aws-access-key-id: AWS_ACCESS_KEY_ID
