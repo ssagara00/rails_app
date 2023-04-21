@@ -24,9 +24,6 @@ ENTRYPOINT ["sh", "entrypoint.sh"]
 
 RUN mkdir -p myapp/tmp/sockets
 
-ARG RAILS_MASTER_KEY
-ENV RAILS_MASTER_KEY ${RAILS_MASTER_KEY}
-
 VOLUME /myapp/public
 VOLUME /myapp/tmp
 EXPOSE 3000
