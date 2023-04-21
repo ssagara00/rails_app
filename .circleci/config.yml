@@ -111,13 +111,13 @@ workflows:
           repo: 'react-app'
           region: $AWS_DEFAULT_REGION
           tag: "${CIRCLE_SHA1}"
-          path: ./react/
-          requires:
-              - test
-              - front-test
-          filters:
-            branches:
-              only: main
+          path: ./react
+          # requires:
+          #     - test
+          #     - front-test
+          # filters:
+          #   branches:
+          #     only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-rails
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -127,12 +127,12 @@ workflows:
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
           path: ./
-          requires:
-              - test
-              - front-test
-          filters:
-            branches:
-              only: main
+          # requires:
+          #     - test
+          #     - front-test
+          # filters:
+          #   branches:
+          #     only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-nginx
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -141,7 +141,7 @@ workflows:
           repo: 'nginx-app'
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
-          path: ../nginx
+          path: ./nginx
           # requires:
           #     - test
           #     - front-test
