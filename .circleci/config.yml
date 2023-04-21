@@ -111,7 +111,8 @@ workflows:
           repo: 'react-app'
           region: $AWS_DEFAULT_REGION
           tag: "${CIRCLE_SHA1}"
-          path: ./react
+          dockerfile: ./react/Dockerfile.prod
+          #path: ./react
           # requires:
           #     - test
           #     - front-test
@@ -141,7 +142,8 @@ workflows:
           repo: 'nginx-app'
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
-          path: ./nginx
+          dockerfile: ./nginx/Dockerfile.prod
+          #path: ./nginx
           # requires:
           #     - test
           #     - front-test
