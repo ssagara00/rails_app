@@ -29,4 +29,3 @@ VOLUME /myapp/tmp
 EXPOSE 3000
 
 CMD /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
-RUN SECRET_KEY_BASE=placeholder bundle exec rails assets:precompile
