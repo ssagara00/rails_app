@@ -24,7 +24,6 @@ ENTRYPOINT ["sh", "entrypoint.sh"]
 
 RUN mkdir -p myapp/tmp/sockets
 
-# 本番環境用
 VOLUME /myapp/public
 VOLUME /myapp/tmp
 EXPOSE 3000

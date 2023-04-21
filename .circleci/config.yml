@@ -112,7 +112,6 @@ workflows:
           region: $AWS_DEFAULT_REGION
           tag: "${CIRCLE_SHA1}"
           dockerfile: ./react/Dockerfile.prod
-          #path: ./react
           # requires:
           #     - test
           #     - front-test
@@ -128,12 +127,12 @@ workflows:
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
           path: ./
-          # requires:
-          #     - test
-          #     - front-test
-          # filters:
-          #   branches:
-          #     only: main
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-nginx
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -143,13 +142,12 @@ workflows:
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
           dockerfile: ./nginx/Dockerfile.prod
-          #path: ./nginx
-          # requires:
-          #     - test
-          #     - front-test
-          # filters:
-          #   branches:
-          #     only: main
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
       - aws-ecs/deploy-service-update:
           requires:
             - build-and-push-image-react
