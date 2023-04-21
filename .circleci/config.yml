@@ -7,6 +7,8 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.0.0
   node: circleci/node@5.1.0
+  aws-ecr: circleci/aws-ecr@8.2.1
+  aws-ecs: circleci/aws-ecs@03.2.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -88,7 +90,6 @@ jobs:
           working_directory: react/react-app
           name: run jest
           command: yarn jest-test
-          
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -102,3 +103,72 @@ workflows:
           requires:
             - build
       - front-test
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-image-react
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: 'react-app'
+          region: AWS_REGION
+          tag: "${CIRCLE_SHA1}"
+          path: ./react/
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-image-rails
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: 'rails-app'
+          region: AWS_REGION
+          tag: '${CIRCLE_SHA1}'
+          path: ./
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-image-nginx
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: 'nginx-app'
+          region: AWS_REGION
+          tag: '${CIRCLE_SHA1}'
+          path: ./nginx/
+      - aws-ecs/deploy-service-update:
+          requires:
+            - build-and-push-image-react
+            - build-and-push-image-rails
+            - build-and-push-image-nginx
+          name: deploy-ecs-react
+          family: 'ssagara-myapp-tasks'
+          cluster: 'ssagara-myapp-cluster'
+          service-name: 'service'
+          container-image-name-updates: 'container=react,tag=${CIRCLE_SHA1}'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - build-and-push-image-react
+            - build-and-push-image-rails
+            - build-and-push-image-nginx
+          name: deploy-ecs-rails
+          family: 'ssagara-myapp-tasks'
+          cluster: 'ssagara-myapp-cluster'
+          service-name: 'service'
+          container-image-name-updates: 'container=rails,tag=${CIRCLE_SHA1}'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - build-and-push-image-react
+            - build-and-push-image-rails
+            - build-and-push-image-nginx
+          name: deploy-ecs-nginx
+          family: 'ssagara-myapp-tasks'
+          cluster: 'ssagara-myapp-cluster'
+          service-name: 'service'
+          container-image-name-updates: 'container=nginx,tag=${CIRCLE_SHA1}'
