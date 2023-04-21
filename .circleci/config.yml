@@ -141,7 +141,7 @@ workflows:
           repo: 'nginx-app'
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
-          path: ./nginx
+          path: ../nginx
           # requires:
           #     - test
           #     - front-test
