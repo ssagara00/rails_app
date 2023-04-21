@@ -120,9 +120,9 @@ workflows:
           #     only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-rails
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          registry-id: AWS_ECR_REGISTRY_ID
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          registry-id: $AWS_ECR_REGISTRY_ID
           repo: 'rails-app'
           region: $AWS_DEFAULT_REGION
           tag: '${CIRCLE_SHA1}'
