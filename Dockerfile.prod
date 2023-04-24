@@ -27,9 +27,11 @@ ENTRYPOINT ["sh", "entrypoint.sh"]
 
 #RUN mkdir -p /myapp/tmp/sockets
 RUN mkdir -p tmp/sockets
+RUN mkdir -p tmp/pids
 
 VOLUME /myapp/public
 VOLUME /myapp/tmp
 EXPOSE 3000
 
-CMD /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
+#CMD /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
+CMD /bin/sh -c "bundle exec puma -C config/puma.rb"
