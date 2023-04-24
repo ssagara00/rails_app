@@ -11,6 +11,8 @@ apt-get update && apt-get install -y yarn
 RUN apt-get update -qq && apt-get install -y build-essential yarn
 RUN apt-get install -y nodejs npm && npm install n -g && n 16
 
+RUN apt-get install -y vim
+
 RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
