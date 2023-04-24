@@ -20,10 +20,10 @@ export const Dialog = ({ onClose, title, message }: DialogProps) => {
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-         <Button onClick={() => onClose('ok')}>はい</Button>
-         <Button onClick={() => onClose('cancel')} autoFocus>
+        <Button onClick={() => onClose('cancel')} autoFocus>
           いいえ
         </Button>
+        <Button onClick={() => onClose('ok')}>はい</Button>
       </DialogActions>
     </MyDialog>
   )
