@@ -21,8 +21,11 @@ RUN yarn install --check-files
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["sh", "entrypoint.sh"]
-#for honban
+
 RUN mkdir -p myapp/tmp/sockets
+
+VOLUME /myapp/public
+VOLUME /myapp/tmp
 EXPOSE 3000
 
 CMD /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
