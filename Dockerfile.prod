@@ -25,7 +25,8 @@ COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["sh", "entrypoint.sh"]
 
-RUN mkdir -p /myapp/tmp/sockets
+#RUN mkdir -p /myapp/tmp/sockets
+RUN mkdir -p tmp/sockets
 
 VOLUME /myapp/public
 VOLUME /myapp/tmp
