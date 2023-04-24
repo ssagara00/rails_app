@@ -22,7 +22,7 @@ export const Dialog = ({ onClose, title, message }: DialogProps) => {
       <DialogActions>
          <Button onClick={() => onClose('ok')}>はい</Button>
          <Button onClick={() => onClose('cancel')} autoFocus>
-          いいえdesu
+          いいえ
         </Button>
       </DialogActions>
     </MyDialog>

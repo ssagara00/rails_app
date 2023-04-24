@@ -99,10 +99,10 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      # - test:
-      #     requires:
-      #       - build
-      # - front-test
+      - test:
+          requires:
+            - build
+      - front-test
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-react
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -110,14 +110,14 @@ workflows:
           registry-id: AWS_ECR_REGISTRY_ID
           repo: 'react-app'
           region: $AWS_DEFAULT_REGION
-          tag: "${CIRCLE_SHA1}"
+          tag: 'latest'
           dockerfile: ./react/Dockerfile.prod
-          # requires:
-          #     - test
-          #     - front-test
-          # filters:
-          #   branches:
-          #     only: main
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-rails
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -125,14 +125,14 @@ workflows:
           registry-id: AWS_ECR_REGISTRY_ID
           repo: 'rails-app'
           region: $AWS_DEFAULT_REGION
-          tag: '${CIRCLE_SHA1}'
+          tag: 'latest'
           path: ./
-          # requires:
-          #     - test
-          #     - front-test
-          # filters:
-          #   branches:
-          #     only: main
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-nginx
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -140,14 +140,14 @@ workflows:
           registry-id: AWS_ECR_REGISTRY_ID
           repo: 'nginx-app'
           region: $AWS_DEFAULT_REGION
-          tag: '${CIRCLE_SHA1}'
+          tag: 'latest'
           dockerfile: ./nginx/Dockerfile.prod
-          # requires:
-          #     - test
-          #     - front-test
-          # filters:
-          #   branches:
-          #     only: main
+          requires:
+              - test
+              - front-test
+          filters:
+            branches:
+              only: main
       - aws-ecs/deploy-service-update:
           requires:
             - build-and-push-image-react
@@ -157,7 +157,7 @@ workflows:
           family: 'ssagara-myapp-tasks'
           cluster: 'ssagara-myapp-cluster'
           service-name: 'service'
-          container-image-name-updates: 'container=react,tag=${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=react,tag=latest'
       - aws-ecs/deploy-service-update:
           requires:
             - build-and-push-image-react
@@ -167,7 +167,7 @@ workflows:
           family: 'ssagara-myapp-tasks'
           cluster: 'ssagara-myapp-cluster'
           service-name: 'service'
-          container-image-name-updates: 'container=rails,tag=${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=rails,tag=latest'
       - aws-ecs/deploy-service-update:
           requires:
             - build-and-push-image-react
@@ -177,4 +177,4 @@ workflows:
           family: 'ssagara-myapp-tasks'
           cluster: 'ssagara-myapp-cluster'
           service-name: 'service'
-          container-image-name-updates: 'container=nginx,tag=${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=nginx,tag=latest'
