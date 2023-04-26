@@ -61,7 +61,7 @@ describe('PostsTop', () => {
     expect(signupButton).toBeInTheDocument()
     const signinButton = screen.getByRole('button', { name: 'ログイン' })
     expect(signinButton).toBeInTheDocument()
-    const notLogin = screen.getByText('ログインしていません。')
+    const notLogin = screen.getByText('右のメニューからログインしてください。')
     expect(notLogin).toBeInTheDocument()
     
     // エラー避けのため、ログ出力終わるまで待つ
@@ -75,8 +75,6 @@ describe('PostsTop', () => {
     mockedApi.getIndexPosts.mockResolvedValue({ status: 200 } as AxiosResponse)
     renderLoginPostsTop()
 
-    const signupButton = screen.getByRole('button', { name: '会員登録' })
-    expect(signupButton).toBeInTheDocument()
     const signoutButton = screen.getByRole('button', { name: 'ログアウト' })
     expect(signoutButton).toBeInTheDocument()
     const formButton = screen.getByRole('button', { name: '新規投稿' })
