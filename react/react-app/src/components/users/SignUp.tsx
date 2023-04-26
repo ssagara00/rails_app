@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAlert } from 'react-alert'
+import Cookies from 'js-cookie'
 
+import { AuthContext } from '../../Context'
 import { Dialog, DialogProps } from '../../Dialog'
 import { signUp } from '../../api/api_actions'
 import { SignUpParams } from '../../interfaces/interface'
@@ -12,6 +14,8 @@ interface SignUpProps {
 }
 
 export const SignUp = ({ signup, setSignup }: SignUpProps) => {
+  const { setIsSignedIn, setCurrentUser, setLoading } = useContext(AuthContext)
+
   const alert = useAlert()
   const { register, handleSubmit, getValues, trigger, formState: { errors } } = useForm<SignUpParams>({mode: "onBlur"})
   const [dialog, setDialog] = useState<DialogProps | undefined>()
@@ -35,6 +39,15 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
         const res = await signUp(data)
         if (res.status === 200) {
           alert.success('登録に成功しました')
+          // 続けてログイン処理を行う。
+          Cookies.set("_access_token", res.headers["access-token"])
+          Cookies.set("_client", res.headers.client)
+          Cookies.set("_uid", res.headers.uid)
+          setIsSignedIn(true)
+          setCurrentUser(res.data.data)
+          alert.error('ログインに成功しました')
+          // 非ログイン時に表示した投稿の重複を避けるため、現在の表示内容を削除し、スクロール状況をリセットする関数を起動する。
+          setLoading(true)
           setSignup(false)
         } else {
           alert.error('登録に失敗しました')

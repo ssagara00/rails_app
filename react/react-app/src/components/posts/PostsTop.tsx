@@ -169,7 +169,7 @@ export const PostsTop = () => {
           isSignedIn && currentUser ? (
             <h1 className="text-neutral-content">ようこそ! {currentUser.name}さん！</h1>
           ) : (
-            <h1 className="text-neutral-content">ログインしていません。</h1>
+            <h1 className="text-neutral-content">右のメニューからログインしてください。</h1>
           )
         }
         </div>
@@ -178,12 +178,6 @@ export const PostsTop = () => {
             {
               isSignedIn && currentUser ? (
                 <ul className="menu menu-horizontal px-1">
-                  <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>会員登録</button>
-                    <Modal isOpen={signup} className="Modal">
-                      <SignUp signup={signup} setSignup={setSignup} />
-                    </Modal>
-                  </li>
                   <li>
                     <button type="submit" className="btn btn-primary w-32 " onClick={() => signoutStart()}>ログアウト</button>
                   </li>
