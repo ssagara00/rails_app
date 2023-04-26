@@ -177,32 +177,26 @@ export const PostsTop = () => {
         <div className="posts-head-btns">
             {
               isSignedIn && currentUser ? (
-                <ul className="menu menu-horizontal px-1">
-                  <li>
+                <div>
                     <button type="submit" className="btn btn-primary w-32 " onClick={() => signoutStart()}>ログアウト</button>
-                  </li>
-                  <li>
+
                     <button type="submit" className="btn btn-primary w-32" onClick={() => formstart()}>新規投稿</button>
                     <Modal isOpen={form} className="Modal">
                       <Form form={form} setForm={setForm} />
                     </Modal>
-                  </li>
-                </ul>
+                </div>
               ) : (
-                <ul className="menu menu-horizontal px-1">
-                  <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>会員登録</button>
-                    <Modal isOpen={signup} className="Modal">
-                      <SignUp signup={signup} setSignup={setSignup} />
-                    </Modal>
-                  </li>
-                  <li>
-                    <button type="submit" className="btn btn-primary w-32" onClick={() => signinstart()}>ログイン</button>
-                    <Modal isOpen={signin} className="Modal">
-                      <SignIn signin={signin} setSignin={setSignin} />
-                    </Modal>
-                  </li>
-                </ul>
+                <div>
+                  <button type="submit" className="btn btn-primary w-32" onClick={() => signupstart()}>会員登録</button>
+                  <Modal isOpen={signup} className="Modal">
+                    <SignUp signup={signup} setSignup={setSignup} />
+                  </Modal>
+
+                  <button type="submit" className="btn btn-primary w-32" onClick={() => signinstart()}>ログイン</button>
+                  <Modal isOpen={signin} className="Modal">
+                    <SignIn signin={signin} setSignin={setSignin} />
+                  </Modal>
+                </div>
               )
             }
         </div>
