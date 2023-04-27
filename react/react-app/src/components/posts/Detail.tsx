@@ -202,7 +202,7 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
       <h3 className="detail-lead">タイトル</h3>
       <p>{post.title}</p>
       <h3 className="detail-lead">本文</h3>
-      <p>{post.contents}</p>
+      <p className="detail-content">{post.contents}</p>
       <br/>
 
       <div className="card-actions">

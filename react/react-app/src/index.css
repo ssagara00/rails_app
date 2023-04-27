@@ -104,6 +104,11 @@ code {
   border-bottom: solid 3px #516ab6;
 }
 
+.detail-content {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 .detail-img {
   margin: 0 auto;
   height: 400px;
@@ -135,6 +140,8 @@ code {
 .reply-contents {
   padding: 15px 20px;
   margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 /*管理画面*/
