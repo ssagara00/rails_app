@@ -19,7 +19,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
   const [dialog, setDialog] = useState<DialogProps | undefined>()
   const [isFileTypeError, setIsFileTypeError] = useState<boolean>(false)
   const [photo, setPhoto] = useState<File>()
-  const [preview, setPreview] = useState<string>("")
+  const [preview, setPreview] = useState<string | undefined>(post.image?.url)
 
   const closeModal = () => {
     setUpdate(false)
@@ -67,7 +67,10 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
       const formData = new FormData()
       formData.append("post[title]", data.title)
       formData.append("post[contents]", data.contents)
+      // 新たに画像ファイルを追加した場合は、更新する。
       if (photo) formData.append("post[image]", photo)
+      // 画像ファイルがリセットされた場合は、画像なしで更新する。
+      if (!preview) formData.append("post[image]", "")
 
       try {
         const res = await updatePost(post.id, formData)
