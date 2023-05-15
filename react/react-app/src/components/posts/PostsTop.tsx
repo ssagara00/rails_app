@@ -80,11 +80,11 @@ export const PostsTop = () => {
             navigation("/")
             alert.success('ログアウトに成功しました')
           } else {
-            alert.error('ログアウトに失敗しました')
+            alert.error('ログアウトに失敗しました。アカウントが見つかりません。しばらくしてからもう一度お試しください。')
             console.log("Failed in sign out")
           }
       } catch (err) {
-        alert.error('ログアウトに失敗しました')
+        alert.error('ログアウトに失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
         console.log(err)
       }
     }

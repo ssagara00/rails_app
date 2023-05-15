@@ -68,11 +68,11 @@ export const Item = ({ post, setPosts}: PostItemProps) => {
             // ユーザー情報といいね状況を取得しなおす
             setReset(true)
           } else {
-            alert.error('削除に失敗しました')
+            alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください。')
             console.log("Failed delete")
           }
         } catch (err) {
-          alert.error('削除に失敗しました')
+          alert.error('削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
           console.log(err)
         }
       }

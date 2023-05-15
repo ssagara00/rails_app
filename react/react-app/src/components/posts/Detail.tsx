@@ -86,11 +86,11 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
             setPosts((prev: Post[]) => prev.filter((prevpost: Post) => prevpost.id !== id))
             setDetail(false)
           } else {
-            alert.error('削除に失敗しました')
+            alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください。')
             console.log("Failed delete")
           }
         } catch (err) {
-          alert.error('削除に失敗しました')
+          alert.error('削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
           console.log(err)
         }
       }

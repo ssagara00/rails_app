@@ -53,11 +53,11 @@ export const AuthTop = () => {
             navigation("/")
             alert.success('アカウントの削除に成功しました')
           } else {
-            alert.error('アカウントの削除に失敗しました')
+            alert.error('アカウントの削除に失敗しました。アカウントが見つかりません。しばらくしてからもう一度お試しください。')
             console.log('Failed in delete User')
           }
         } catch (err) {
-          alert.error('アカウントの削除に失敗しました')
+          alert.error('アカウントの削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
           console.log(err)
         }
       }

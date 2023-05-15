@@ -80,11 +80,11 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
           setPosts((prev: Post[]) => prev.map((value) => (value.id === post.id ? res.data : value)))
           setUpdate(false)
         } else {
-          alert.error('更新に失敗しました')
+          alert.error('更新に失敗しました。入力内容の形式に不備があります。')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('更新に失敗しました')
+        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
         console.log(err)
       }
     }
