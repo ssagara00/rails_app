@@ -55,11 +55,11 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
           }
           setReplyForm(false)
         } else {
-          alert.error('返信に失敗しました')
+          alert.error('返信に失敗しました。入力内容の形式に不備があります。')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('返信に失敗しました')
+        alert.error('返信に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
         console.log(err)
       }
     }

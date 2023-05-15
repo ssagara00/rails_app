@@ -50,11 +50,11 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
           setLoading(true)
           setSignup(false)
         } else {
-          alert.error('登録に失敗しました')
+          alert.error('登録に失敗しました。入力内容の形式に不備があります。')
           console.log('signup is failed')
         }
       } catch (err) {
-        alert.error('登録に失敗しました')
+        alert.error('登録に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
         console.log(err)
       }
     }

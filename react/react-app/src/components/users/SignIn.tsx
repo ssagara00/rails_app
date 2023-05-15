@@ -38,11 +38,11 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
         setLoading(true)
         setSignin(false)
       } else {
-        alert.error('ログインに失敗しました')
+        alert.error('ログインに失敗しました。メールアドレスまたはパスワードが間違っています。')
         console.log("Signed in missed")
       }
     } catch (err) {
-      alert.error('ログインに失敗しました')
+      alert.error('ログインに失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
       console.log(err)
     }
   }

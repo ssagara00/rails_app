@@ -79,11 +79,11 @@ export const Form = ({ form, setForm }: PostFormProps) => {
           setForm(false)
           setLoading(true)
         } else {
-          alert.error('投稿に失敗しました')
+          alert.error('投稿に失敗しました。入力内容の形式に不備があります。')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('投稿に失敗しました')
+        alert.error('投稿に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
         console.log(err)
       }
     }
