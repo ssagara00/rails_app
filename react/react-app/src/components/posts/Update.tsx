@@ -41,8 +41,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
       ![
         "image/jpeg",
         "image/png",
-        "image/bmp",
-        "image/svg+xml",
+        "image/jpg"
       ].includes(file.type)
     ) {
       setIsFileTypeError(true)
@@ -151,6 +150,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
             }
 
           <p className="form-lead">画像</p>
+          <p className="form-lead">（ファイル形式はjpeg, png, jpgのみアップロード可能です。）</p>
           <label htmlFor="photo" className="btn btn-secondary">
             画像アップロード
             <input hidden type="file" id="photo" name="photo" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleFile} onClick={emptytarget}/>
@@ -161,7 +161,7 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
             <div className="alert alert-warning shadow-lg">
               <div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                <span>※jpeg, png, bmp, svg以外のファイル形式は表示されません。</span>
+                <span>※jpeg, png, jpg以外のファイル形式は表示されません。</span>
               </div>
             </div>
           )}
