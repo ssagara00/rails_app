@@ -82,6 +82,9 @@ https://ssagara-communication-board.com/
 # ER図
 ![ER図](https://github.com/ssagara00/rails_app/assets/113130446/ddb49b08-017c-47b6-aaef-18a310737e29)
 
+# インフラ構成図
+![インフラ構成図](https://github.com/ssagara00/rails_app/assets/113130446/4670b6c8-f3d8-40ec-83ef-62b8463e237c)
+
 # 今後の改良予定
 * フロントエンドのテストコードを記述し、自動テストをより充実させる。
 * パスワードの変更をできるようにする。
