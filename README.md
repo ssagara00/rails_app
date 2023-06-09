@@ -79,6 +79,9 @@ https://ssagara-communication-board.com/
 〇その他
 * 画面を下にスクロールすると、投稿を追加読み込みする。
 
+# ER図
+![ER図](https://github.com/ssagara00/rails_app/assets/113130446/ddb49b08-017c-47b6-aaef-18a310737e29)
+
 # 今後の改良予定
 * フロントエンドのテストコードを記述し、自動テストをより充実させる。
 * パスワードの変更をできるようにする。
