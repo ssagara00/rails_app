@@ -83,7 +83,7 @@ https://ssagara-communication-board.com/
 ![ER図](https://github.com/ssagara00/rails_app/assets/113130446/ddb49b08-017c-47b6-aaef-18a310737e29)
 
 # インフラ構成図
-![インフラ構成図](https://github.com/ssagara00/rails_app/assets/113130446/4670b6c8-f3d8-40ec-83ef-62b8463e237c)
+![インフラ構築図png](https://github.com/ssagara00/rails_app/assets/113130446/b46b250e-7641-4eb1-a874-7a05aea61383)
 
 # 今後の改良予定
 * フロントエンドのテストコードを記述し、自動テストをより充実させる。
