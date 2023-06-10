@@ -161,6 +161,10 @@ export const Item = ({ post, setPosts}: PostItemProps) => {
     }
   }
 
+  const onlogout = async() =>{
+    alert.info('ログインすると「いいね」できます。会員登録がお済みでない方は、会員登録をお願いします。')
+  }
+
   // 詳細画面から削除した時、正しい投稿者情報を反映するため、詳細画面起動の変数を指定
   useEffect(() => {
     handleGetUser(post.user_id)
@@ -203,7 +207,9 @@ export const Item = ({ post, setPosts}: PostItemProps) => {
               </form>
             )
           ) : (
-            <img src={heartoff} className="item-like-icon" alt="heartoff" />
+            <form data-testid='tet' onSubmit={handleSubmit(onlogout)}> 
+              <button type='submit' data-testid='onlogout'><img src={heartoff} className="item-like-icon" alt="heartoff" /></button>
+            </form>
           )
         }
 

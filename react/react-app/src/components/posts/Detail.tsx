@@ -149,6 +149,10 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
     }
   }
 
+  const onlogout = async() =>{
+    alert.info('ログインすると「いいね」できます。会員登録がお済みでない方は、会員登録をお願いします。')
+  }
+
   useEffect(() => {
     handleGetUser(post.user_id)
   }, [])
@@ -185,7 +189,9 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
               </form>
             )
           ) : (
-            <img src={heartoff} className="detail-like-icon" alt="heartoff" />
+            <form data-testid='tet' onSubmit={handleSubmit(onlogout)}> 
+              <button type='submit' data-testid='onlogout'><img src={heartoff} className="item-like-icon" alt="heartoff" /></button>
+            </form>
           )
         }
       </div>
