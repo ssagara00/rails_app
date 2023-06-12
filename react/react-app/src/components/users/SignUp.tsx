@@ -45,7 +45,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
           Cookies.set("_uid", res.headers.uid)
           setIsSignedIn(true)
           setCurrentUser(res.data.data)
-          alert.error('ログインに成功しました')
+          alert.success('ログインに成功しました')
           // 非ログイン時に表示した投稿の重複を避けるため、現在の表示内容を削除し、スクロール状況をリセットする関数を起動する。
           setLoading(true)
           setSignup(false)
