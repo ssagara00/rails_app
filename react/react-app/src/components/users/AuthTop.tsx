@@ -14,7 +14,7 @@ import deleteaccount from '../../img/deleteaccount.svg'
 import contents from '../../img/contents.svg'
 
 export const AuthTop = () => {
-  const { currentUser, setIsSignedIn } = useContext(AuthContext)
+  const { currentUser, setIsSignedIn, setLoading } = useContext(AuthContext)
   const user_id = currentUser?.id
 
   const navigation = useNavigate()
@@ -50,6 +50,7 @@ export const AuthTop = () => {
             Cookies.remove("_client")
             Cookies.remove("_uid")
             setIsSignedIn(false)
+            setLoading(true)
             navigation("/")
             alert.success('アカウントの削除に成功しました')
           } else {
@@ -108,7 +109,7 @@ export const AuthTop = () => {
                 退会
               </div>
               <div className="collapse-content"> 
-                <p>アカウントを削除します。<br/>後から復元はできません。</p>
+                <p>アカウントを削除します。<br/>これまでの投稿も全て削除されます。<br/>後から復元はできません。</p>
               </div>
             </div>
           </li>
