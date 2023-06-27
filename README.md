@@ -26,7 +26,7 @@ https://ssagara-communication-board.com/
 〇フロントエンド
 * HTML/CSS
 * TypeScript
-* react.js: 18.2.0
+* React: 18.2.0
 
 〇バックエンド
 * Ruby: 3.1.1
