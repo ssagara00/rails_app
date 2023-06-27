@@ -23,31 +23,31 @@ https://ssagara-communication-board.com/
 そういった思いで作りました。
 
 # 使用技術
-〇フロントエンド
-* HTML/CSS
-* TypeScript
-* React: 18.2.0
+* フロントエンド
+  * HTML/CSS
+  * TypeScript
+  * React: 18.2.0
 
-〇バックエンド
-* Ruby: 3.1.1
-* Rails: 6.1.6
+* バックエンド
+  * Ruby: 3.1.1
+  * Rails: 6.1.6
 
-〇インフラ・開発環境
-* MySQL: 8.0.33
-* Nginx
-* Puma
-* Docker/docker-compose（開発、テスト）
-* AWS(Fargate・ECS・ECR・RDS・S3・ACM・VPC・Route53・ALB・IAM)
-* CircleCI（CI/CD）
+* インフラ・開発環境
+  * MySQL: 8.0.33
+  * Nginx
+  * Puma
+  * Docker/docker-compose（開発、テスト）
+  * AWS(Fargate・ECS・ECR・RDS・S3・ACM・VPC・Route53・ALB・IAM)
+  * CircleCI（CI/CD）
 
-〇テスト・静的コード解析
-* Rspec
-* Rubocop
-* Jest
-* ESLint/Prettier
+* テスト・静的コード解析
+  * Rspec
+  * Rubocop
+  * Jest
+  * ESLint/Prettier
 
-〇バージョン管理
-* Git/GitHub
+* バージョン管理
+  * Git/GitHub
 
 # 工夫した点
 * スマホでの使用を想定し、レスポンシブデザインを意識
@@ -58,10 +58,10 @@ https://ssagara-communication-board.com/
 
 # 機能一覧
 
-〇ユーザー管理機能
-* 新規会員登録・ログイン機能・ログアウト機能・退会機能
-* マイページ機能（自分の投稿のみ抽出して表示する機能）
-* ユーザー登録情報変更（ユーザー名、メールアドレス）
+* ユーザー管理機能
+  * 新規会員登録・ログイン機能・ログアウト機能・退会機能
+  * マイページ機能（自分の投稿のみ抽出して表示する機能）
+  *  ユーザー登録情報変更（ユーザー名、メールアドレス）
 
 〇投稿に関する機能
 * 投稿一覧表示、投稿機能、投稿詳細表示、投稿編集、投稿削除機能
