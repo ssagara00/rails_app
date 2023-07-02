@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import { AxiosResponse } from 'axios'
+import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
 import { AuthContext } from '../../Context'
@@ -9,7 +10,6 @@ import { ReplyItem } from './ReplyItem'
 import { mockedUseAlertReturn } from '../../__mocks__/react-alert'
 import * as ApiActions from '../../api/api_actions'
 
-jest.mock('react-alert')
 jest.mock('../../api/api_actions')
 
 const renderReplyItem = () => {
@@ -110,6 +110,62 @@ describe('ReplyItem', () => {
 
     // エラー避けのため、ログ出力終わるまで待つ
     await waitFor(() => {
+    })
+  })
+})
+
+describe('ReplyItem delete', () => {
+  
+  it('削除処理が成功する', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.deleteReply.mockResolvedValue({ status: 200 } as AxiosResponse)
+    renderLoginReplyItem()
+
+    await waitFor(() => {
+      const deletebutton = screen.getByRole('button', { name: '削除' })
+      userEvent.click(deletebutton)
+    })
+    
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('削除します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    }) 
+
+    // deleteReplyが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.deleteReply).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('削除に成功しました')    
+    })
+  })
+
+  it('削除処理が失敗する', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.deleteReply.mockResolvedValue({ status: 404 } as AxiosResponse)
+    console.log = jest.fn()
+    renderLoginReplyItem()
+    
+    await waitFor(() => {
+      const deletebutton = screen.getByRole('button', { name: '削除' })
+      userEvent.click(deletebutton)
+    })
+    
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('削除します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    })
+
+    // deleteReplyが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.deleteReply).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.error.mock.calls[0][0]).toBe('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください')
     })
   })
 })

@@ -47,11 +47,11 @@ export const ReplyItem = ({ reply, setReplies }: ReplyItemProps) => {
             handleGetUser(reply.user_id)
           }
         } else {
-          alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください。')
-          console.log("Failed delete")
+          alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください')
+          console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -62,6 +62,8 @@ export const ReplyItem = ({ reply, setReplies }: ReplyItemProps) => {
       const res = await showUser(id)
       if (res.status === 200) {
         setUser(res.data)
+      } else {
+        console.log(res.data.message)
       }
     } catch (err) {
       console.log(err)

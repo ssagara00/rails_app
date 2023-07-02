@@ -86,7 +86,8 @@
       "semi-spacing": ["error", {"after": true, "before": false}],
       "semi-style": ["error", "first"],
       "testing-library/no-wait-for-empty-callback": "off",
-      "testing-library/no-wait-for-multiple-assertions": "off"
+      "testing-library/no-wait-for-multiple-assertions": "off",
+      "testing-library/no-wait-for-side-effects": "off"
     },
     "settings": {
       "import/resolver": {

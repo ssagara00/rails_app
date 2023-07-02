@@ -50,11 +50,11 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
           setLoading(true)
           setSignup(false)
         } else {
-          alert.error('登録に失敗しました。入力内容の形式に不備があります。')
-          console.log('signup is failed')
+          alert.error('登録に失敗しました。入力内容の形式に不備があります')
+          console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('登録に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('登録に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -68,7 +68,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form">
           <div className="head bg-neutral">
-            <h2>SIGN UP</h2>
+            <h2>会員登録</h2>
           </div>
 
           <p className="form-lead">名前</p>
@@ -76,11 +76,11 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
             {...register('name', {
               required: {
                 value: true,
-                message: '名前を入力してください。',
+                message: '名前を入力してください',
               },
               maxLength: {
                 value: 100,
-                message: '100文字以内で入力してください。',
+                message: '100文字以内で入力してください',
               }
             })}/>
             { errors.name?.message &&
@@ -97,11 +97,11 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
             {...register('email', {
               required: {
                 value: true,
-                message: 'メールアドレスを入力してください。',
+                message: 'メールアドレスを入力してください',
               },
               pattern: {
                 value: /^[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/,
-                message: 'メールアドレスの形式が不正です。',
+                message: 'メールアドレスの形式が不正です',
               }
             })}/>
             { errors.email?.message &&
@@ -118,19 +118,19 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
             {...register('password', {
               required: {
                 value: true,
-                message: 'パスワードを入力してください。',
+                message: 'パスワードを入力してください',
               },
               minLength: {
                 value: 6,
-                message: '6文字以上入力してください。',
+                message: '6文字以上入力してください',
               },
               maxLength: {
                 value: 128,
-                message: '128文字以内で入力してください。',
+                message: '128文字以内で入力してください',
               },
               pattern: {
                 value: /^[a-zA-Z0-9]+$/,
-                message: 'パスワードは半角英数字のみ有効です。',
+                message: 'パスワードは半角英数字のみ有効です',
               },
               onBlur: () => {
                 if(getValues("passwordConfirmation")){
@@ -152,7 +152,7 @@ export const SignUp = ({ signup, setSignup }: SignUpProps) => {
             {...register('passwordConfirmation', {
               required: {
                 value: true,
-                message: '確認用パスワードを入力してください。',
+                message: '確認用パスワードを入力してください',
               },
               validate: (value)=> {
                 return (

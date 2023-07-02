@@ -80,11 +80,11 @@ export const PostsTop = () => {
             navigation("/")
             alert.success('ログアウトに成功しました')
           } else {
-            alert.error('ログアウトに失敗しました。アカウントが見つかりません。しばらくしてからもう一度お試しください。')
-            console.log("Failed in sign out")
+            alert.error('ログアウトに失敗しました。アカウントが見つかりません。しばらくしてからもう一度お試しください')
+            console.log(res.data.message)
           }
       } catch (err) {
-        alert.error('ログアウトに失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('ログアウトに失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -206,7 +206,7 @@ export const PostsTop = () => {
           <Tabs>
             <TabList className = "tabList">
               <Tab className = "tab"><p onClick={changeActive}>投稿一覧</p></Tab>
-              <Tab className = "tab"><p onClick={changeActive}>ユーザー情報管理画面</p></Tab>
+              <Tab className = "tab"><p onClick={changeActive}>会員情報管理画面</p></Tab>
             </TabList>
             <TabPanel>
               <div>

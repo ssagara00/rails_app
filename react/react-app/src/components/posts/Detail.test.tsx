@@ -7,13 +7,13 @@ import '@testing-library/jest-dom'
 import { AuthContext } from '../../Context'
 import { Post } from '../../interfaces/interface'
 import { Detail } from './Detail'
+import { mockedUseAlertReturn } from '../../__mocks__/react-alert'
 import * as ApiActions from '../../api/api_actions'
 
-jest.mock('react-alert')
 jest.mock('../../api/api_actions')
 
 const renderDetail = () => {
-  const day = new Date(2023, 2, 1, 0, 0, 0)// 2023-03-01 0:00:00
+  const day = new Date(2023, 3, 1, 0, 0, 0)// 2023-04-01 0:00:00
   const detail = true
   const setDetail = jest.fn()
   const post: Post ={ id:1, user_id:1, title:'testTitle', contents:'testContents', image:{url
@@ -32,7 +32,7 @@ const renderDetail = () => {
 }
 
 const renderLoginDetail = () => {
-  const day = new Date(2023, 2, 1, 0, 0, 0)// 2023-03-01 0:00:00
+  const day = new Date(2023, 3, 1, 0, 0, 0)// 2023-04-01 0:00:00
   const detail = true
   const setDetail = jest.fn()
   const post: Post ={ id:1, user_id:1, title:'testTitle', contents:'testContents', created_at: day }
@@ -61,9 +61,6 @@ const renderLoginDetail = () => {
 }
 
 describe('Detail', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
 
   it('非ログイン状態で画面表示が適切', async() => {
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
@@ -75,7 +72,7 @@ describe('Detail', () => {
     expect(title).toBeInTheDocument()
     const content = screen.getByText('testContents')
     expect(content).toBeInTheDocument()
-    const formatday = screen.getByText(/2023-03-01/i)
+    const formatday = screen.getByText(/2023-04-01/i)
     expect(formatday).toBeInTheDocument()
     // 画像が投稿されている場合、投稿された画像が表示される
     const image = screen.getByAltText('user_content')
@@ -97,9 +94,8 @@ describe('Detail', () => {
   })
 
   it('ログイン状態で画面表示が適切', async() => {
-    const replyday = new Date(2023, 3, 1, 0, 0, 0)// 2023-04-01 0:00:00
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
-    mockedApi.showReply.mockResolvedValue({ status: 200, data: { 0:{ id:1, user_id:1, title:'Re:testTitle', contents:'replytestContents', created_at: replyday }, 1:{ id:2, user_id:2, title:'Re:2testTitle2', contents:'2replytestContents2', created_at: replyday } }} as AxiosResponse)
+    mockedApi.showReply.mockResolvedValue({ status: 200, data: []} as AxiosResponse)
     renderLoginDetail()
     
     // 画像なしの場合はデフォルト画像が表示される
@@ -130,6 +126,8 @@ describe('Detail', () => {
     const setIs_liked = jest.fn()
     const likes = [{ id: 1, user_id: 1, post_id: 1 }, { id: 2, user_id: 2, post_id: 1 }]
     const setLikes = jest.fn()
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.showReply.mockResolvedValue({ status: 200, data: []} as AxiosResponse)
 
     render(
       <AuthContext.Provider
@@ -164,50 +162,62 @@ describe('Detail', () => {
   })
 })
 
-/*
-describe('Item delete', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
+describe('Detail delete', () => {
+  
   it('削除処理が成功する', async() => {
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
     mockedApi.deletePost.mockResolvedValue({ status: 200 } as AxiosResponse)
-    
-    render(
-      <AuthContext.Provider
-        value={
-          {
-            isSignedIn: true,
-            currentUser: {
-              id: 1,
-            },
-          } as any
-        }
-      >
-        <Item
-          post={{
-            contents: 'testContents',
-            title: 'testTitle',
-            user_id: 1,
-            id: 1,
-          }}
-          setPosts={(p: Post) => {}}
-        />
-      </AuthContext.Provider>
-    )
+    mockedApi.showReply.mockResolvedValue({ status: 200, data: []} as AxiosResponse)
+    renderLoginDetail()
 
-    const deletebutton = screen.getByRole('button', { name: '削除' })
-    // 削除ボタンをクリック
-    userEvent.click(deletebutton)
-    
     await waitFor(() => {
-      // ここで、確認ダイアログが表示される。ユーザーが「はい」を選択すると、deletePostが起動する。
+      const deletebutton = screen.getByRole('button', { name: '削除' })
+      userEvent.click(deletebutton)
     })
 
-    expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('削除に成功しました')
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('削除します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    })
+
+    // deletePostが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.deletePost).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('削除に成功しました')    
+    })
+  })
+
+  it('削除処理が失敗する', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.deletePost.mockResolvedValue({ status: 404 } as AxiosResponse)
+    mockedApi.showReply.mockResolvedValue({ status: 200, data: []} as AxiosResponse)
+    console.log = jest.fn()
+    renderLoginDetail()
+    
+    await waitFor(() => {
+      const deletebutton = screen.getByRole('button', { name: '削除' })
+      userEvent.click(deletebutton)
+    })
+    
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('削除します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    })
+    
+    // deletePostが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.deletePost).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.error.mock.calls[0][0]).toBe('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください')
+    })
   })
 })
-*/
 
-// いいね機能はItem.tsxでテスト済
+/* いいね機能はItem.tsxでテスト済み */

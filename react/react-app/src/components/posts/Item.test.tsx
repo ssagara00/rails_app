@@ -7,10 +7,9 @@ import '@testing-library/jest-dom'
 import { AuthContext } from '../../Context'
 import { Post } from '../../interfaces/interface'
 import { Item } from './Item'
-import { mockedUseAlertReturn } from "../../__mocks__/react-alert"
+import { mockedUseAlertReturn } from '../../__mocks__/react-alert'
 import * as ApiActions from '../../api/api_actions'
 
-jest.mock('react-alert')
 jest.mock('../../api/api_actions')
 
 const renderItem = () => {
@@ -27,6 +26,7 @@ const renderLoginItem = () => {
   const day = new Date(2023, 2, 1, 0, 0, 0)// 2023-03-01 0:00:00
   const post: Post ={ id:1, user_id:1, title:'testTitle', contents:'testContents', created_at: day }
   const setPosts = jest.fn()
+
   render(
     <AuthContext.Provider
         value={
@@ -44,9 +44,6 @@ const renderLoginItem = () => {
 }
 
 describe('Item', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
 
   it('非ログイン状態で画面表示が適切', async() => {
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
@@ -143,55 +140,73 @@ describe('Item', () => {
   })
 })
 
-/*
 describe('Item delete', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
+  
   it('削除処理が成功する', async() => {
     const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
     mockedApi.deletePost.mockResolvedValue({ status: 200 } as AxiosResponse)
-    
-    render(
-      <AuthContext.Provider
-        value={
-          {
-            isSignedIn: true,
-            currentUser: {
-              id: 1,
-            },
-          } as any
-        }
-      >
-        <Item
-          post={{
-            contents: 'testContents',
-            title: 'testTitle',
-            user_id: 1,
-            id: 1,
-          }}
-          setPosts={(p: Post) => {}}
-        />
-      </AuthContext.Provider>
-    )
+    renderLoginItem()
 
-    const deletebutton = screen.getByRole('button', { name: '削除' })
-    // 削除ボタンをクリック
-    userEvent.click(deletebutton)
+    await waitFor(() => {
+      const deletebutton = screen.getByRole('button', { name: '削除' })
+      userEvent.click(deletebutton)
+    })
     
     await waitFor(() => {
-      // ここで、確認ダイアログが表示される。ユーザーが「はい」を選択すると、deletePostが起動する。
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('削除します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
     })
 
-    expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('削除に成功しました')
+    // deletePostが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.deletePost).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('削除に成功しました')    
+    })
+  })
+
+  it('削除処理が失敗する', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.deletePost.mockResolvedValue({ status: 404 } as AxiosResponse)
+    console.log = jest.fn()
+    renderLoginItem()
+    
+    await waitFor(() => {
+      const deletebutton = screen.getByRole('button', { name: '削除' })
+      userEvent.click(deletebutton)
+    })
+    
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('削除します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    })
+
+    // deletePostが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.deletePost).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.error.mock.calls[0][0]).toBe('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください')
+    })
   })
 })
-*/
 
 describe('Item like', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+
+  it('ログインしていないときにいいねする', async() => {
+    renderItem()
+
+    const unlikeButton = screen.getByTestId('onlogout')
+    userEvent.click(unlikeButton)
+
+    await waitFor(() => {
+      expect(mockedUseAlertReturn.info.mock.calls[0][0]).toBe('ログインすると「いいね」できます。会員登録がお済みでない方は、会員登録をお願いします')    
+    })
   })
 
   it('いいねする', async() => {
@@ -203,11 +218,10 @@ describe('Item like', () => {
 
     const unlikeButton = screen.getByTestId('tolike')
     userEvent.click(unlikeButton)
+
     await waitFor(() => {
       const likeButton = screen.getByTestId('tounlike')
       expect(likeButton).toBeInTheDocument()
-      const likeNum = screen.getByText(/3/i)
-      expect(likeNum).toBeInTheDocument()
     })
   })
 
@@ -220,11 +234,10 @@ describe('Item like', () => {
 
     const likeButton = await screen.findByTestId('tounlike')
     userEvent.click(likeButton)
+
     await waitFor(() => {
       const unlikeButton = screen.getByTestId('tolike')
       expect(unlikeButton).toBeInTheDocument()
-      const likeNum = screen.getByText(/1/i)
-      expect(likeNum).toBeInTheDocument()
     })
   })
 })

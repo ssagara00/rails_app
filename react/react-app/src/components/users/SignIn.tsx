@@ -38,11 +38,11 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
         setLoading(true)
         setSignin(false)
       } else {
-        alert.error('ログインに失敗しました。メールアドレスまたはパスワードが間違っています。')
-        console.log("Signed in missed")
+        alert.error('ログインに失敗しました。メールアドレスまたはパスワードが間違っています')
+        console.log(res.data.message)
       }
     } catch (err) {
-      alert.error('ログインに失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+      alert.error('ログインに失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
       console.log(err)
     }
   }
@@ -61,11 +61,11 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
             {...register('email', {
               required: {
                 value: true,
-                message: 'メールアドレスを入力してください。',
+                message: 'メールアドレスを入力してください',
               },
               pattern: {
                 value: /^[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/,
-                message: 'メールアドレスの形式が不正です。',
+                message: 'メールアドレスの形式が不正です',
               }
             })}/>
             { errors.email?.message &&
@@ -82,19 +82,19 @@ export const SignIn = ({ signin, setSignin }: SignInProps) => {
             {...register('password', {
               required: {
                 value: true,
-                message: 'パスワードを入力してください。',
+                message: 'パスワードを入力してください',
               },
               minLength: {
                 value: 6,
-                message: '6文字以上入力してください。',
+                message: '6文字以上入力してください',
               },
               maxLength: {
                 value: 128,
-                message: '128文字以内で入力してください。',
+                message: '128文字以内で入力してください',
               },
               pattern: {
                 value: /^[a-zA-Z0-9]+$/,
-                message: 'パスワードは半角英数字のみ有効です。',
+                message: 'パスワードは半角英数字のみ有効です',
               }
             })}/>
             <br/>

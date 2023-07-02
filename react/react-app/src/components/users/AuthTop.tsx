@@ -52,13 +52,13 @@ export const AuthTop = () => {
             setIsSignedIn(false)
             setLoading(true)
             navigation("/")
-            alert.success('アカウントの削除に成功しました')
+            alert.success('会員情報の削除に成功しました')
           } else {
-            alert.error('アカウントの削除に失敗しました。アカウントが見つかりません。しばらくしてからもう一度お試しください。')
-            console.log('Failed in delete User')
+            alert.error('会員情報の削除に失敗しました。会員情報が見つかりません。しばらくしてからもう一度お試しください')
+            console.log(res.data.message)
           }
         } catch (err) {
-          alert.error('アカウントの削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+          alert.error('会員情報の削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
           console.log(err)
         }
       }
@@ -84,7 +84,7 @@ export const AuthTop = () => {
             </Modal>
               <div tabIndex={0} className="collapse collapse-arrow bg-base-100 rounded-box">
                 <div className="collapse-title text-xl font-medium">
-                  ユーザー情報編集
+                  会員情報更新
                 </div>
                 <div className="collapse-content"> 
                   <p>名前とメールアドレスを変更できます。</p>
@@ -103,13 +103,13 @@ export const AuthTop = () => {
             </div>
           </li>
           <li>
-            <button type="submit" onClick={() => handleDeleteUser(user_id)}><img src={deleteaccount} alt="deleteaccount" className="mypage-icon" width="250" height="250" /></button>
+            <button type="submit" data-testid="userDelete" onClick={() => handleDeleteUser(user_id)}><img src={deleteaccount} alt="deleteaccount" className="mypage-icon" width="250" height="250" /></button>
             <div tabIndex={0} className="collapse collapse-arrow bg-base-100 rounded-box">
               <div className="collapse-title text-xl font-medium">
                 退会
               </div>
               <div className="collapse-content"> 
-                <p>アカウントを削除します。<br/>これまでの投稿も全て削除されます。<br/>後から復元はできません。</p>
+                <p>会員情報を削除します。<br/>これまでの投稿も全て削除されます。<br/>後から復元はできません。</p>
               </div>
             </div>
           </li>

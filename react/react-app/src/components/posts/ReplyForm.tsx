@@ -55,11 +55,11 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
           }
           setReplyForm(false)
         } else {
-          alert.error('返信に失敗しました。入力内容の形式に不備があります。')
+          alert.error('返信に失敗しました。入力内容の形式に不備があります')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('返信に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('返信に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -81,11 +81,11 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
             {...register('title', {
               required: {
                 value: true,
-                message: 'タイトルを入力してください。',
+                message: 'タイトルを入力してください',
               },
               maxLength: {
                 value: 30,
-                message: '30文字以内で入力してください。',
+                message: '30文字以内で入力してください',
               },
             })}/>
             { errors.title?.message &&
@@ -102,11 +102,11 @@ export const ReplyForm = ({ replyForm, setReplyForm, post, replies, setReplies }
             {...register('contents', {
               required: {
                 value: true,
-                message: '本文を入力してください。',
+                message: '本文を入力してください',
               },
               maxLength: {
                 value: 3000,
-                message: '3000文字以内で入力してください。',
+                message: '3000文字以内で入力してください',
               },
             })}>
           </textarea>

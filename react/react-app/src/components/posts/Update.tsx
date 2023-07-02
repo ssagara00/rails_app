@@ -79,11 +79,11 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
           setPosts((prev: Post[]) => prev.map((value) => (value.id === post.id ? res.data : value)))
           setUpdate(false)
         } else {
-          alert.error('更新に失敗しました。入力内容の形式に不備があります。')
+          alert.error('更新に失敗しました。入力内容の形式に不備があります')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -111,11 +111,11 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
             {...register('title', {
               required: {
                 value: true,
-                message: 'タイトルを入力してください。',
+                message: 'タイトルを入力してください',
               },
               maxLength: {
                 value: 30,
-                message: '30文字以内で入力してください。',
+                message: '30文字以内で入力してください',
               },
             })}/>
             { errors.title?.message &&
@@ -132,11 +132,11 @@ export const Update = ({ update, setUpdate, post, setPosts }: PostUpdateProps) =
             {...register('contents', {
               required: {
                 value: true,
-                message: '本文を入力してください。',
+                message: '本文を入力してください',
               },
               maxLength: {
                 value: 3000,
-                message: '3000文字以内で入力してください。',
+                message: '3000文字以内で入力してください',
               },
             })}>
           </textarea>
