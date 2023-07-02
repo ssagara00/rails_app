@@ -1,21 +1,26 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
+import { AxiosResponse } from 'axios'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
 import { AuthContext } from '../../Context'
 import { Edit } from './Edit'
+import { mockedUseAlertReturn } from '../../__mocks__/react-alert'
+import * as ApiActions from '../../api/api_actions'
 
-jest.mock('react-alert')
+jest.mock('../../api/api_actions')
 
 const renderEdit = () => {
   const edit = true
   const setEdit = jest.fn()
+  const setCurrentUser = jest.fn()
   render(
     <AuthContext.Provider
         value={
           {
             isSignedIn: true,
+            setCurrentUser,
             currentUser: {
               id: 1,
               name: 'テストユーザー',
@@ -30,9 +35,6 @@ const renderEdit = () => {
 }
 
 describe('Edit', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
 
   it('画面表示が適切', () => {
     renderEdit()
@@ -57,9 +59,6 @@ describe('Edit', () => {
 })
 
 describe('Edit name', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
 
   it('名前が空の場合、エラーメッセージを表示', async() => {
     renderEdit()
@@ -69,7 +68,7 @@ describe('Edit name', () => {
     userEvent.clear(nameInput)
     userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('名前を入力してください。')).toBeInTheDocument()
+      expect(screen.getByText('名前を入力してください')).toBeInTheDocument()
     })
   })
 
@@ -82,15 +81,12 @@ describe('Edit name', () => {
     userEvent.type(nameInput,'あ'.repeat(101))
     userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('100文字以内で入力してください。')).toBeInTheDocument()
+      expect(screen.getByText('100文字以内で入力してください')).toBeInTheDocument()
     })
   })
 })
 
 describe('Edit email', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
 
   it('メールアドレスが空の場合、エラーメッセージを表示', async() => {
     renderEdit()
@@ -100,7 +96,7 @@ describe('Edit email', () => {
     userEvent.clear(emailInput)
     userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('メールアドレスを入力してください。')).toBeInTheDocument()
+      expect(screen.getByText('メールアドレスを入力してください')).toBeInTheDocument()
     })
   })
 
@@ -113,7 +109,69 @@ describe('Edit email', () => {
     userEvent.type(emailInput,'xxxx1111')
     userEvent.click(submitButton)
     await waitFor(() => {
-      expect(screen.getByText('メールアドレスの形式が不正です。')).toBeInTheDocument()
+      expect(screen.getByText('メールアドレスの形式が不正です')).toBeInTheDocument()
+    })
+  })
+})
+
+describe('Edit post', () => {
+
+  it('更新が成功する', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.editUser.mockResolvedValue({ status: 200, data: { data: 'sample' } } as AxiosResponse)
+    renderEdit()
+    
+    const nameInput = screen.getByPlaceholderText('Type name here')
+    const emailInput = screen.getByPlaceholderText('Type email here')
+    const submitButton = screen.getByRole('button', { name: '更新する' })
+
+    userEvent.type(nameInput,'テスト名前')
+    userEvent.type(emailInput,'test@example.com')
+    userEvent.click(submitButton)
+
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('会員情報を更新します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    })
+
+    // editUserが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.editUser).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.success.mock.calls[0][0]).toBe('更新に成功しました') 
+    })
+  })
+
+  it('更新が失敗する', async() => {
+    const mockedApi = ApiActions as jest.Mocked<typeof ApiActions>
+    mockedApi.editUser.mockResolvedValue({ status: 404, data: {message: 'エラー'} } as AxiosResponse)
+    console.log = jest.fn()
+    renderEdit()
+
+    const nameInput = screen.getByPlaceholderText('Type name here')
+    const emailInput = screen.getByPlaceholderText('Type email here')
+    const submitButton = screen.getByRole('button', { name: '更新する' })
+
+    userEvent.type(nameInput,'テスト名前')
+    userEvent.type(emailInput,'test@example.com')
+    userEvent.click(submitButton)
+
+    await waitFor(() => {
+      // 確認ダイアログが表示されることを確認
+      const dialog = screen.getByText('会員情報を更新します。よろしいですか?')
+      expect(dialog).toBeInTheDocument()
+      // ユーザーが「はい」を選択する
+      const confirmButton = screen.getByRole('button', { name: 'はい' })
+      userEvent.click(confirmButton)
+    })
+
+    // editUserが起動することを確認
+    await waitFor(() => {
+      expect(mockedApi.editUser).toHaveBeenCalled()
+      expect(mockedUseAlertReturn.error.mock.calls[0][0]).toBe('更新に失敗しました。入力内容の形式に不備があります') 
     })
   })
 })

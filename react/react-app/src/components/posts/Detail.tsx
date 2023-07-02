@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext }  from 'react'
+import React, { useState, useEffect, useContext }  from 'react'
 import { useForm } from 'react-hook-form'
 import { useAlert } from 'react-alert'
 import Modal from 'react-modal'
@@ -57,6 +57,8 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
         const res = await showReply(id)
         if (res.status === 200) {
           setReplies(res.data)
+        } else {
+          console.log(res.data.message)
         }
       } catch (err) {
         console.log(err)
@@ -86,15 +88,16 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
             setPosts((prev: Post[]) => prev.filter((prevpost: Post) => prevpost.id !== id))
             setDetail(false)
           } else {
-            alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください。')
-            console.log("Failed delete")
+            alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください')
+            console.log(res.data.message)
           }
         } catch (err) {
-          alert.error('削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+          alert.error('削除に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
           console.log(err)
         }
       }
     } else {
+      alert.error('削除に失敗しました。投稿が見つかりません。しばらくしてからもう一度お試しください')
       console.log('There is no target')
     }
   }
@@ -104,14 +107,15 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
       const res = await showUser(id)
       if (res.status === 200) {
         setUser(res.data)
+      } else {
+        console.log(res.data.message)
       }
     } catch (err) {
-      // ユーザーが退会済の時
       console.log(err)
     }
   }
 
-  const onlikeSubmit = async() =>{
+  const onlikeSubmit = async() =>{console.log('22')
     if(user_id && post_id) {
       const formData = new FormData()
       formData.append("like[user_id]", user_id.toString())
@@ -123,12 +127,14 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
           const result = await showLike(post_id)
           setLikes(result.data)
           setIs_liked(true)
+        } else {
+          console.log(res.data.message)
         }
       } catch (err) {
         console.log(err)
       }
     } else {
-      console.log('You have to Sign In Or There is no target')
+      console.log('You have to Sign In Or There is no Target')
     }
   }
 
@@ -140,17 +146,19 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
           const ret = await showLike(post_id)
           setLikes(ret.data)
           setIs_liked(false)
+        } else {
+          console.log(res.data.message)
         }
       } catch (err) {
         console.log(err)
       }
     } else {
-      console.log('You have to Sign In Or There is no target')
+      console.log('You have to Sign In Or There is no Target')
     }
   }
 
   const onlogout = async() =>{
-    alert.info('ログインすると「いいね」できます。会員登録がお済みでない方は、会員登録をお願いします。')
+    alert.info('ログインすると「いいね」できます。会員登録がお済みでない方は、会員登録をお願いします')
   }
 
   useEffect(() => {
@@ -184,12 +192,12 @@ export const Detail = ({ detail, setDetail, post, setPosts, is_liked, setIs_like
                 <button type='submit' data-testid='tounlike'><img src={hearton} className="detail-like-icon" alt="hearton" /></button>
               </form>
             ) : (
-              <form data-testid='tet' onSubmit={handleSubmit(onlikeSubmit)}>        
+              <form onSubmit={handleSubmit(onlikeSubmit)}>        
                 <button type='submit' data-testid='tolike'><img src={heartoff} className="detail-like-icon" alt="heartoff" /></button>
               </form>
             )
           ) : (
-            <form data-testid='tet' onSubmit={handleSubmit(onlogout)}> 
+            <form onSubmit={handleSubmit(onlogout)}> 
               <button type='submit' data-testid='onlogout'><img src={heartoff} className="item-like-icon" alt="heartoff" /></button>
             </form>
           )

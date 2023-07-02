@@ -30,8 +30,8 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
     const ret = await new Promise<string>((resolve) => {
         setDialog({
         onClose: resolve,
-        title: 'ユーザー情報編集',
-        message: 'ユーザー情報を更新します。よろしいですか?'
+        title: '会員情報更新',
+        message: '会員情報を更新します。よろしいですか?'
       })
     })
     setDialog(undefined)
@@ -48,11 +48,11 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
           setCurrentUser(res.data.data)
           setEdit(false)
         } else {
-          alert.error('更新に失敗しました。入力内容の形式に不備があります。')
+          alert.error('更新に失敗しました。入力内容の形式に不備があります')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -66,7 +66,7 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form">
           <div className="head bg-neutral">
-            <h2>ユーザー情報更新</h2>
+            <h2>会員情報更新</h2>
           </div>
 
           <p className="form-lead">名前</p>
@@ -74,11 +74,11 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
             {...register('name', {
               required: {
                 value: true,
-                message: '名前を入力してください。',
+                message: '名前を入力してください',
               },
               maxLength: {
                 value: 100,
-                message: '100文字以内で入力してください。',
+                message: '100文字以内で入力してください',
               }
             })}/>
             { errors.name?.message &&
@@ -95,11 +95,11 @@ export const Edit = ({ edit, setEdit }: UserEditProps) => {
             {...register('email', {
               required: {
                 value: true,
-                message: 'メールアドレスを入力してください。',
+                message: 'メールアドレスを入力してください',
               },
               pattern: {
                 value: /^[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/,
-                message: 'メールアドレスの形式が不正です。',
+                message: 'メールアドレスの形式が不正です',
               }
             })}/>
             <br/>

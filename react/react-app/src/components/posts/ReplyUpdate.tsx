@@ -45,11 +45,11 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
           setReplies((prev: Reply[]) => prev.map((value) => (value.id === reply.id ? res.data : value)))
           setReplyUpdate(false)
         } else {
-          alert.error('更新に失敗しました。入力内容の形式に不備があります。')
+          alert.error('更新に失敗しました。入力内容の形式に不備があります')
           console.log(res.data.message)
         }
       } catch (err) {
-        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください。')
+        alert.error('更新に失敗しました。しばらくしてからもう一度お試しください。または管理者にお問合せください')
         console.log(err)
       }
     }
@@ -63,7 +63,7 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form">
           <div className="head bg-neutral">
-            <h2>返信更新</h2>
+            <h2>更新</h2>
           </div>
 
           <p className="form-lead">タイトル</p>
@@ -71,11 +71,11 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
             {...register('title', {
               required: {
                 value: true,
-                message: 'タイトルを入力してください。',
+                message: 'タイトルを入力してください',
               },
               maxLength: {
                 value: 30,
-                message: '30文字以内で入力してください。',
+                message: '30文字以内で入力してください',
               },
             })}/>
             { errors.title?.message &&
@@ -92,11 +92,11 @@ export const ReplyUpdate = ({ replyupdate, setReplyUpdate, reply, setReplies }: 
             {...register('contents', {
               required: {
                 value: true,
-                message: '本文を入力してください。',
+                message: '本文を入力してください',
               },
               maxLength: {
                 value: 3000,
-                message: '3000文字以内で入力してください。',
+                message: '3000文字以内で入力してください',
               },
             })}>
           </textarea>
